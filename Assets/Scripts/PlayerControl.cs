@@ -10,14 +10,18 @@ public class PlayerControl : MonoBehaviour
         Jog,
         Run
     }
-    public Transform playerTransform;
-    public MovementMode movement;
     public Animator animator;
-    public float maxSpeed;
+    public GameObject camera;
+    public float mouseSensitivity;
+    private float maxSpeed;
+    private MovementMode movement;
     private Rigidbody rb;
     private float velocity = 0.0f;
     private float acceleration = 4.0f;
     private float deceleration = 6.0f;
+    private float mouseX = 0;
+    private float mouseY = 0;
+    private float playerRotationSpeed = 500;
 
     void Start()
     {
@@ -27,21 +31,39 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float xAxis = Input.GetAxis("Horizontal") * maxSpeed;
-        float zAxis = Input.GetAxis("Vertical") * maxSpeed;
-        Vector3 movePos = transform.right * xAxis + transform.forward * zAxis;
-        Vector3 newMovePos = new Vector3(movePos.x, rb.velocity.y, movePos.z);
+        //General Move
+        float vertInput = Input.GetAxis("Horizontal") * velocity;
+        float horzInput = Input.GetAxis("Vertical") * velocity;
+        Vector3 movePos = new Vector3(vertInput, 0, horzInput);
+        movePos.Normalize();
+        transform.Translate(movePos * velocity * Time.deltaTime, Space.World);
 
-        rb.velocity = newMovePos;
+        //player rotation
+        if (movePos != Vector3.zero)
+        {
+            Quaternion toRotation = Quaternion.LookRotation(movePos, Vector3.up);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, playerRotationSpeed * Time.deltaTime);
+        }
+
+        //Cam movement/placement
+        mouseX += Input.GetAxis("Mouse X") * mouseSensitivity;
+        mouseY -= Input.GetAxis("Mouse Y") * mouseSensitivity;
+        mouseY = Mathf.Clamp(mouseY, 0, 40);
+        camera.transform.localEulerAngles = new Vector3(mouseY, -45, 0);
+        camera.transform.position = new Vector3(transform.position.x + 8, transform.position.y +7, transform.position.z -8);
+
+        //animation movement controller
         animator.SetFloat("Velocity", velocity);
-
         if (Input.GetKey(KeyCode.LeftShift)) { movement = MovementMode.Run; }
         else { movement = MovementMode.Jog; }
         if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) 
         {
             if (movement != MovementMode.Run){movement = MovementMode.Jog;}
         }
-        if (Input.anyKey == false){movement = MovementMode.Idle;}
+        else if (Input.GetKey(KeyCode.W) == false && Input.GetKey(KeyCode.A) == false && Input.GetKey(KeyCode.S) == false && Input.GetKey(KeyCode.D) == false)
+        { 
+            movement = MovementMode.Idle;
+        }
 
         switch (movement)
         {
