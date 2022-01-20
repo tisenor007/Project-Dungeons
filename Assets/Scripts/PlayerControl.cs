@@ -60,8 +60,8 @@ public class PlayerControl : MonoBehaviour
         mouseX += Input.GetAxis("Mouse X") * mouseSensitivity;
         mouseY -= Input.GetAxis("Mouse Y") * mouseSensitivity;
         mouseY = Mathf.Clamp(mouseY, 0, 40);
-        camera.transform.localEulerAngles = new Vector3(mouseY, -45, 0);
-        camera.transform.position = new Vector3(transform.position.x + 11, transform.position.y +11, transform.position.z -11);
+        camera.transform.localEulerAngles = new Vector3(50, -45, 0);
+        camera.transform.position = new Vector3(transform.position.x + 8, transform.position.y +15, transform.position.z -8);
 
         //animation movement controller
         animator.SetFloat("Velocity", velocity);
