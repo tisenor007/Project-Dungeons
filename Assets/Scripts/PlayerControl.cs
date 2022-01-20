@@ -8,7 +8,8 @@ public class PlayerControl : MonoBehaviour
     {
         Idle,
         Jog,
-        Run
+        Run,
+        Jump
     }
     public Animator animator;
     public GameObject camera;
@@ -18,14 +19,24 @@ public class PlayerControl : MonoBehaviour
     private Rigidbody rb;
     private float velocity = 0.0f;
     private float acceleration = 4.0f;
-    private float deceleration = 6.0f;
+    private float deceleration = 10.0f;
     private float mouseX = 0;
     private float mouseY = 0;
     private float playerRotationSpeed = 500;
+    private float jumpHeight = 4f;
+    private bool canJump;
+    private KeyCode forwardInput = KeyCode.W;
+    private KeyCode backwardInput = KeyCode.S;
+    private KeyCode leftInput = KeyCode.A;
+    private KeyCode rightInput = KeyCode.D;
+    private KeyCode jumpInput = KeyCode.Space;
+    private KeyCode sprintInput = KeyCode.LeftShift;
 
     void Start()
     {
         rb = this.GetComponent<Rigidbody>();
+        movement = MovementMode.Idle;
+        canJump = true;
     }
 
     // Update is called once per frame
@@ -50,17 +61,17 @@ public class PlayerControl : MonoBehaviour
         mouseY -= Input.GetAxis("Mouse Y") * mouseSensitivity;
         mouseY = Mathf.Clamp(mouseY, 0, 40);
         camera.transform.localEulerAngles = new Vector3(mouseY, -45, 0);
-        camera.transform.position = new Vector3(transform.position.x + 8, transform.position.y +7, transform.position.z -8);
+        camera.transform.position = new Vector3(transform.position.x + 11, transform.position.y +11, transform.position.z -11);
 
         //animation movement controller
         animator.SetFloat("Velocity", velocity);
-        if (Input.GetKey(KeyCode.LeftShift)) { movement = MovementMode.Run; }
-        else { movement = MovementMode.Jog; }
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) 
+        if (Input.GetKey(sprintInput) &&  movement != MovementMode.Jump && canJump == true) { movement = MovementMode.Run; }
+        if (Input.GetKey(forwardInput) && Input.GetKey(sprintInput) == false &&  movement != MovementMode.Jump && canJump == true || Input.GetKey(leftInput) && Input.GetKey(sprintInput) == false &&  movement != MovementMode.Jump && canJump == true || Input.GetKey(backwardInput) && Input.GetKey(sprintInput) == false &&  movement != MovementMode.Jump && canJump == true || Input.GetKey(rightInput) && Input.GetKey(sprintInput) == false &&  movement != MovementMode.Jump && canJump == true) 
         {
-            if (movement != MovementMode.Run){movement = MovementMode.Jog;}
+            movement = MovementMode.Jog;
         }
-        else if (Input.GetKey(KeyCode.W) == false && Input.GetKey(KeyCode.A) == false && Input.GetKey(KeyCode.S) == false && Input.GetKey(KeyCode.D) == false)
+        if (Input.GetKeyDown(jumpInput) && canJump == true) { movement = MovementMode.Jump; rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y + jumpHeight, rb.velocity.z);}
+        else if (Input.GetKey(forwardInput) == false && Input.GetKey(leftInput) == false && Input.GetKey(backwardInput) == false && Input.GetKey(rightInput) == false &&  movement != MovementMode.Jump && canJump == true)
         { 
             movement = MovementMode.Idle;
         }
@@ -68,15 +79,21 @@ public class PlayerControl : MonoBehaviour
         switch (movement)
         {
             case MovementMode.Idle:
-                if (velocity >= 0.0f) { velocity -= Time.deltaTime * deceleration; }
+                animator.SetFloat("AnimState", 0);
+                if (velocity > 0.0f) { velocity -= Time.deltaTime * deceleration; }
                 break;
             case MovementMode.Jog:
+                animator.SetFloat("AnimState", 0);
                 maxSpeed = 5;
                 Move();
                 break;
             case MovementMode.Run:
+                animator.SetFloat("AnimState", 0);
                 maxSpeed = 10;
                 Move();
+                break;
+            case MovementMode.Jump:
+                animator.SetFloat("AnimState", 1);
                 break;
         }
     }
@@ -87,5 +104,15 @@ public class PlayerControl : MonoBehaviour
         {
             velocity -= Time.deltaTime * deceleration;
         }
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.tag == "Ground") { canJump = true; }
+        movement = MovementMode.Idle;
+    }
+    private void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.tag == "Ground") { canJump = false; }
     }
 }
