@@ -6,11 +6,15 @@ public class PlayerControl : MonoBehaviour
 {
     public enum MovementMode
     {
-        Idle,
-        Jog,
-        Run,
-        Jump
+        Normal_Idle,
+        Normal_Walk,
+        Normal_Run,
+        Normal_Jump,
+        Fight_Idle,
+        Fight_Walk,
+        Fight_Punch
     }
+   
     public Animator animator;
     public GameObject camera;
     public float mouseSensitivity;
@@ -24,7 +28,7 @@ public class PlayerControl : MonoBehaviour
     private float mouseY = 0;
     private float playerRotationSpeed = 500;
     private float jumpHeight = 4f;
-    private bool canJump;
+    private bool isGrounded;
     private KeyCode forwardInput = KeyCode.W;
     private KeyCode backwardInput = KeyCode.S;
     private KeyCode leftInput = KeyCode.A;
@@ -35,8 +39,8 @@ public class PlayerControl : MonoBehaviour
     void Start()
     {
         rb = this.GetComponent<Rigidbody>();
-        movement = MovementMode.Idle;
-        canJump = true;
+        movement = MovementMode.Normal_Idle;
+        isGrounded = true;
     }
 
     // Update is called once per frame
@@ -65,34 +69,34 @@ public class PlayerControl : MonoBehaviour
 
         //animation movement controller
         animator.SetFloat("Velocity", velocity);
-        if (Input.GetKey(sprintInput) &&  movement != MovementMode.Jump && canJump == true) { movement = MovementMode.Run; }
-        if (Input.GetKey(forwardInput) && Input.GetKey(sprintInput) == false &&  movement != MovementMode.Jump && canJump == true || Input.GetKey(leftInput) && Input.GetKey(sprintInput) == false &&  movement != MovementMode.Jump && canJump == true || Input.GetKey(backwardInput) && Input.GetKey(sprintInput) == false &&  movement != MovementMode.Jump && canJump == true || Input.GetKey(rightInput) && Input.GetKey(sprintInput) == false &&  movement != MovementMode.Jump && canJump == true) 
+        if (Input.GetKey(sprintInput) &&  movement != MovementMode.Normal_Jump && isGrounded == true) { movement = MovementMode.Normal_Run; }
+        if (Input.GetKey(forwardInput) && Input.GetKey(sprintInput) == false &&  movement != MovementMode.Normal_Jump && isGrounded == true || Input.GetKey(leftInput) && Input.GetKey(sprintInput) == false &&  movement != MovementMode.Normal_Jump && isGrounded == true || Input.GetKey(backwardInput) && Input.GetKey(sprintInput) == false &&  movement != MovementMode.Normal_Jump && isGrounded == true || Input.GetKey(rightInput) && Input.GetKey(sprintInput) == false &&  movement != MovementMode.Normal_Jump && isGrounded == true) 
         {
-            movement = MovementMode.Jog;
+            movement = MovementMode.Normal_Walk;
         }
-        if (Input.GetKeyDown(jumpInput) && canJump == true) { movement = MovementMode.Jump; rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y + jumpHeight, rb.velocity.z);}
-        else if (Input.GetKey(forwardInput) == false && Input.GetKey(leftInput) == false && Input.GetKey(backwardInput) == false && Input.GetKey(rightInput) == false &&  movement != MovementMode.Jump && canJump == true)
+        if (Input.GetKeyDown(jumpInput) && isGrounded == true) { movement = MovementMode.Normal_Jump; rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y + jumpHeight, rb.velocity.z);}
+        else if (Input.GetKey(forwardInput) == false && Input.GetKey(leftInput) == false && Input.GetKey(backwardInput) == false && Input.GetKey(rightInput) == false &&  movement != MovementMode.Normal_Jump && isGrounded == true)
         { 
-            movement = MovementMode.Idle;
+            movement = MovementMode.Normal_Idle;
         }
 
         switch (movement)
         {
-            case MovementMode.Idle:
+            case MovementMode.Normal_Idle:
                 animator.SetFloat("AnimState", 0);
                 if (velocity > 0.0f) { velocity -= Time.deltaTime * deceleration; }
                 break;
-            case MovementMode.Jog:
+            case MovementMode.Normal_Walk:
                 animator.SetFloat("AnimState", 0);
                 maxSpeed = 5;
                 Move();
                 break;
-            case MovementMode.Run:
+            case MovementMode.Normal_Run:
                 animator.SetFloat("AnimState", 0);
                 maxSpeed = 10;
                 Move();
                 break;
-            case MovementMode.Jump:
+            case MovementMode.Normal_Jump:
                 animator.SetFloat("AnimState", 1);
                 break;
         }
@@ -108,11 +112,12 @@ public class PlayerControl : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.tag == "Ground") { canJump = true; }
-        movement = MovementMode.Idle;
+        if (other.gameObject.tag == "Ground") { isGrounded = true;}
+        //This line fixes jump movement, but only here, other methods failed....
+        if (movement == MovementMode.Normal_Jump) { movement = MovementMode.Normal_Idle; }
     }
     private void OnCollisionExit(Collision other)
     {
-        if (other.gameObject.tag == "Ground") { canJump = false; }
+        if (other.gameObject.tag == "Ground") { isGrounded = false;}
     }
 }
