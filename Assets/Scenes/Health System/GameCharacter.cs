@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 public class GameCharacter : MonoBehaviour
 {
     public int Health { get => health; }
     public bool IsAlive { get => isAlive; }
-    [SerializeField] private int armorValue;
     [SerializeField] private int maxHealth;
     private int health;
     private bool isAlive = true;
@@ -16,23 +12,22 @@ public class GameCharacter : MonoBehaviour
     }
     public void ResetStats()
     {
-        health = maxHealth;
+        Heal(maxHealth);
         isAlive = true;
     }
     public void TakeDamage(int damage)
     {
         DamageFeedback();
-        if(damage - armorValue > health)
-        {
-            health -= (damage - armorValue);
-        } else
+        health -= damage;
+        if(health <= 0)
         {
             Death();
         }
     }
-    public void Heal()
+    public void Heal(int heal)
     {
-        health = maxHealth;
+        health += heal;
+        if (health > maxHealth) health = maxHealth;
     }
     protected virtual void Death()
     {
@@ -41,6 +36,7 @@ public class GameCharacter : MonoBehaviour
     }
     protected virtual void DamageFeedback()
     {
-        
+        // Insert Damage Feedback Code Here
+        // Reminder: This method can be overridden. This should be the "universal" feedback for player and enemies
     }
 }
