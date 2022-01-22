@@ -8,8 +8,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.SceneManagement;
 using System;
 
-// disappearing tex
+// disappearing text
 using UnityEngine.UI;
+using TMPro;
 
 public enum GameState
 { 
@@ -28,8 +29,8 @@ public class GameManager : MonoBehaviour
 
     public LevelManager levelManager;
     public UIManager uiManager;
-    public Text saveText;
-    public Text loadText;
+    public TextMeshProUGUI saveText;
+    public TextMeshProUGUI loadText;
 
     private GameState gameState;
     private GameState savedScreenState;
@@ -95,7 +96,7 @@ public class GameManager : MonoBehaviour
                     }
 
                     uiManager.LoadGameplay();
-                    levelManager.ManageGameplay();
+
                     return;
                 }
             case GameState.WIN:
