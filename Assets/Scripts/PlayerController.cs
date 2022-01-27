@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
    
     public Animator animator;
     public GameObject camera;
+    public LayerMask body;
     private float maxInensity;
     private MovementMode movementMode;
     private Rigidbody rb;
@@ -37,7 +38,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 moveDirection;
     private float jumpTimeDuration = 1.34f;
     private float jumpTimer;
-    private float rayRange = 1f;
+    private float rayRange = 0.85f;
     private RaycastHit rayHit;
 
     void Start()
@@ -132,14 +133,14 @@ public class PlayerController : MonoBehaviour
 
     private bool isGrounded()
     {
-        if (Physics.Raycast(this.transform.position, -this.transform.up, out rayHit, rayRange)) 
+        if (Physics.Raycast(this.transform.position, -this.transform.up, out rayHit, rayRange, ~body)) 
         {
             return true;
         }
         return false;
     }
 
-    private void OnCollisionEnter(Collision other)
+    private void OnCollisionStay(Collision other)
     {
         if (isGrounded() == true && movementMode == MovementMode.Jumping || isGrounded() == true && movementMode == MovementMode.Falling) 
         { 
