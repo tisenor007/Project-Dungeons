@@ -12,9 +12,15 @@ public class UIManager : MonoBehaviour
     public Canvas options;
     public Canvas credits;
 
+
     private void Awake()
     {
         LoadTitleMenu();
+    }
+
+    private void Update()
+    {
+        Debug.Log(credits.enabled);
     }
 
     public void DisableAll()
@@ -64,6 +70,7 @@ public class UIManager : MonoBehaviour
 
     public void LoadCredits()
     {
+        DisableAll();
         credits.enabled = true;
     }
 }

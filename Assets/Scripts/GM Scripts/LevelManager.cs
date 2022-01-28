@@ -8,7 +8,6 @@ public class LevelManager : MonoBehaviour
     //Manages a singular level aspect
 
     public static LevelManager control;
-
     
     
     [HideInInspector]
@@ -18,7 +17,24 @@ public class LevelManager : MonoBehaviour
     [SerializeField]
     private GUI gameUI;
 
+    private static float creditsBottomPos = 2800;
+    private static float creditsTopPos = -1425;
+    private static float creditsBeginPos = -500;
+    private float creditsYPos = creditsBeginPos;
+    private float creditsScrollRate = 1;
+
     #region UIButtons
+    public void Update()
+    {
+        if (GameManager.manager.uiManager.credits.enabled == false && creditsYPos != creditsBeginPos)
+        {
+            creditsYPos = creditsBeginPos;
+        }
+        else if (GameManager.manager.uiManager.credits.enabled == true)
+        {
+            ScrollCredits();
+        }
+    }
     public void ButtonStartNewGame()
     {
         ChangeGameStateToGamePlay();
@@ -60,6 +76,17 @@ public class LevelManager : MonoBehaviour
     public void ChangeGameStateToCredits()
     {
         GameManager.manager.ChangeState(GameState.CREDITS);
+    }
+    private void ScrollCredits()
+    {
+        int childOrderNum = 0;
+        GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position = new Vector3(GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.x, creditsYPos, GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.z);
+
+        if (GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y >= creditsBottomPos) { creditsYPos = creditsTopPos; }
+        else if (GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y <= creditsBottomPos && GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y >= creditsTopPos)
+        {
+            creditsYPos = creditsYPos += Time.deltaTime * creditsScrollRate;
+        }
     }
 
     public void LoadButtonFade(bool fileExists)
