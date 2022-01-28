@@ -1,10 +1,10 @@
 using UnityEngine;
 public class GameCharacter : MonoBehaviour
 {
-    public int Health { get => health; }
+    public float Health { get => health; }
     public bool IsAlive { get => isAlive; }
-    [SerializeField] private int maxHealth;
-    private int health;
+    [SerializeField] protected float maxHealth;
+    [SerializeField] protected float health;
     private bool isAlive = true;
     private void Awake()
     {
@@ -12,7 +12,7 @@ public class GameCharacter : MonoBehaviour
     }
     public void ResetStats()
     {
-        Heal(maxHealth);
+        health = maxHealth;
         isAlive = true;
     }
     public void TakeDamage(int damage)
@@ -24,7 +24,7 @@ public class GameCharacter : MonoBehaviour
             Death();
         }
     }
-    public void Heal(int heal)
+    public void Heal(float heal)
     {
         health += heal;
         if (health > maxHealth) health = maxHealth;
