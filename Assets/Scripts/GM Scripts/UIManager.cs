@@ -12,10 +12,6 @@ public class UIManager : MonoBehaviour
     public Canvas options;
     public Canvas credits;
 
-    private static float creditsBottomPos = 2800;
-    private static float creditsTopPos = -1425;
-    private float creditsYPos = -500;
-    private float creditsScrollRate = 1;
 
     private void Awake()
     {
@@ -24,10 +20,6 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        if (credits.enabled == true)
-        {
-            ScrollCredits();
-        }
         Debug.Log(credits.enabled);
     }
 
@@ -80,17 +72,5 @@ public class UIManager : MonoBehaviour
     {
         DisableAll();
         credits.enabled = true;
-    }
-
-    private void ScrollCredits() 
-    {
-        int childOrderNum = 1;
-        credits.transform.GetChild(childOrderNum).transform.position = new Vector3(credits.transform.GetChild(childOrderNum).transform.position.x, creditsYPos, credits.transform.GetChild(childOrderNum).transform.position.z);
-
-        if (credits.transform.GetChild(childOrderNum).transform.position.y >= creditsBottomPos) { creditsYPos = creditsTopPos; }
-        else if (credits.transform.GetChild(childOrderNum).transform.position.y <= creditsBottomPos && credits.transform.GetChild(childOrderNum).transform.position.y >= creditsTopPos)
-        {
-            creditsYPos = creditsYPos += Time.deltaTime * creditsScrollRate;
-        }
     }
 }
