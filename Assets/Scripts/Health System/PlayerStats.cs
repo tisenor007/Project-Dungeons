@@ -9,4 +9,9 @@ public class PlayerStats : GameCharacter
         base.Death();
         // ENTER CODE FOR DEATH ANIMATIONS, ETC
     }
+
+    public float GetHealthDividedMaxHealth()
+    {
+        return (health / maxHealth);
+    }
 }
