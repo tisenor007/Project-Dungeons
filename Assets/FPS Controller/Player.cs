@@ -8,7 +8,7 @@ using UnityEditor;
 [System.Serializable]
 
 
-public class Player : MonoBehaviour
+public class Player : GameCharacter
 {
     //Urg that's ugly, maybe find a better way
     public static Player Instance { get; protected set; }
@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     //public Camera MainCamera;
 
 
-    public Transform CameraPosition;
+    //public Transform CameraPosition;
 
 
     //this is only use at start, allow to grant ammo in the inspector. m_AmmoInventory is used during gameplay
@@ -29,11 +29,14 @@ public class Player : MonoBehaviour
     public float CrouchingSpeed = 2.0f;
     public float JumpSpeed = 5.0f;
 
-    public int health = 100;
+    public bool attacking = false;
+    //public GameCharacter nearestEnemy;
 
     public bool running;
     public bool blocking;
     public GameObject shield;
+    public float hitTimer = 0.5f;
+    public GameObject hitArea;
 
     float m_VerticalSpeed = 0.0f;
     bool m_IsPaused = false;
@@ -62,6 +65,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -77,18 +81,39 @@ public class Player : MonoBehaviour
 
         m_VerticalAngle = 0.0f;
         m_HorizontalAngle = transform.localEulerAngles.y;
+
+        damage = 10;
+        
     }
 
     void Update()
     {
-        Debug.Log("HEALTH: " + health);
+        //Debug.Log("HEALTH: " + health);
 
         bool wasGrounded = m_Grounded;
         bool loosedGrounding = false;
 
-        //we define our own grounded and not use the Character controller one as the character controller can flicker
-        //between grounded/not grounded on small step and the like. So we actually make the controller "not grounded" only
-        //if the character controller reported not being grounded for at least .5 second;
+        //attacking = Input.GetKeyUp(KeyCode.E);
+
+        if (Input.GetKeyUp(KeyCode.E))
+        {
+            attacking = true;
+        }
+        if (attacking)
+        {
+            hitArea.SetActive(true);
+
+            hitTimer -= Time.deltaTime;
+
+            if (hitTimer < 0)
+            {
+                hitArea.SetActive(false);
+                hitTimer = 0.5f;
+                attacking = false;
+            }
+            
+        }
+
         if (!m_CharacterController.isGrounded)
         {
             if (m_Grounded)
@@ -165,9 +190,9 @@ public class Player : MonoBehaviour
             var turnCam = -Input.GetAxis("Mouse Y");
             turnCam = turnCam * MouseSensitivity;
             m_VerticalAngle = Mathf.Clamp(turnCam + m_VerticalAngle, -89.0f, 89.0f);
-            currentAngles = CameraPosition.transform.localEulerAngles;
+            //currentAngles = CameraPosition.transform.localEulerAngles;
             currentAngles.x = m_VerticalAngle;
-            CameraPosition.transform.localEulerAngles = currentAngles;
+            //CameraPosition.transform.localEulerAngles = currentAngles;
 
 
 
@@ -192,19 +217,9 @@ public class Player : MonoBehaviour
 
     }
 
-    public void TakeDamage(int damage)
+    public void Attack()
     {
-        health -= damage;
-
-        if (health < 0)
-            health = 0;
-    }
-
-    public void Heal(int heal)
-    {
-        health += heal;
-
-        if (health > 100)
-            health = 100;
+        //nearestEnemy.TakeDamage(damage);
+        //Debug.Log("ENEMY HEALTH: " + nearestEnemy.health);
     }
 }

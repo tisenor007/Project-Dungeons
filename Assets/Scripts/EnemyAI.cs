@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : GameCharacter
 {
     enum State
     {
@@ -34,7 +34,7 @@ public class EnemyAI : MonoBehaviour
     public int viewDistance = 20;
     public int hearingDistance = 10;
     public int attackDistance = 3;
-    public int attackDamage = 10;
+    //public int attackDamage = 10;
     public float distance;
     public float chasingTime = 4.0f;
     public float hitTime = 3.0f;
@@ -46,10 +46,13 @@ public class EnemyAI : MonoBehaviour
     public Ray enemySight;
     public RaycastHit hitInfo;
 
+    public bool hitable;
+
     void Start()
     {
+        health = 100;
+        damage = 10;
         enemy = GetComponent<NavMeshAgent>();
-        //patrolDestinationPoint = 0;
         SwitchState(State.Idle);
     }
 
@@ -73,12 +76,12 @@ public class EnemyAI : MonoBehaviour
         switch (enemyState)
         {
             case State.Idle:
-                Debug.Log("State: Idle");
+                //Debug.Log("State: Idle");
                 Idle();
                 break;
 
             case State.Chasing:
-                Debug.Log("State: Chasing");
+                //Debug.Log("State: Chasing");
                 Chasing();
                 break;
 
@@ -98,7 +101,7 @@ public class EnemyAI : MonoBehaviour
                 break;*/
 
             case State.Attacking:
-                Debug.Log("State: Attacking");
+                //Debug.Log("State: Attacking");
                 Attacking();
                 break;
         }
@@ -246,15 +249,19 @@ public class EnemyAI : MonoBehaviour
         {
             if (player.blocking)
             {
-                player.TakeDamage((int)(attackDamage / 4));
+                player.TakeDamage((int)(damage / 4));
                 hitTime = 5.0f; // <----- will be replaced by a possible stunned class
             }
             else
             {
-                player.TakeDamage(attackDamage);
+                player.TakeDamage(damage);
                 hitTime = 3.0f;
             }
+
+            Debug.Log("PLAYER HEALTH: " + player.health);
         }
+
+        
 
         if (distance > attackDistance)
         {
@@ -266,6 +273,8 @@ public class EnemyAI : MonoBehaviour
     {
         enemyState = newState;
     }
+
+    
 
 
 

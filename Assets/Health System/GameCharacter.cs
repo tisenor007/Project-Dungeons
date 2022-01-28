@@ -4,7 +4,8 @@ public class GameCharacter : MonoBehaviour
     public int Health { get => health; }
     public bool IsAlive { get => isAlive; }
     [SerializeField] private int maxHealth;
-    private int health;
+    public int health;
+    public int damage;
     private bool isAlive = true;
     private void Awake()
     {
@@ -39,4 +40,5 @@ public class GameCharacter : MonoBehaviour
         // Insert Damage Feedback Code Here
         // Reminder: This method can be overridden. This should be the "universal" feedback for player and enemies
     }
+
 }
