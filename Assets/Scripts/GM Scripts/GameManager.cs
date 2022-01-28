@@ -73,30 +73,24 @@ public class GameManager : MonoBehaviour
         {
             case GameState.TITLEMENU:
                 {
-                    if (SceneManager.GetActiveScene() != SceneManager.GetSceneByBuildIndex(0))
+                    if (SceneManager.GetActiveScene().name != GameState.TITLEMENU.ToString())
                     {
-                        SceneManager.LoadScene(0);
+                        SceneManager.LoadScene(GameState.TITLEMENU.ToString(), LoadSceneMode.Single);
                         SaveScreenState();
                     }
-
+                    if (Time.timeScale == 1) { Time.timeScale = 0; }
                     uiManager.LoadTitleMenu();
                     return; 
                 }
             case GameState.GAMEPLAY:
                 {
-                    if (SceneManager.GetActiveScene() != SceneManager.GetSceneByBuildIndex(1))
+                    if (SceneManager.GetActiveScene().name != GameState.GAMEPLAY.ToString())
                     {
-                        SceneManager.LoadScene(1);
+                        SceneManager.LoadScene(GameState.GAMEPLAY.ToString(), LoadSceneMode.Single);
                         SaveScreenState();
                     }
-
-                    if (Time.timeScale == 0)
-                    {
-                        Time.timeScale = 1;  
-                    }
-
+                    if (Time.timeScale == 0){Time.timeScale = 1;}
                     uiManager.LoadGameplay();
-
                     return;
                 }
             case GameState.WIN:
@@ -123,6 +117,12 @@ public class GameManager : MonoBehaviour
                 }
             case GameState.CREDITS:
                 {
+                    if (SceneManager.GetActiveScene().name != GameState.CREDITS.ToString())
+                    {
+                        SceneManager.LoadScene(GameState.CREDITS.ToString(), LoadSceneMode.Single);
+                        SaveScreenState();
+                    }
+                    if (Time.timeScale == 0) { Time.timeScale = 100; }
                     uiManager.LoadCredits();
                     return;
                 }
