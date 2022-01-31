@@ -12,10 +12,12 @@ public class PlayerController : MonoBehaviour
         Jumping,
         Falling
     }
-   
+
+    public float interactionRadius = 7f;
     public Animator animator;
     public GameObject camera;
     public LayerMask body;
+    public LayerMask interactable;
     private float maxInensity;
     private MovementMode movementMode;
     private Rigidbody rb;
@@ -40,6 +42,9 @@ public class PlayerController : MonoBehaviour
     private float jumpTimer;
     private float rayRange = 0.85f;
     private RaycastHit rayHit;
+    [SerializeField]
+    private bool canInteract;
+    private RaycastHit interactionHit;
 
     void Start()
     {
@@ -74,35 +79,79 @@ public class PlayerController : MonoBehaviour
         camera.transform.position = new Vector3(transform.position.x + 8, transform.position.y + 15, transform.position.z - 8);
 
         //animation movement controller
-        CheckPlayerInputandPerformPlayerAnims();
-        if (Time.time > jumpTimer && isGrounded() == false) { movementMode = MovementMode.Falling; }
-        animator.SetFloat("Velocity", moveIntensity);
-        animator.SetLayerWeight(1, attackBlend);
+        { 
+            CheckPlayerInputandPerformPlayerAnims();
+            if (Time.time > jumpTimer && isGrounded() == false) { movementMode = MovementMode.Falling; }
+            animator.SetFloat("Velocity", moveIntensity);
+            animator.SetLayerWeight(1, attackBlend);
 
-        switch (movementMode)
+            switch (movementMode)
+            {
+                case MovementMode.Idle:
+                    animator.SetFloat("AnimState", 0);
+                    if (moveIntensity > 0.0f) { moveIntensity -= Time.deltaTime * velocityDeceleration; }
+                    break;
+                case MovementMode.Running:
+                    animator.SetFloat("AnimState", 0);
+                    maxInensity = 5;
+                    AdjustMoveIntensity();
+                    break;
+                case MovementMode.Sprinting:
+                    animator.SetFloat("AnimState", 0);
+                    maxInensity = 10;
+                    AdjustMoveIntensity();
+                    break;
+                case MovementMode.Jumping:
+                    animator.SetFloat("AnimState", 1);
+                    break;
+                case MovementMode.Falling:
+                    animator.SetFloat("AnimState", 2);
+                    break;
+            }
+        }
+
+        //Interaction
         {
-            case MovementMode.Idle:
-                animator.SetFloat("AnimState", 0);
-                if (moveIntensity > 0.0f) { moveIntensity -= Time.deltaTime * velocityDeceleration; }
-                break;
-            case MovementMode.Running:
-                animator.SetFloat("AnimState", 0);
-                maxInensity = 5;
-                AdjustMoveIntensity();
-                break;
-            case MovementMode.Sprinting:
-                animator.SetFloat("AnimState", 0);
-                maxInensity = 10;
-                AdjustMoveIntensity();
-                break;
-            case MovementMode.Jumping:
-                animator.SetFloat("AnimState", 1);
-                break;
-            case MovementMode.Falling:
-                animator.SetFloat("AnimState", 2);
-                break;
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Collider[] hitCol = null;
+                hitCol = Physics.OverlapSphere(transform.position,
+                    interactionRadius, interactable.value, QueryTriggerInteraction.Ignore);
+
+                Debug.LogWarning("call Interact");
+                if (hitCol != null)
+                {
+                    foreach (Collider col in hitCol)
+                    { 
+                        col.gameObject.GetComponent<Interactable>().Interact();
+                    }
+                }
+            }
         }
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        /*Gizmos = new Transform
+        {
+            position = new Vector3
+            (transform.position.x,
+            transform.position.y,
+            transform.position.z)
+        }
+        Vector3 gizmoPos = t.position;
+
+
+        t.position += new Vector3(0, 0, r);
+        gizmoPos = t.InverseTransformPoint(t.position);
+
+        */
+        float r = interactionRadius;
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, r);
+    }
+
     public void AdjustMoveIntensity()
     {
         if (moveIntensity < maxInensity) { moveIntensity += Time.deltaTime * velocityAcceleration; }
