@@ -528,7 +528,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 283359718282666646, guid: 1897fc1814d23704d94e79e4fe39875c, type: 3}
       propertyPath: m_Name
-      value: IsometricCharacterController
+      value: PlayerController/Camera
       objectReference: {fileID: 0}
     - target: {fileID: 283359718282666646, guid: 1897fc1814d23704d94e79e4fe39875c, type: 3}
       propertyPath: m_Layer
@@ -548,7 +548,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 283359718282666647, guid: 1897fc1814d23704d94e79e4fe39875c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.27
+      value: 8.6
       objectReference: {fileID: 0}
     - target: {fileID: 283359718282666647, guid: 1897fc1814d23704d94e79e4fe39875c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -585,6 +585,10 @@ PrefabInstance:
     - target: {fileID: 283359718840524380, guid: 1897fc1814d23704d94e79e4fe39875c, type: 3}
       propertyPath: body.m_Bits
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 283359718840524383, guid: 1897fc1814d23704d94e79e4fe39875c, type: 3}
+      propertyPath: m_Name
+      value: PlayerController
       objectReference: {fileID: 0}
     - target: {fileID: 283359718840524383, guid: 1897fc1814d23704d94e79e4fe39875c, type: 3}
       propertyPath: m_Layer
