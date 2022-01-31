@@ -2,13 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Interactable : MonoBehaviour
+public class Interactable : MonoBehaviour
 {
-    public float radius = 3f;
-
-    private void OnDrawGizmosSelected()
+    public void Interact()
     {
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, radius);
+        this.gameObject.SetActive(false);
+        Debug.LogError("Interacted");
     }
+    
 }
