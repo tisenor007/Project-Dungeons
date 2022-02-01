@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
     private RaycastHit rayHit;
     [SerializeField]
     private bool canInteract;
-    private RaycastHit interactionHit;
+    Collider[] hitColInteraction;
 
     void Start()
     {
@@ -112,16 +112,35 @@ public class PlayerController : MonoBehaviour
 
         //Interaction
         {
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                Collider[] hitCol = null;
-                hitCol = Physics.OverlapSphere(transform.position,
+            hitColInteraction = Physics.OverlapSphere(transform.position,
                     interactionRadius, interactable.value, QueryTriggerInteraction.Ignore);
 
-                Debug.LogWarning("call Interact");
-                if (hitCol != null)
+            //tell interactable to highlight if interaction is possible
+            if (hitColInteraction != null)
+            {
+                float r = interactionRadius - 1f; // MN#: -1 due to radius encompasing hitColInteraction enough to not miss turning off the light
+
+                foreach (Collider col in hitColInteraction)
                 {
-                    foreach (Collider col in hitCol)
+                    if (col.transform.position.x > transform.position.x + r ||
+                        col.transform.position.x < transform.position.x - r ||
+                        col.transform.position.z > transform.position.z + r ||
+                        col.transform.position.z < transform.position.z - r)
+                    {
+                        col.gameObject.GetComponent<Interactable>().DisableFeedback();
+                    }
+                    else { col.gameObject.GetComponent<Interactable>().EnableFeedback(); }
+                }
+            }
+
+            //interact with object
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                Debug.LogWarning("call Interact");
+             
+                if (hitColInteraction != null)
+                {
+                    foreach (Collider col in hitColInteraction)
                     { 
                         col.gameObject.GetComponent<Interactable>().Interact();
                     }
@@ -132,20 +151,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        /*Gizmos = new Transform
-        {
-            position = new Vector3
-            (transform.position.x,
-            transform.position.y,
-            transform.position.z)
-        }
-        Vector3 gizmoPos = t.position;
-
-
-        t.position += new Vector3(0, 0, r);
-        gizmoPos = t.InverseTransformPoint(t.position);
-
-        */
         float r = interactionRadius;
 
         Gizmos.color = Color.green;
