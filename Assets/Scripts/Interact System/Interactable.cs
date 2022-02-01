@@ -11,7 +11,6 @@ public abstract class Interactable : MonoBehaviour
     private Light feedbackLight; //feedback to show object is interactable
     private bool feedbackEnabled;
     private bool interactableEnabled = true;
-    private GameObject interactee; // the object interacting with this
 
     //types of interactables
     private Item item;
@@ -46,12 +45,11 @@ public abstract class Interactable : MonoBehaviour
         }
     }
 
-    public void Interact(GameObject gameObject)
+    public void Interact(GameObject interactee)
     {
         Debug.LogError("Interacted");
-        interactee = gameObject;
         
-        if (item != null) { item.OnPickup(); }
+        if (item != null) { item.OnPickup(interactee); }
         
         RemoveGameObjectWFeedback();
     }

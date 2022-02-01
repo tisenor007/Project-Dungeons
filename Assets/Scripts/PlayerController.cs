@@ -144,7 +144,7 @@ public class PlayerController : MonoBehaviour
                         Interactable interactable = col.gameObject.GetComponent<Interactable>();
                         if (interactable.InteractableEnabled)
                         { 
-                            interactable.Interact();
+                            interactable.Interact(this.gameObject);
                         }
                     }
                 }
