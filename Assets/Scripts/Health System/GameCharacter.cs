@@ -16,9 +16,9 @@ public class GameCharacter : MonoBehaviour
         Heal(maxHealth);
         isAlive = true;
     }
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, Transform character)
     {
-        DamageFeedback();
+        DamageFeedback(character);
         health -= damage;
         if(health <= 0)
         {
@@ -36,10 +36,9 @@ public class GameCharacter : MonoBehaviour
         isAlive = false;
         gameObject.SetActive(false);
     }
-    protected virtual void DamageFeedback()
+    protected virtual void DamageFeedback(Transform character)
     {
-        // Insert Damage Feedback Code Here
-        // Reminder: This method can be overridden. This should be the "universal" feedback for player and enemies
+        character.transform.Translate(Vector3.back);
     }
 
 }

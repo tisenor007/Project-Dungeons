@@ -46,8 +46,8 @@ public class EnemyAI : GameCharacter
 
     void Start()
     {
-        health = 100;
-        damage = 10;
+        health = 30;
+        damage = 5;
         enemy = GetComponent<NavMeshAgent>();
         SwitchState(State.Idle);
     }
@@ -134,12 +134,12 @@ public class EnemyAI : GameCharacter
         {
             if (player.blocking)
             {
-                player.TakeDamage((int)(damage / 4));
+                player.TakeDamage((int)(damage / 4), player.GetComponent<Transform>());
                 hitTime = 5.0f; // <----- will be replaced by a possible stunned state
             }
             else
             {
-                player.TakeDamage(damage);
+                player.TakeDamage(damage, player.GetComponent<Transform>());
                 hitTime = 3.0f;
             }
 

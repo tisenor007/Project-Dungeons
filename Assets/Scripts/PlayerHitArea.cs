@@ -22,7 +22,7 @@ public class PlayerHitArea : MonoBehaviour
         if (other.tag == "Enemy")
         {
             
-            other.GetComponent<EnemyAI>().TakeDamage(player.damage);
+            other.GetComponent<EnemyAI>().TakeDamage(player.damage, other.GetComponent<Transform>());
             Debug.Log("ENEMY HEALTH: " + other.GetComponent<EnemyAI>().health);
             
         }

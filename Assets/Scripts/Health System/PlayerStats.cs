@@ -15,6 +15,7 @@ public class PlayerStats : GameCharacter
     private void Start()
     {
         damage = 10;
+        health = 100;
     }
 
     private void Update()
@@ -29,7 +30,7 @@ public class PlayerStats : GameCharacter
         {
             shield.SetActive(false);
 
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(0) && attacking == false)
             {
                 attacking = true;
             }
@@ -42,7 +43,7 @@ public class PlayerStats : GameCharacter
                 if (hitTimer < 0)
                 {
                     hitArea.SetActive(false);
-                    hitTimer = 0.5f;
+                    hitTimer = 2.0f;
                     attacking = false;
                 }
 
