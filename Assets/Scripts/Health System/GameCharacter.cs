@@ -1,10 +1,11 @@
 using UnityEngine;
 public class GameCharacter : MonoBehaviour
 {
-    public float Health { get => health; }
+    public int Health { get => health; }
     public bool IsAlive { get => isAlive; }
-    [SerializeField] protected float maxHealth;
-    [SerializeField] protected float health;
+    [SerializeField] public int maxHealth;
+    public int health;
+    public int damage;
     private bool isAlive = true;
     private void Awake()
     {
@@ -12,19 +13,19 @@ public class GameCharacter : MonoBehaviour
     }
     public void ResetStats()
     {
-        health = maxHealth;
+        Heal(maxHealth);
         isAlive = true;
     }
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, Transform character)
     {
-        DamageFeedback();
+        DamageFeedback(character);
         health -= damage;
         if(health <= 0)
         {
             Death();
         }
     }
-    public void Heal(float heal)
+    public void Heal(int heal)
     {
         health += heal;
         if (health > maxHealth) health = maxHealth;
@@ -33,10 +34,11 @@ public class GameCharacter : MonoBehaviour
     {
         health = 0;
         isAlive = false;
+        gameObject.SetActive(false);
     }
-    protected virtual void DamageFeedback()
+    protected virtual void DamageFeedback(Transform character)
     {
-        // Insert Damage Feedback Code Here
-        // Reminder: This method can be overridden. This should be the "universal" feedback for player and enemies
+        character.transform.Translate(Vector3.back);
     }
+
 }
