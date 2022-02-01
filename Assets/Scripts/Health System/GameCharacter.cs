@@ -3,7 +3,7 @@ public class GameCharacter : MonoBehaviour
 {
     public int Health { get => health; }
     public bool IsAlive { get => isAlive; }
-    [SerializeField] private int maxHealth;
+    [SerializeField] public int maxHealth;
     public int health;
     public int damage;
     private bool isAlive = true;

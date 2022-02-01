@@ -29,14 +29,11 @@ public class Player : GameCharacter
     public float CrouchingSpeed = 2.0f;
     public float JumpSpeed = 5.0f;
 
-    public bool attacking = false;
+    
     //public GameCharacter nearestEnemy;
 
     public bool running;
-    public bool blocking;
-    public GameObject shield;
-    public float hitTimer = 0.5f;
-    public GameObject hitArea;
+    
 
     float m_VerticalSpeed = 0.0f;
     bool m_IsPaused = false;
@@ -81,8 +78,6 @@ public class Player : GameCharacter
 
         m_VerticalAngle = 0.0f;
         m_HorizontalAngle = transform.localEulerAngles.y;
-
-        damage = 10;
         
     }
 
@@ -95,24 +90,7 @@ public class Player : GameCharacter
 
         //attacking = Input.GetKeyUp(KeyCode.E);
 
-        if (Input.GetKeyUp(KeyCode.E))
-        {
-            attacking = true;
-        }
-        if (attacking)
-        {
-            hitArea.SetActive(true);
-
-            hitTimer -= Time.deltaTime;
-
-            if (hitTimer < 0)
-            {
-                hitArea.SetActive(false);
-                hitTimer = 0.5f;
-                attacking = false;
-            }
-            
-        }
+        
 
         if (!m_CharacterController.isGrounded)
         {
@@ -147,16 +125,7 @@ public class Player : GameCharacter
             running = Input.GetKey(KeyCode.LeftShift);
             float actualSpeed = running ? RunningSpeed : PlayerSpeed;
 
-            blocking = Input.GetKey(KeyCode.RightShift);
-            if (blocking)
-            { 
-                actualSpeed = blocking ? CrouchingSpeed : PlayerSpeed;
-                shield.SetActive(true);
-            }
-            if (blocking == false)
-            {
-                shield.SetActive(false);
-            }
+            
 
             if (loosedGrounding)
             {

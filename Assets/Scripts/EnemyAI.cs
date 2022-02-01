@@ -12,10 +12,7 @@ public class EnemyAI : GameCharacter
     {
         Idle,
         Chasing,
-        Searching,
-        Attacking,
-        Retreating,
-        Listening
+        Attacking
     }
 
     private State enemyState;
@@ -24,7 +21,7 @@ public class EnemyAI : GameCharacter
     //public Animator animator;
     public NavMeshAgent enemy;
 
-    public Player player;
+    public PlayerStats player;
     //public Transform[] points;
 
     //public TextMeshProUGUI currentStateTxt;
@@ -39,7 +36,6 @@ public class EnemyAI : GameCharacter
     public float chasingTime = 4.0f;
     public float hitTime = 3.0f;
 
-    private Vector3 lastPlayerLocation;
     private Vector3 playerLocation;
     private Vector3 enemyLocation;
 
@@ -85,21 +81,6 @@ public class EnemyAI : GameCharacter
                 Chasing();
                 break;
 
-            /*case State.Searching:
-                Debug.Log("State: Searching");
-                Searching();
-                break;
-
-            case State.Listening:
-                Debug.Log("State: Listening");
-                Listening();
-                break;
-
-            case State.Retreating:
-                Debug.Log("State: Retreating");
-                Retreating();
-                break;*/
-
             case State.Attacking:
                 //Debug.Log("State: Attacking");
                 Attacking();
@@ -110,15 +91,8 @@ public class EnemyAI : GameCharacter
 
     void Idle()
     {
-
-
-        /*animator.SetBool("Running", false);
-        animator.SetBool("Searching", false);
-        animator.SetBool("Attacking", false);
-        animator.SetBool("Walking", true);
-
         playerLocation = player.gameObject.transform.position;
-        enemy.SetDestination(points[patrolDestinationPoint].position);*/
+
 
         if (Physics.Raycast(enemySight, out hitInfo, viewDistance))
         {
@@ -129,30 +103,10 @@ public class EnemyAI : GameCharacter
             }
         }
 
-        /*if ((enemyLocation.x == points[patrolDestinationPoint].position.x) && (enemyLocation.z == points[patrolDestinationPoint].position.z))
-        {
-            Debug.Log("triggered");
-
-            patrolDestinationPoint = patrolDestinationPoint + 1;
-
-            if (patrolDestinationPoint >= patrolDestinationAmount)
-            {
-                patrolDestinationPoint = 0;
-            }
-
-            SwitchState(State.Patrolling);
-        }*/
-
-
     }
 
     void Chasing()
     {
-        /*animator.SetBool("Running", true);
-        animator.SetBool("Searching", false);
-        animator.SetBool("Attacking", false);
-        animator.SetBool("Walking", false);*/
-
         enemy.SetDestination(playerLocation);
 
         if (distance <= attackDistance)
@@ -163,83 +117,14 @@ public class EnemyAI : GameCharacter
 
         if (distance >= viewDistance)
         {
-            lastPlayerLocation = player.gameObject.transform.position;
             SwitchState(State.Idle);
         }
 
 
     }
 
-    /*void Searching()
-    {
-
-        *//*animator.SetBool("Running", false);
-        animator.SetBool("Searching", true);
-        animator.SetBool("Attacking", false);
-        animator.SetBool("Walking", false);*//*
-
-        enemy.SetDestination(enemyLocation);
-
-        searchTime -= Time.deltaTime;
-
-        if (searchTime <= 0.0f)
-        {
-            SwitchState(State.Retreating);
-        }
-
-        if (Physics.Raycast(enemySight, out hitInfo, viewDistance))
-        {
-            if (hitInfo.collider.tag == "Player")
-            {
-                Debug.Log("triggered!!!!");
-                SwitchState(State.Chasing);
-            }
-        }
-
-    }*/
-
-    /*void Listening()
-    {
-        //transform.LookAt(player.transform);
-        enemy.SetDestination(playerLocation);
-
-        if (distance >= hearingDistance)
-        {
-            SwitchState(State.Chasing);
-        }
-
-    }*/
-
-    /*void Retreating()
-    {
-        *//*animator.SetBool("Running", true);
-        animator.SetBool("Searching", false);
-        animator.SetBool("Attacking", false);
-        animator.SetBool("Walking", false);*//*
-
-        enemy.SetDestination(points[patrolDestinationPoint].position);
-
-        if ((enemyLocation.x == points[patrolDestinationPoint].position.x) && (enemyLocation.z == points[patrolDestinationPoint].position.z))
-        {
-            SwitchState(State.Patrolling);
-        }
-
-        if (Physics.Raycast(enemySight, out hitInfo, viewDistance))
-        {
-            if (hitInfo.collider.tag == "Player")
-            {
-                Debug.Log("triggered!!!!");
-                SwitchState(State.Chasing);
-            }
-        }
-    }*/
-
     void Attacking()
     {
-        /*animator.SetBool("Running", false);
-        animator.SetBool("Searching", false);
-        animator.SetBool("Attacking", true);
-        animator.SetBool("Walking", false);*/
 
         enemy.SetDestination(enemyLocation);
 
@@ -250,7 +135,7 @@ public class EnemyAI : GameCharacter
             if (player.blocking)
             {
                 player.TakeDamage((int)(damage / 4));
-                hitTime = 5.0f; // <----- will be replaced by a possible stunned class
+                hitTime = 5.0f; // <----- will be replaced by a possible stunned state
             }
             else
             {

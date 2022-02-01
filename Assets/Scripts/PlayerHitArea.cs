@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerHitArea : MonoBehaviour
 {
-    public Player player;
+    public PlayerStats player;
 
     void Start()
     {
