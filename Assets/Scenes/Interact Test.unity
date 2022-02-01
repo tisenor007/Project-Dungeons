@@ -198,8 +198,26 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6191856575762159750, guid: abff814f6ede90a46af3926acb659fbd, type: 3}
+      propertyPath: shield
+      value: 
+      objectReference: {fileID: 213253809}
+    - target: {fileID: 6191856575762159750, guid: abff814f6ede90a46af3926acb659fbd, type: 3}
+      propertyPath: hitArea
+      value: 
+      objectReference: {fileID: 213253808}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: abff814f6ede90a46af3926acb659fbd, type: 3}
+--- !u!1 &213253808 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 401969443469347134, guid: abff814f6ede90a46af3926acb659fbd, type: 3}
+  m_PrefabInstance: {fileID: 213253807}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &213253809 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 401969443755238383, guid: abff814f6ede90a46af3926acb659fbd, type: 3}
+  m_PrefabInstance: {fileID: 213253807}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &339105141
 GameObject:
   m_ObjectHideFlags: 0

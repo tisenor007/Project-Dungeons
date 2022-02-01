@@ -5,11 +5,11 @@ using UnityEngine;
 public class HealthItem : Item
 {
     [SerializeField]
-    private float RestoreValue = 10;
+    private int RestoreValue = 10;
 
     public override void OnPickup(GameObject gameObject)
     {
         base.OnPickup(gameObject);
-        gameObject.GetComponent<PlayerController>()
+        gameObject.GetComponent<PlayerStats>().Heal(RestoreValue);
     }
 }
