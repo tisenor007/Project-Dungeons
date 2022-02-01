@@ -2,22 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Interactable : MonoBehaviour
+[System.Serializable]
+
+public abstract class Interactable : MonoBehaviour
 {
     public float interactableFeedback__Intensity = 10;
 
     private Light feedbackLight; //feedback to show object is interactable
     private bool feedbackEnabled;
-    private bool removeInteractableObject = false;
+    private bool interactableEnabled = true;
+    private GameObject interactee; // the object interacting with this
 
-    private void Start()
+    //types of interactables
+    private Item item;
+
+    public bool InteractableEnabled { get; }
+
+    void Start()
     {
+        if (TryGetComponent<Item>(out Item itemGet))
+        {
+            item = itemGet;
+            Debug.Log($"{gameObject.name} is a {item} interactable, (ITEM) Type.");
+        }
         feedbackLight = GetComponent<Light>();
         feedbackLight.intensity = 0;
         DisableFeedback();
     }
 
-    private void Update()
+    void Update()
     {
         if (feedbackEnabled == false && feedbackLight.intensity > 0)
         {
@@ -27,21 +40,25 @@ public class Interactable : MonoBehaviour
         {
             feedbackLight.intensity += Time.deltaTime * 30;
         }
-        else if (removeInteractableObject && feedbackLight.intensity <= 0)
+        else if (interactableEnabled && feedbackLight.intensity <= 0)
         { 
             this.gameObject.SetActive(false);
         }
     }
 
-    public void Interact()
+    public void Interact(GameObject gameObject)
     {
         Debug.LogError("Interacted");
+        interactee = gameObject;
+        
+        if (item != null) { item.OnPickup(); }
+        
         RemoveGameObjectWFeedback();
     }
 
     public void EnableFeedback()
     {
-        if (feedbackEnabled != true && !removeInteractableObject) //quickfix: only enable feedback if object isnt being deleted
+        if (feedbackEnabled != true && !interactableEnabled) //quickfix: only enable feedback if object isnt being deleted
         { 
             feedbackEnabled = true;
             Debug.Log("enabled feedback");
@@ -59,7 +76,7 @@ public class Interactable : MonoBehaviour
 
     public void RemoveGameObjectWFeedback()
     {
-        removeInteractableObject = true;
+        interactableEnabled = true;
         GetComponent<MeshRenderer>().enabled = false;
         DisableFeedback();
     }

@@ -115,17 +115,16 @@ public class PlayerController : MonoBehaviour
             hitColInteraction = Physics.OverlapSphere(transform.position,
                     interactionRadius, interactable.value, QueryTriggerInteraction.Ignore);
 
-            //tell interactable to highlight if interaction is possible
+            //highlight 
             if (hitColInteraction != null)
             {
                 float r = interactionRadius - 1f; // MN#: -1 due to radius encompasing hitColInteraction enough to not miss turning off the light
 
                 foreach (Collider col in hitColInteraction)
                 {
-                    if (col.transform.position.x > transform.position.x + r ||
-                        col.transform.position.x < transform.position.x - r ||
-                        col.transform.position.z > transform.position.z + r ||
-                        col.transform.position.z < transform.position.z - r)
+                    float distance = Vector3.Distance(transform.position, col.transform.position);
+
+                    if (distance <= r)
                     {
                         col.gameObject.GetComponent<Interactable>().DisableFeedback();
                     }
@@ -141,8 +140,12 @@ public class PlayerController : MonoBehaviour
                 if (hitColInteraction != null)
                 {
                     foreach (Collider col in hitColInteraction)
-                    { 
-                        col.gameObject.GetComponent<Interactable>().Interact();
+                    {
+                        Interactable interactable = col.gameObject.GetComponent<Interactable>();
+                        if (interactable.InteractableEnabled)
+                        { 
+                            interactable.Interact();
+                        }
                     }
                 }
             }
@@ -151,10 +154,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        float r = interactionRadius;
+        //interaction range
+        { 
+            float r = interactionRadius;
 
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, r);
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(transform.position, r);
+        }
     }
 
     public void AdjustMoveIntensity()
