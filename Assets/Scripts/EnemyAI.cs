@@ -172,14 +172,6 @@ public class EnemyAI : GameCharacter
         if (Health < maxHealth * 0.2)
             healthColour.color = new Color32(204, 40, 0, 255);
     }
-    public override void TakeDamage(int damage, Transform character)
-    {
-        base.TakeDamage(damage, character);
-        if (health <= 0)
-        {
-            Death();
-        }
-    }
 
     protected override void Death()
     {
