@@ -11,19 +11,19 @@ public class GameCharacter : MonoBehaviour
     {
         ResetStats();
     }
-    public void ResetStats()
+    public virtual void ResetStats()
     {
         Heal(maxHealth);
         isAlive = true;
     }
-    public void TakeDamage(int damage, Transform character)
+    public virtual void TakeDamage(int damage, Transform character)
     {
         //DamageFeedback(character);
         health -= damage;
-        if(health <= 0)
-        {
-            Death();
-        }
+        //if(health <= 0)
+        //{
+            //Death();
+        //}
     }
     public void Heal(int heal)
     {
@@ -34,7 +34,7 @@ public class GameCharacter : MonoBehaviour
     {
         health = 0;
         isAlive = false;
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
     protected virtual void DamageFeedback(Transform character)
     {
