@@ -7,16 +7,16 @@ public class PlayerStats : GameCharacter
 {
     public bool attacking = false;
     public bool blocking;
+
     public float hitTimer = 0.5f;
-    public float attackDuration = 1;
+
     public GameObject shield;
     public GameObject hitArea;
-    [SerializeField] private Slider healthBar;
-    [SerializeField] private Text healthText;
 
-    private void Awake()
+    private void Start()
     {
-        healthBar.maxValue = maxHealth;
+        damage = 10;
+        //health = 100;
     }
 
     private void Update()
