@@ -5,11 +5,6 @@ using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
-    //Manages a singular level aspect
-
-    public static LevelManager control;
-    
-    
     [HideInInspector]
     public int activeScreen; // starts at 1 to count properly to screenCount
     [SerializeField]
@@ -22,6 +17,11 @@ public class LevelManager : MonoBehaviour
     private static float creditsBeginPos = -500;
     private float creditsYPos = creditsBeginPos;
     private float creditsScrollRate = 1;
+
+    public void Start()
+    {
+        
+    }
 
     public void Update()
     {
@@ -52,6 +52,7 @@ public class LevelManager : MonoBehaviour
     
     public void ChangeGameStateToGamePlay()
     {
+        GameManager.manager.playerAndCamera.transform.GetChild(0).GetComponent<PlayerStats>().ResetStats();
         GameManager.manager.ChangeState(GameState.GAMEPLAY);
     }
     

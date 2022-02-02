@@ -11,34 +11,37 @@ public class GameCharacter : MonoBehaviour
     {
         ResetStats();
     }
-    public void ResetStats()
+    public virtual void ResetStats()
     {
         Heal(maxHealth);
         isAlive = true;
     }
-    public void TakeDamage(int damage, Transform character)
+    public virtual void TakeDamage(int damage, Transform character)
     {
-        //DamageFeedback(character);
+        DamageFeedback(character);
         health -= damage;
-        if(health <= 0)
-        {
-            Death();
-        }
+        //if(health <= 0)
+        //{
+            //Death();
+        //}
     }
-    public void Heal(int heal)
+    public void Heal(int healValue)
     {
-        health += heal;
+        health += healValue;
+        Debug.Log($"{gameObject.name} healed {healValue}");
         if (health > maxHealth) health = maxHealth;
     }
     protected virtual void Death()
     {
         health = 0;
         isAlive = false;
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
     }
     protected virtual void DamageFeedback(Transform character)
     {
-        character.transform.Translate(Vector3.back);
+        //GameManager.manager.levelManager.DisplayPopup(":)");
+
+        //character.transform.Translate(Vector3.back); < movement not feedback
     }
 
 }

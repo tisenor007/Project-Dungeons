@@ -7,28 +7,20 @@ public class PlayerStats : GameCharacter
 {
     public bool attacking = false;
     public bool blocking;
+
     public float hitTimer = 0.5f;
-    public float attackDuration = 1;
+
     public GameObject shield;
     public GameObject hitArea;
     [SerializeField] private Slider healthBar;
     [SerializeField] private Text healthText;
-
-    private void Awake()
-    {
-        healthBar.maxValue = maxHealth;
-    }
+    [Space]
+    public Vector3 respawnPos = new Vector3(-56.0f, 5.11f, -63.0f);
 
     private void Update()
     {
         healthBar.value = Health;
         healthText.text = "" + Health;
-
-        if (IsAlive == false)
-        {
-            GameManager.manager.ChangeState(GameState.LOSE);
-            //Health = maxHealth;
-        }
 
         //blocking = Input.GetMouseButton(1);
 
@@ -66,19 +58,40 @@ public class PlayerStats : GameCharacter
     public void Block() { if (shield.activeSelf == false) { shield.SetActive(true); } blocking = true; }
     public void StopBlocking() { if (shield.activeSelf == true) { shield.SetActive(false); blocking = false; } }
 
-    protected override void Death()
-    {
-        base.Death();
-        // ENTER CODE FOR DEATH ANIMATIONS, ETC
-    }
-
     public float GetHealthDividedMaxHealth()
     {
         return (health / maxHealth);
     }
 
+    public override void ResetStats()
+    {
+        base.ResetStats();
+        transform.GetChild(0).gameObject.SetActive(true);
+        transform.localPosition = respawnPos;
+        transform.parent.localEulerAngles = Vector3.zero;
+        StopAttacking();
+        StopBlocking();
+    }
+
+    public override void TakeDamage(int damage, Transform character)
+    {
+        base.TakeDamage(damage, character);
+        if (health <= 0)
+        {
+            GameManager.manager.levelManager.ChangeGameStateToLose();
+            Death();
+        }
+    }
+
+    protected override void Death()
+    {
+        base.Death();
+        transform.GetChild(0).gameObject.SetActive(false);
+        // ENTER CODE FOR DEATH ANIMATIONS, ETC
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "WIN") { GameManager.manager.ChangeState(GameState.WIN); }
+        if (other.tag == "WIN") { GameManager.manager.levelManager.ChangeGameStateToWin(); }
     }
 }
