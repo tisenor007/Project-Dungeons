@@ -46,11 +46,13 @@ public class GameManager : MonoBehaviour
         if (manager == null)
         {
             DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(playerRef);
             manager = this; // setting this object to be THE singleton
         }
         else if (manager != this) // already exist's? DESTROY
         {
             Destroy(this.gameObject);
+            Destroy(playerRef);
         }
 
         // make fading text invisible at start
@@ -81,8 +83,6 @@ public class GameManager : MonoBehaviour
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     uiManager.LoadTitleMenu();
 
-                    playerRef.transform.position = new Vector3(125f, 2.81f, -54f);
-                    playerRef.transform.localEulerAngles = new Vector3(0, 0, 0);
                     playerRef.SetActive(false);
                     return; 
                 }
@@ -102,24 +102,18 @@ public class GameManager : MonoBehaviour
             case GameState.WIN:
                 {
                     uiManager.LoadWinScreen();
-
-                    playerRef.transform.position = new Vector3(125f, 2.81f, -54f);
-                    playerRef.transform.localEulerAngles = new Vector3(0, 0, 0);
-                    playerRef.SetActive(false);
+                    if (Time.timeScale == 1) { Time.timeScale = 0; }
                     return;
                 }
             case GameState.LOSE:
                 {
                     uiManager.LoadLoseScreen();
-
-                    playerRef.transform.position = new Vector3(125f, 2.81f, -54f);
-                    playerRef.transform.localEulerAngles = new Vector3(0, 0, 0);
-                    playerRef.SetActive(false);
+                    if (Time.timeScale == 1) { Time.timeScale = 0; }
                     return;
                 }
             case GameState.PAUSE:
                 {
-                    Time.timeScale = 0;
+                    if (Time.timeScale == 1) { Time.timeScale = 0; }
 
                     uiManager.LoadPauseScreen();
                     return;
@@ -136,7 +130,7 @@ public class GameManager : MonoBehaviour
                         SceneManager.LoadScene(GameState.CREDITS.ToString(), LoadSceneMode.Single);
                         SaveScreenState();
                     }
-                    if (Time.timeScale == 0) { Time.timeScale = 100; }
+                    if (Time.timeScale == 0) { Time.timeScale = 1; }
                     uiManager.LoadCredits();
 
                     playerRef.SetActive(false);
