@@ -39,7 +39,7 @@ public class PlayerController : MonoBehaviour
     private float attackBlend;
     private float attackBlendAcceleration = 10.0f;
     private float attackBlendDeceleration = 3.5f;
-    private float attackTimeDuration;
+    private float attackTimeDuration = 1.34f;
     private float attackTimer;
     private Vector3 moveDirection;
     private float jumpTimeDuration = 1.34f;
@@ -85,10 +85,36 @@ public class PlayerController : MonoBehaviour
         gameCamera.transform.position = new Vector3(transform.position.x + 8, transform.position.y + 15, transform.position.z - 8);
 
         //animation movement controller
-        CheckPlayerInputandPerformPlayerActions();
-        if (Time.time > jumpTimer && isGrounded() == false) { movementMode = MovementMode.Falling; }
-        animator.SetFloat("Velocity", moveIntensity);
-        animator.SetLayerWeight(1, attackBlend);
+        {
+            CheckPlayerInputandPerformPlayerActions();
+            if (Time.time > jumpTimer && isGrounded() == false) { movementMode = MovementMode.Falling; }
+            animator.SetFloat("Velocity", moveIntensity);
+            animator.SetLayerWeight(1, attackBlend);
+
+            switch (movementMode)
+            {
+                case MovementMode.Idle:
+                    animator.SetFloat("AnimState", 0);
+                    if (moveIntensity > 0.0f) { moveIntensity -= Time.deltaTime * velocityDeceleration; }
+                    break;
+                case MovementMode.Running:
+                    animator.SetFloat("AnimState", 0);
+                    maxInensity = 5;
+                    AdjustMoveIntensity();
+                    break;
+                case MovementMode.Sprinting:
+                    animator.SetFloat("AnimState", 0);
+                    maxInensity = 10;
+                    AdjustMoveIntensity();
+                    break;
+                case MovementMode.Jumping:
+                    animator.SetFloat("AnimState", 1);
+                    break;
+                case MovementMode.Falling:
+                    animator.SetFloat("AnimState", 2);
+                    break;
+            }
+        }
 
         //Interaction 
         {

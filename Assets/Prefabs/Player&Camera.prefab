@@ -415,6 +415,7 @@ MonoBehaviour:
   hitArea: {fileID: 401969443469347134}
   healthBar: {fileID: 2634224971215384146}
   healthText: {fileID: 2674521243341044341}
+  respawnPos: {x: -55.1, y: 5.8, z: -59.7}
 --- !u!136 &1565133607663050785
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1313,6 +1314,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 46106eff2ac219749aa162bb3bf04ae1, type: 3}
       propertyPath: m_Layer
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 46106eff2ac219749aa162bb3bf04ae1, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 1082271958561512970, guid: 46106eff2ac219749aa162bb3bf04ae1, type: 3}
       propertyPath: m_Layer

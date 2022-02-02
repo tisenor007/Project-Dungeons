@@ -39,7 +39,9 @@ public class GameCharacter : MonoBehaviour
     }
     protected virtual void DamageFeedback(Transform character)
     {
-        character.transform.Translate(Vector3.back);
+        //GameManager.manager.levelManager.DisplayPopup(":)");
+
+        //character.transform.Translate(Vector3.back); < movement not feedback
     }
 
 }

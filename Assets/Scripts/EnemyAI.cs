@@ -21,7 +21,7 @@ public class EnemyAI : GameCharacter
     //public Animator animator;
     public NavMeshAgent enemy;
 
-    public PlayerStats player;
+    public PlayerStats playerStats;
     //public Transform[] points;
 
     //public TextMeshProUGUI currentStateTxt;
@@ -67,14 +67,14 @@ public class EnemyAI : GameCharacter
 
     void Update()
     {
-        if (player == null) { player = GameManager.manager.playerAndCamera.GetComponentInChildren<PlayerStats>(); }
+        if (playerStats == null) { playerStats = GameObject.Find("Player").GetComponent<PlayerStats>(); }
 
         UpdateHealth();
         transform.GetChild(0).transform.LookAt(transform.GetChild(0).transform.position + cam.forward);
 
         enemySight = new Ray(transform.position, transform.TransformDirection(Vector3.forward));
         enemyLocation = enemy.transform.position;
-        playerLocation = player.gameObject.transform.position;
+        playerLocation = playerStats.gameObject.transform.position;
         distance = Vector3.Distance(playerLocation, enemyLocation);
 
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * viewDistance, Color.white);
@@ -97,7 +97,7 @@ public class EnemyAI : GameCharacter
 
     void Idle()
     {
-        playerLocation = player.gameObject.transform.position;
+        playerLocation = playerStats.gameObject.transform.position;
 
         if (Physics.Raycast(enemySight, out hitInfo, viewDistance))
         {
@@ -132,14 +132,14 @@ public class EnemyAI : GameCharacter
 
         if (hitTime <= 0.0f)
         {
-            if (player.blocking)
+            if (playerStats.blocking)
             {
-                player.TakeDamage((int)(damage / 4), player.GetComponent<Transform>());
+                playerStats.TakeDamage((int)(damage / 4), playerStats.GetComponent<Transform>());
                 hitTime = stunnedHitDuration; // <----- will be replaced by a possible stunned state
             }
             else
             {
-                player.TakeDamage(damage, player.GetComponent<Transform>());
+                playerStats.TakeDamage(damage, playerStats.GetComponent<Transform>());
                 hitTime = attackDuration;
             }
         }   

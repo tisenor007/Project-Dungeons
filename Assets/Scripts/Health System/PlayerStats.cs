@@ -16,10 +16,6 @@ public class PlayerStats : GameCharacter
     [SerializeField] private Text healthText;
     [Space]
     public Vector3 respawnPos = new Vector3(-56.0f, 5.11f, -63.0f);
-    private void Awake()
-    {
-        
-    }
 
     private void Update()
     {
@@ -73,6 +69,8 @@ public class PlayerStats : GameCharacter
         transform.GetChild(0).gameObject.SetActive(true);
         transform.localPosition = respawnPos;
         transform.parent.localEulerAngles = Vector3.zero;
+        StopAttacking();
+        StopBlocking();
     }
 
     public override void TakeDamage(int damage, Transform character)
