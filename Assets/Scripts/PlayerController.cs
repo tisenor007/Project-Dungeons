@@ -54,7 +54,6 @@ public class PlayerController : MonoBehaviour
         playerStats = transform.GetComponent<PlayerStats>();
         rb = this.GetComponent<Rigidbody>();
         movementMode = MovementMode.Idle;
-        attackTimeDuration = playerStats.attackDuration;
     }
 
     // Update is called once per frame
