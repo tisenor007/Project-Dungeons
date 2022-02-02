@@ -25,9 +25,10 @@ public class GameCharacter : MonoBehaviour
             Death();
         }
     }
-    public void Heal(int heal)
+    public void Heal(int healValue)
     {
-        health += heal;
+        health += healValue;
+        Debug.Log($"{gameObject.name} healed {healValue}");
         if (health > maxHealth) health = maxHealth;
     }
     protected virtual void Death()

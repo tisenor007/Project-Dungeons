@@ -232,7 +232,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1565133607124626167}
-  - {fileID: 6287891267050677916}
   - {fileID: 1565133606891264096}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -267,7 +266,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1565133606617093633}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 15, y: 0, z: 0}
 --- !u!20 &1565133606891264103
 Camera:
@@ -351,6 +350,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1311323491020522569}
+  - {fileID: 6287891267050677916}
   m_Father: {fileID: 1565133606617093633}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -383,10 +383,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1565133607663050784}
-  camera: {fileID: 1565133606891264101}
+  gameCamera: {fileID: 1565133606891264101}
   body:
     serializedVersion: 2
     m_Bits: 8
+  interactable:
+    serializedVersion: 2
+    m_Bits: 64
+  interactionRadius: 7
+  canInteract: 0
 --- !u!114 &6191856575762159750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -405,8 +410,8 @@ MonoBehaviour:
   attacking: 0
   blocking: 0
   hitTimer: 0.5
-  shield: {fileID: 0}
-  hitArea: {fileID: 0}
+  shield: {fileID: 401969443755238383}
+  hitArea: {fileID: 401969443469347134}
 --- !u!136 &1565133607663050785
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -464,12 +469,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8636224843330213976}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.98, y: 2.44, z: -2.96}
+  m_LocalPosition: {x: -0.025666595, y: 0.20179558, z: 0.37140203}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 401969443755238371}
   - {fileID: 401969443469347133}
-  m_Father: {fileID: 1565133606617093633}
+  m_Father: {fileID: 1565133607124626167}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1565133606699541410

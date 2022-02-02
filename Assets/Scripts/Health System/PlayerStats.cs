@@ -15,7 +15,7 @@ public class PlayerStats : GameCharacter
     private void Start()
     {
         damage = 10;
-        health = 100;
+        //health = 100;
     }
 
     private void Update()

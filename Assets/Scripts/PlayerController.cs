@@ -13,11 +13,13 @@ public class PlayerController : MonoBehaviour
         Falling
     }
 
-    public float interactionRadius = 7f;
+    
     public Animator animator;
-    public GameObject camera;
+    public GameObject gameCamera;
     public LayerMask body;
     public LayerMask interactable;
+    public float interactionRadius = 7f;
+
     private float maxInensity;
     private MovementMode movementMode;
     private Rigidbody rb;
@@ -75,8 +77,8 @@ public class PlayerController : MonoBehaviour
         }
 
         //Cam movement/placement
-        camera.transform.localEulerAngles = new Vector3(50, -45, 0);
-        camera.transform.position = new Vector3(transform.position.x + 8, transform.position.y + 15, transform.position.z - 8);
+        gameCamera.transform.localEulerAngles = new Vector3(50, -45, 0);
+        gameCamera.transform.position = new Vector3(transform.position.x + 8, transform.position.y + 15, transform.position.z - 8);
 
         //animation movement controller
         { 
@@ -110,40 +112,51 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        //Interaction
+        //Interaction 
         {
+            /// make sure interactable LayerMask is set in PlayerController inspector Interactable
             hitColInteraction = Physics.OverlapSphere(transform.position,
                     interactionRadius, interactable.value, QueryTriggerInteraction.Ignore);
 
-            //highlight 
-            if (hitColInteraction != null)
+            //highlight objects interactable to the player
+            if (hitColInteraction.Length != 0)
             {
-                float r = interactionRadius - 1f; // MN#: -1 due to radius encompasing hitColInteraction enough to not miss turning off the light
+                canInteract = true;
+                float r = interactionRadius - .1f; // MN#: -.5 due to radius encompasing hitColInteraction enough to not miss turning off the light
+                Debug.LogError($"hitting {hitColInteraction.Length} object(s)");
 
                 foreach (Collider col in hitColInteraction)
                 {
                     float distance = Vector3.Distance(transform.position, col.transform.position);
+                    Debug.LogError($"hit {col.gameObject.name}");
 
-                    if (distance <= r)
+                    if (distance >= r)
                     {
                         col.gameObject.GetComponent<Interactable>().DisableFeedback();
                     }
                     else { col.gameObject.GetComponent<Interactable>().EnableFeedback(); }
+                    
                 }
             }
 
             //interact with object
             if (Input.GetKeyDown(KeyCode.E))
             {
+                canInteract = false;
                 Debug.LogWarning("call Interact");
-             
-                if (hitColInteraction != null)
+
+                if (hitColInteraction.Length != 0)
                 {
+                    Debug.LogError  ($"trying Interaction with {hitColInteraction.Length} object(s)");
+                    
                     foreach (Collider col in hitColInteraction)
                     {
                         Interactable interactable = col.gameObject.GetComponent<Interactable>();
-                        if (interactable.InteractableEnabled)
-                        { 
+                        Debug.LogWarning($"trying Interaction with {interactable.gameObject.name}");
+                        
+                        if (interactable.InteractableEnabled == true)
+                        {
+                            Debug.LogWarning($"Interacting with {interactable.gameObject.name}");
                             interactable.Interact(this.gameObject);
                         }
                     }
@@ -193,6 +206,7 @@ public class PlayerController : MonoBehaviour
 
     private bool isGrounded()
     {
+        /// Make sure body Layermask is set in PlayerController Inspector Body
         if (Physics.Raycast(this.transform.position, -this.transform.up, out rayHit, rayRange, ~body)) 
         {
             return true;
