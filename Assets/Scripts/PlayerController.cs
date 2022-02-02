@@ -12,14 +12,10 @@ public class PlayerController : MonoBehaviour
         Jumping,
         Falling
     }
-
-    
+   
     public Animator animator;
-    public GameObject gameCamera;
+    public GameObject camera;
     public LayerMask body;
-    public LayerMask interactable;
-    public float interactionRadius = 7f;
-
     private float maxInensity;
     private MovementMode movementMode;
     private Rigidbody rb;
@@ -45,9 +41,6 @@ public class PlayerController : MonoBehaviour
     private float rayRange = 0.85f;
     private RaycastHit rayHit;
     private PlayerStats playerStats;
-    [SerializeField]
-    private bool canInteract;
-    Collider[] hitColInteraction;
 
     void Start()
     {
@@ -80,8 +73,8 @@ public class PlayerController : MonoBehaviour
         }
 
         //Cam movement/placement
-        gameCamera.transform.localEulerAngles = new Vector3(50, -45, 0);
-        gameCamera.transform.position = new Vector3(transform.position.x + 8, transform.position.y + 15, transform.position.z - 8);
+        camera.transform.localEulerAngles = new Vector3(50, -45, 0);
+        camera.transform.position = new Vector3(transform.position.x + 8, transform.position.y + 15, transform.position.z - 8);
 
         //animation movement controller
         CheckPlayerInputandPerformPlayerActions();
@@ -89,70 +82,30 @@ public class PlayerController : MonoBehaviour
         animator.SetFloat("Velocity", moveIntensity);
         animator.SetLayerWeight(1, attackBlend);
 
-        //Interaction 
+        switch (movementMode)
         {
-            /// make sure interactable LayerMask is set in PlayerController inspector Interactable
-            hitColInteraction = Physics.OverlapSphere(transform.position,
-                    interactionRadius, interactable.value, QueryTriggerInteraction.Ignore);
-
-            //highlight objects interactable to the player
-            if (hitColInteraction.Length != 0)
-            {
-                canInteract = true;
-                float r = interactionRadius - .1f; // MN#: -.5 due to radius encompasing hitColInteraction enough to not miss turning off the light
-                Debug.LogError($"hitting {hitColInteraction.Length} object(s)");
-
-                foreach (Collider col in hitColInteraction)
-                {
-                    float distance = Vector3.Distance(transform.position, col.transform.position);
-                    Debug.LogError($"hit {col.gameObject.name}");
-
-                    if (distance >= r)
-                    {
-                        col.gameObject.GetComponent<Interactable>().DisableFeedback();
-                    }
-                    else { col.gameObject.GetComponent<Interactable>().EnableFeedback(); }
-                    
-                }
-            }
-
-            //interact with object
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                canInteract = false;
-                Debug.LogWarning("call Interact");
-
-                if (hitColInteraction.Length != 0)
-                {
-                    Debug.LogError  ($"trying Interaction with {hitColInteraction.Length} object(s)");
-                    
-                    foreach (Collider col in hitColInteraction)
-                    {
-                        Interactable interactable = col.gameObject.GetComponent<Interactable>();
-                        Debug.LogWarning($"trying Interaction with {interactable.gameObject.name}");
-                        
-                        if (interactable.InteractableEnabled == true)
-                        {
-                            Debug.LogWarning($"Interacting with {interactable.gameObject.name}");
-                            interactable.Interact(this.gameObject);
-                        }
-                    }
-                }
-            }
+            case MovementMode.Idle:
+                animator.SetFloat("AnimState", 0);
+                if (moveIntensity > 0.0f) { moveIntensity -= Time.deltaTime * velocityDeceleration; }
+                break;
+            case MovementMode.Running:
+                animator.SetFloat("AnimState", 0);
+                maxInensity = 5;
+                AdjustMoveIntensity();
+                break;
+            case MovementMode.Sprinting:
+                animator.SetFloat("AnimState", 0);
+                maxInensity = 10;
+                AdjustMoveIntensity();
+                break;
+            case MovementMode.Jumping:
+                animator.SetFloat("AnimState", 1);
+                break;
+            case MovementMode.Falling:
+                animator.SetFloat("AnimState", 2);
+                break;
         }
     }
-
-    private void OnDrawGizmosSelected()
-    {
-        //interaction range
-        { 
-            float r = interactionRadius;
-
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(transform.position, r);
-        }
-    }
-
     public void AdjustMoveIntensity()
     {
         if (moveIntensity < maxInensity) { moveIntensity += Time.deltaTime * velocityAcceleration; }
@@ -189,7 +142,6 @@ public class PlayerController : MonoBehaviour
 
     private bool isGrounded()
     {
-        /// Make sure body Layermask is set in PlayerController Inspector Body
         if (Physics.Raycast(this.transform.position, -this.transform.up, out rayHit, rayRange, ~body)) 
         {
             return true;
