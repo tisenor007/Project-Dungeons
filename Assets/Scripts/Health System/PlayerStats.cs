@@ -1,55 +1,70 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerStats : GameCharacter 
 {
     public bool attacking = false;
     public bool blocking;
-
     public float hitTimer = 0.5f;
-
+    public float attackDuration = 1;
     public GameObject shield;
     public GameObject hitArea;
+    [SerializeField] private Slider healthBar;
+    [SerializeField] private Text healthText;
 
-    private void Start()
+    private void Awake()
     {
-        damage = 10;
-        //health = 100;
+        healthBar.maxValue = maxHealth;
     }
 
     private void Update()
     {
-        blocking = Input.GetMouseButton(1);
+        healthBar.value = Health;
+        healthText.text = "" + Health;
 
-        if (blocking)
+        if (IsAlive == false)
         {
-            shield.SetActive(true);
+            GameManager.manager.ChangeState(GameState.LOSE);
+            //Health = maxHealth;
         }
-        if (blocking == false)
-        {
-            shield.SetActive(false);
 
-            if (Input.GetMouseButtonDown(0) && attacking == false)
-            {
-                attacking = true;
-            }
-            if (attacking)
-            {
-                hitArea.SetActive(true);
+        //blocking = Input.GetMouseButton(1);
 
-                hitTimer -= Time.deltaTime;
+        //if (blocking)
+        //{
+        //    shield.SetActive(true);
+        //}
+        //if (blocking == false)
+        //{
+        //    shield.SetActive(false);
 
-                if (hitTimer < 0)
-                {
-                    hitArea.SetActive(false);
-                    hitTimer = 2.0f;
-                    attacking = false;
-                }
+        //    if (Input.GetMouseButtonDown(0) && attacking == false)
+        //    {
+        //        attacking = true;
+        //    }
+        //    if (attacking)
+        //    {
+        //        hitArea.SetActive(true);
 
-            }
-        }
+        //        hitTimer -= Time.deltaTime;
+
+        //        if (hitTimer < 0)
+        //        {
+        //            hitArea.SetActive(false);
+        //            hitTimer = attackDuration;
+        //            attacking = false;
+        //        }
+
+        //    }
+        //}
     }
+    public void Attack() { if (shield.activeSelf == false && hitArea.activeSelf == false) { hitArea.SetActive(true); } }
+    public void StopAttacking() { if (hitArea.activeSelf == true) hitArea.SetActive(false);}
+
+    public void Block() { if (shield.activeSelf == false) { shield.SetActive(true); } blocking = true; }
+    public void StopBlocking() { if (shield.activeSelf == true) { shield.SetActive(false); blocking = false; } }
 
     protected override void Death()
     {
@@ -60,5 +75,10 @@ public class PlayerStats : GameCharacter
     public float GetHealthDividedMaxHealth()
     {
         return (health / maxHealth);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "WIN") { GameManager.manager.ChangeState(GameState.WIN); }
     }
 }

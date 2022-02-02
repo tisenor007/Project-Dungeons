@@ -23,7 +23,6 @@ public class LevelManager : MonoBehaviour
     private float creditsYPos = creditsBeginPos;
     private float creditsScrollRate = 1;
 
-    #region UIButtons
     public void Update()
     {
         if (GameManager.manager.uiManager.credits.enabled == false && creditsYPos != creditsBeginPos)
@@ -35,6 +34,9 @@ public class LevelManager : MonoBehaviour
             ScrollCredits();
         }
     }
+
+    #region UIButtons
+
     public void ButtonStartNewGame()
     {
         ChangeGameStateToGamePlay();
@@ -76,17 +78,6 @@ public class LevelManager : MonoBehaviour
     public void ChangeGameStateToCredits()
     {
         GameManager.manager.ChangeState(GameState.CREDITS);
-    }
-    private void ScrollCredits()
-    {
-        int childOrderNum = 0;
-        GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position = new Vector3(GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.x, creditsYPos, GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.z);
-
-        if (GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y >= creditsBottomPos) { creditsYPos = creditsTopPos; }
-        else if (GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y <= creditsBottomPos && GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y >= creditsTopPos)
-        {
-            creditsYPos = creditsYPos += Time.deltaTime * creditsScrollRate;
-        }
     }
 
     public void LoadButtonFade(bool fileExists)
@@ -130,6 +121,18 @@ public class LevelManager : MonoBehaviour
         Debug.LogError($"newAlpha: {newAlpha.a}, Image colour: {optionUI.brightnessImage.color}");
     }
     #endregion
+
+    private void ScrollCredits()
+    {
+        int childOrderNum = 0;
+        GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position = new Vector3(GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.x, creditsYPos, GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.z);
+
+        if (GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y >= creditsBottomPos) { creditsYPos = creditsTopPos; }
+        else if (GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y <= creditsBottomPos && GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y >= creditsTopPos)
+        {
+            creditsYPos = creditsYPos += Time.deltaTime * creditsScrollRate;
+        }
+    }
 }
 
 [System.Serializable]

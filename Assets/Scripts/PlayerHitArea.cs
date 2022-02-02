@@ -14,18 +14,15 @@ public class PlayerHitArea : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Enemy")
         {
-            
             other.GetComponent<EnemyAI>().TakeDamage(player.damage, other.GetComponent<Transform>());
             Debug.Log("ENEMY HEALTH: " + other.GetComponent<EnemyAI>().health);
-            
         }
-        
     }
 }
