@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -52,10 +53,15 @@ public class LevelManager : MonoBehaviour
     
     public void ChangeGameStateToGamePlay()
     {
+        GameManager.manager.ChangeState(GameState.GAMEPLAY);
+    }
+    public void ChangeGameStateToNewGame()
+    {
+        GameManager.manager.ResetScene();
         GameManager.manager.playerAndCamera.transform.GetChild(0).GetComponent<PlayerStats>().ResetStats();
         GameManager.manager.ChangeState(GameState.GAMEPLAY);
     }
-    
+
     public void ChangeGameStateToWin()
     {
         GameManager.manager.ChangeState(GameState.WIN);

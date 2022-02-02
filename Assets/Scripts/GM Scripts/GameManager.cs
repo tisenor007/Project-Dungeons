@@ -227,6 +227,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ResetScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+    }
 
     IEnumerator WaitToFadeText(string fade)
     {
