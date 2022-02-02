@@ -108,7 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c71dda248583ef1438edb739bcaedb2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 6191856575762159750}
 --- !u!1 &401969443755238383
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,7 +214,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1565133606617093633}
   m_Layer: 3
-  m_Name: IsometricCharacterController
+  m_Name: Player&Camera
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -384,10 +384,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 1565133607663050784}
-  camera: {fileID: 0}
+  gameCamera: {fileID: 1565133606891264101}
   body:
     serializedVersion: 2
     m_Bits: 8
+  interactable:
+    serializedVersion: 2
+    m_Bits: 64
+  interactionRadius: 7
+  canInteract: 0
 --- !u!114 &6191856575762159750
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -406,11 +411,10 @@ MonoBehaviour:
   attacking: 0
   blocking: 0
   hitTimer: 0.5
-  attackDuration: 1
   shield: {fileID: 401969443755238383}
   hitArea: {fileID: 401969443469347134}
-  healthBar: {fileID: 0}
-  healthText: {fileID: 0}
+  healthBar: {fileID: 2634224971215384146}
+  healthText: {fileID: 2674521243341044341}
 --- !u!136 &1565133607663050785
 CapsuleCollider:
   m_ObjectHideFlags: 0

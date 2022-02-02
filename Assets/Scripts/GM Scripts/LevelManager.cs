@@ -52,7 +52,7 @@ public class LevelManager : MonoBehaviour
     
     public void ChangeGameStateToGamePlay()
     {
-        GameManager.manager.playerRef.transform.GetChild(0).GetComponent<PlayerStats>().ResetStats();
+        GameManager.manager.playerAndCamera.transform.GetChild(0).GetComponent<PlayerStats>().ResetStats();
         GameManager.manager.ChangeState(GameState.GAMEPLAY);
     }
     

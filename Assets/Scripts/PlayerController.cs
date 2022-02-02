@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     public GameObject gameCamera;
     public LayerMask body;
     public LayerMask interactable;
+
+    [Header("Interaction")]
     public float interactionRadius = 7f;
 
     private float maxInensity;
@@ -99,12 +101,12 @@ public class PlayerController : MonoBehaviour
             {
                 canInteract = true;
                 float r = interactionRadius - .1f; // MN#: -.5 due to radius encompasing hitColInteraction enough to not miss turning off the light
-                Debug.LogError($"hitting {hitColInteraction.Length} object(s)");
+                //Debug.LogError($"hitting {hitColInteraction.Length} object(s)");
 
                 foreach (Collider col in hitColInteraction)
                 {
                     float distance = Vector3.Distance(transform.position, col.transform.position);
-                    Debug.LogError($"hit {col.gameObject.name}");
+                    //Debug.LogError($"hit {col.gameObject.name}");
 
                     if (distance >= r)
                     {
@@ -112,30 +114,6 @@ public class PlayerController : MonoBehaviour
                     }
                     else { col.gameObject.GetComponent<Interactable>().EnableFeedback(); }
                     
-                }
-            }
-
-            //interact with object
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                canInteract = false;
-                Debug.LogWarning("call Interact");
-
-                if (hitColInteraction.Length != 0)
-                {
-                    Debug.LogError  ($"trying Interaction with {hitColInteraction.Length} object(s)");
-                    
-                    foreach (Collider col in hitColInteraction)
-                    {
-                        Interactable interactable = col.gameObject.GetComponent<Interactable>();
-                        Debug.LogWarning($"trying Interaction with {interactable.gameObject.name}");
-                        
-                        if (interactable.InteractableEnabled == true)
-                        {
-                            Debug.LogWarning($"Interacting with {interactable.gameObject.name}");
-                            interactable.Interact(this.gameObject);
-                        }
-                    }
                 }
             }
         }
@@ -183,6 +161,29 @@ public class PlayerController : MonoBehaviour
         else if (Input.GetKey(forwardInput) == false && Input.GetKey(leftInput) == false && Input.GetKey(backwardInput) == false && Input.GetKey(rightInput) == false && movementMode != MovementMode.Jumping && isGrounded() == true)
         {
             movementMode = MovementMode.Idle;
+        }
+        //interact with object
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            canInteract = false;
+            Debug.LogWarning("call Interact");
+
+            if (hitColInteraction.Length != 0)
+            {
+                Debug.LogError($"trying Interaction with {hitColInteraction.Length} object(s)");
+
+                foreach (Collider col in hitColInteraction)
+                {
+                    Interactable interactable = col.gameObject.GetComponent<Interactable>();
+                    //Debug.LogWarning($"trying Interaction with {interactable.gameObject.name}");
+
+                    if (interactable.InteractableEnabled == true)
+                    {
+                        Debug.LogWarning($"Interacting with {interactable.gameObject.name}");
+                        interactable.Interact(this.gameObject);
+                    }
+                }
+            }
         }
     }
 

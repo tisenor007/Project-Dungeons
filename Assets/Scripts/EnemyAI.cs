@@ -67,7 +67,7 @@ public class EnemyAI : GameCharacter
 
     void Update()
     {
-        if (player == null) { player = GameObject.Find("IsometricCharacterController").transform.GetChild(0).GetComponent<PlayerStats>(); }
+        if (player == null) { player = GameManager.manager.playerAndCamera.GetComponentInChildren<PlayerStats>(); }
 
         UpdateHealth();
         transform.GetChild(0).transform.LookAt(transform.GetChild(0).transform.position + cam.forward);

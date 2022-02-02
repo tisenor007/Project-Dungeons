@@ -14,7 +14,8 @@ public class PlayerStats : GameCharacter
     public GameObject hitArea;
     [SerializeField] private Slider healthBar;
     [SerializeField] private Text healthText;
-    private Vector3 respawnPos = new Vector3(-56.0f, 5.11f, -63.0f);
+    [Space]
+    public Vector3 respawnPos = new Vector3(-56.0f, 5.11f, -63.0f);
     private void Awake()
     {
         
