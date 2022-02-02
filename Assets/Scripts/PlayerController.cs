@@ -33,18 +33,21 @@ public class PlayerController : MonoBehaviour
     private float attackBlend;
     private float attackBlendAcceleration = 10.0f;
     private float attackBlendDeceleration = 3.5f;
-    private float attackTimeDuration = 1.34f;
+    private float attackTimeDuration;
     private float attackTimer;
     private Vector3 moveDirection;
     private float jumpTimeDuration = 1.34f;
     private float jumpTimer;
     private float rayRange = 0.85f;
     private RaycastHit rayHit;
+    private PlayerStats playerStats;
 
     void Start()
     {
+        playerStats = transform.GetComponent<PlayerStats>();
         rb = this.GetComponent<Rigidbody>();
         movementMode = MovementMode.Idle;
+        attackTimeDuration = playerStats.attackDuration;
     }
 
     // Update is called once per frame
@@ -74,7 +77,7 @@ public class PlayerController : MonoBehaviour
         camera.transform.position = new Vector3(transform.position.x + 8, transform.position.y + 15, transform.position.z - 8);
 
         //animation movement controller
-        CheckPlayerInputandPerformPlayerAnims();
+        CheckPlayerInputandPerformPlayerActions();
         if (Time.time > jumpTimer && isGrounded() == false) { movementMode = MovementMode.Falling; }
         animator.SetFloat("Velocity", moveIntensity);
         animator.SetLayerWeight(1, attackBlend);
@@ -112,18 +115,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void CheckPlayerInputandPerformPlayerAnims()
+    private void CheckPlayerInputandPerformPlayerActions()
     {
-        if (Input.GetMouseButton(0) == true && attackBlend < 1 && movementMode != MovementMode.Sprinting && movementMode != MovementMode.Falling && Time.time > attackTimer) 
+        //attacking
+        if (Input.GetMouseButton(0) == true && attackBlend < 1 && movementMode != MovementMode.Sprinting && movementMode != MovementMode.Falling && Time.time > attackTimer && Input.GetMouseButton(1) == false) 
         {
-            attackBlend = 1; attackTimer = Time.time + attackTimeDuration; 
+            attackBlend = 1; attackTimer = Time.time + attackTimeDuration; playerStats.Attack();
         }
-        if (Input.GetMouseButton(0) == false && attackBlend > 0 && Time.time > attackTimer) { attackBlend -= Time.deltaTime * attackBlendDeceleration; }
+        if (Input.GetMouseButton(0) == false && attackBlend > 0 && Time.time > attackTimer) { attackBlend -= Time.deltaTime * attackBlendDeceleration; playerStats.StopAttacking(); }
+        //blocking
+        if (Input.GetMouseButton(1) == true && Time.time > attackTimer && movementMode != MovementMode.Sprinting && movementMode != MovementMode.Falling) { playerStats.Block(); }
+        if (Input.GetMouseButton(1) == false) { playerStats.StopBlocking(); }
+        //movemonet/sprinting
         if (Input.GetKey(sprintInput) && movementMode != MovementMode.Jumping && isGrounded() == true) { movementMode = MovementMode.Sprinting; }
         if (Input.GetKey(forwardInput) == true && Input.GetKey(sprintInput) == false && movementMode != MovementMode.Jumping && isGrounded() == true || Input.GetKey(leftInput) && Input.GetKey(sprintInput) == false && movementMode != MovementMode.Jumping && isGrounded() == true || Input.GetKey(backwardInput) && Input.GetKey(sprintInput) == false && movementMode != MovementMode.Jumping && isGrounded() == true || Input.GetKey(rightInput) && Input.GetKey(sprintInput) == false && movementMode != MovementMode.Jumping && isGrounded() == true)
         {
             movementMode = MovementMode.Running;
         }
+        //jumping
         if (Input.GetKey(jumpInput) && isGrounded() == true && Time.time > jumpTimer) { movementMode = MovementMode.Jumping; rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y + jumpHeight, rb.velocity.z); jumpTimer = Time.time + jumpTimeDuration;}
         else if (Input.GetKey(forwardInput) == false && Input.GetKey(leftInput) == false && Input.GetKey(backwardInput) == false && Input.GetKey(rightInput) == false && movementMode != MovementMode.Jumping && isGrounded() == true)
         {

@@ -26,12 +26,11 @@ public enum GameState
 public class GameManager : MonoBehaviour
 {
     public static GameManager manager; //singleton inst
-
     public LevelManager levelManager;
     public UIManager uiManager;
     public TextMeshProUGUI saveText;
     public TextMeshProUGUI loadText;
-
+    public GameObject playerRef;
     private GameState gameState;
     private GameState savedScreenState;
     // title acts as default state
@@ -67,7 +66,8 @@ public class GameManager : MonoBehaviour
 
         FadeText();
 
-        levelManager.LoadButtonFade(File.Exists(Application.persistentDataPath + "/savedInfo.dat"));        
+        levelManager.LoadButtonFade(File.Exists(Application.persistentDataPath + "/savedInfo.dat"));
+        Debug.Log(gameState);
 
         switch (gameState)
         {
@@ -80,6 +80,10 @@ public class GameManager : MonoBehaviour
                     }
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     uiManager.LoadTitleMenu();
+
+                    playerRef.transform.position = new Vector3(125f, 2.81f, -54f);
+                    playerRef.transform.localEulerAngles = new Vector3(0, 0, 0);
+                    playerRef.SetActive(false);
                     return; 
                 }
             case GameState.GAMEPLAY:
@@ -89,18 +93,28 @@ public class GameManager : MonoBehaviour
                         SceneManager.LoadScene(GameState.GAMEPLAY.ToString(), LoadSceneMode.Single);
                         SaveScreenState();
                     }
-                    if (Time.timeScale == 0){Time.timeScale = 1;}
+                    if (Time.timeScale == 0) {Time.timeScale = 1;}
                     uiManager.LoadGameplay();
+
+                    playerRef.SetActive(true);
                     return;
                 }
             case GameState.WIN:
                 {
                     uiManager.LoadWinScreen();
+
+                    playerRef.transform.position = new Vector3(125f, 2.81f, -54f);
+                    playerRef.transform.localEulerAngles = new Vector3(0, 0, 0);
+                    playerRef.SetActive(false);
                     return;
                 }
             case GameState.LOSE:
                 {
                     uiManager.LoadLoseScreen();
+
+                    playerRef.transform.position = new Vector3(125f, 2.81f, -54f);
+                    playerRef.transform.localEulerAngles = new Vector3(0, 0, 0);
+                    playerRef.SetActive(false);
                     return;
                 }
             case GameState.PAUSE:
@@ -124,6 +138,8 @@ public class GameManager : MonoBehaviour
                     }
                     if (Time.timeScale == 0) { Time.timeScale = 100; }
                     uiManager.LoadCredits();
+
+                    playerRef.SetActive(false);
                     return;
                 }
         }

@@ -6,17 +6,15 @@ using UnityEngine.UI;
 public class MetaHealthBar : MonoBehaviour
 {
     public EnemyAI enemy;
-
     public Image healthColour;
     public Slider healthBar;
-
     public Transform cam;
 
     void Start()
     {
         enemy = GetComponentInParent<EnemyAI>();
-        healthColour = transform.GetChild(0).GetChild(0).GetComponent<Image>();
-        healthBar = transform.GetChild(0).GetComponent<Slider>();
+        healthColour = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
+        healthBar = transform.GetChild(0).GetChild(0).GetComponent<Slider>();
         healthBar.maxValue = enemy.maxHealth;
         healthColour.GetComponent<Image>().color = new Color32(74, 227, 14, 255);
         cam = GameObject.Find("Main Camera").GetComponent<Transform>();
@@ -26,7 +24,7 @@ public class MetaHealthBar : MonoBehaviour
     void Update()
     {
         UpdateHealth();
-        transform.LookAt(transform.position + cam.forward);
+        transform.GetChild(0).LookAt(transform.position + cam.forward);
     }
 
     void UpdateHealth()

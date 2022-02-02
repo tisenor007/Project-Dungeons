@@ -1,7 +1,7 @@
 using UnityEngine;
 public class GameCharacter : MonoBehaviour
 {
-    public int Health { get => health; }
+    public int Health { get => health; set => health = value; }
     public bool IsAlive { get => isAlive; }
     [SerializeField] public int maxHealth;
     public int health;
@@ -18,7 +18,7 @@ public class GameCharacter : MonoBehaviour
     }
     public void TakeDamage(int damage, Transform character)
     {
-        DamageFeedback(character);
+        //DamageFeedback(character);
         health -= damage;
         if(health <= 0)
         {
