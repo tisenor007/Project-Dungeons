@@ -18,16 +18,17 @@ public class GameCharacter : MonoBehaviour
     }
     public void TakeDamage(int damage, Transform character)
     {
-        //DamageFeedback(character);
+        DamageFeedback(character);
         health -= damage;
         if(health <= 0)
         {
             Death();
         }
     }
-    public void Heal(int heal)
+    public void Heal(int healValue)
     {
-        health += heal;
+        health += healValue;
+        Debug.Log($"{gameObject.name} healed {healValue}");
         if (health > maxHealth) health = maxHealth;
     }
     protected virtual void Death()
