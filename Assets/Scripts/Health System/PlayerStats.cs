@@ -94,5 +94,6 @@ public class PlayerStats : GameCharacter
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "WIN") { GameManager.manager.levelManager.ChangeGameStateToWin(); }
+        if (other.tag == "DeathBox") { transform.position = respawnPos; }
     }
 }
