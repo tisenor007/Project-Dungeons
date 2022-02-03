@@ -227,7 +227,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     IEnumerator WaitToFadeText(string fade)
     {
         yield return new WaitForSeconds(textFadeWaitTime);

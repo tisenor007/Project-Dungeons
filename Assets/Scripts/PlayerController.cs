@@ -134,12 +134,15 @@ public class PlayerController : MonoBehaviour
                     float distance = Vector3.Distance(transform.position, col.transform.position);
                     //Debug.LogError($"hit {col.gameObject.name}");
 
-                    if (distance >= r)
+                    if (col.gameObject.GetComponent<Interactable>() != null)
                     {
-                        col.gameObject.GetComponent<Interactable>().DisableFeedback();
+                        if (distance >= r)
+                        {
+                            col.gameObject.GetComponent<Interactable>().DisableFeedback();
+                        }
+                        else { col.gameObject.GetComponent<Interactable>().EnableFeedback(); }
                     }
-                    else { col.gameObject.GetComponent<Interactable>().EnableFeedback(); }
-                    
+                    else { Debug.LogError("INTERACTABLE LAYER BEING USED BY NON INTERACTABLE, CHECK \"Debug.LogError(hit { col.gameObject.name} );\""); }
                 }
             }
         }
