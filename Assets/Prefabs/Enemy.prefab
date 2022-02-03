@@ -30,8 +30,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2170660378590186985}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -10.6, y: 0, z: -0.2}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -10.6, y: 0.425, z: -0.2}
+  m_LocalScale: {x: 1, y: 1.8764, z: 1}
   m_Children:
   - {fileID: 6391951345694420568}
   m_Father: {fileID: 0}
@@ -137,7 +137,7 @@ MonoBehaviour:
   health: 100
   damage: 10
   enemy: {fileID: 2170660378590186986}
-  player: {fileID: 0}
+  playerStats: {fileID: 0}
   viewDistance: 20
   hearingDistance: 20
   attackDistance: 3

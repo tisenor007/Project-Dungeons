@@ -19,11 +19,6 @@ public class LevelManager : MonoBehaviour
     private float creditsYPos = creditsBeginPos;
     private float creditsScrollRate = 1;
 
-    public void Start()
-    {
-        
-    }
-
     public void Update()
     {
         if (GameManager.manager.uiManager.credits.enabled == false && creditsYPos != creditsBeginPos)
@@ -41,6 +36,11 @@ public class LevelManager : MonoBehaviour
         PopUp popUp;
         popUp = Instantiate(prefab, new Vector3(popUpPos.x, popUpPos.y + 5, popUpPos.z), Quaternion.identity).GetComponent<PopUp>();
         popUp.SetUp(message, color);
+    }
+
+    public void DisplayMessage(string message)
+    { 
+        // enable game ui note and input message
     }
 
     #region UIButtons
