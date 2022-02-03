@@ -18,7 +18,6 @@ public class GameCharacter : MonoBehaviour
     }
     public virtual void TakeDamage(int damage, Transform character)
     {
-        DamageFeedback(character);
         health -= damage;
         //if(health <= 0)
         //{
@@ -37,11 +36,13 @@ public class GameCharacter : MonoBehaviour
         isAlive = false;
         //gameObject.SetActive(false);
     }
-    protected virtual void DamageFeedback(Transform character)
+    protected virtual void DamageFeedback(Transform character, string message, Color color)
     {
-        //GameManager.manager.levelManager.DisplayPopup(":)");
-
-        //character.transform.Translate(Vector3.back); < movement not feedback
+        GameManager.manager.CreatePopUp(message, character.transform.position, color);
     }
 
+    protected void HealFeedback(Transform character, string message, Color color)
+    {
+        GameManager.manager.CreatePopUp(message, character.transform.position, color);
+    }
 }

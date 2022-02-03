@@ -36,6 +36,13 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    public void CreatePopUp(string message, Vector3 popUpPos, GameObject prefab, Color color)
+    {
+        PopUp popUp;
+        popUp = Instantiate(prefab, new Vector3(popUpPos.x, popUpPos.y + 5, popUpPos.z), Quaternion.identity).GetComponent<PopUp>();
+        popUp.SetUp(message, color);
+    }
+
     #region UIButtons
 
     public void ButtonStartNewGame()

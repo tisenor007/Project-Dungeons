@@ -76,6 +76,7 @@ public class PlayerStats : GameCharacter
     public override void TakeDamage(int damage, Transform character)
     {
         base.TakeDamage(damage, character);
+        DamageFeedback(character, "-" + damage, Color.red);
         if (health <= 0)
         {
             GameManager.manager.levelManager.ChangeGameStateToLose();
