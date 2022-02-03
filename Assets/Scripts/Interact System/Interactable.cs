@@ -71,6 +71,7 @@ public class Interactable : MonoBehaviour
     {
         interactableEnabled = false;
         GetComponent<MeshRenderer>().enabled = false;
+        GetComponent<Collider>().enabled = false;
         DisableFeedback();
     }
 }
