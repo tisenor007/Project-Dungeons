@@ -20,7 +20,7 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(credits.enabled);
+        //Debug.Log(credits.enabled);
     }
 
     public void DisableAll()

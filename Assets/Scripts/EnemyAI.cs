@@ -63,12 +63,11 @@ public class EnemyAI : GameCharacter
         healthBar.maxValue = maxHealth;
         healthColour.GetComponent<Image>().color = new Color32(74, 227, 14, 255);
         cam = GameObject.Find("Main Camera").GetComponent<Transform>();
+        playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
     }
 
     void Update()
     {
-        if (playerStats == null) { playerStats = GameObject.Find("Player").GetComponent<PlayerStats>(); }
-
         UpdateHealth();
         transform.GetChild(0).transform.LookAt(transform.GetChild(0).transform.position + cam.forward);
 
