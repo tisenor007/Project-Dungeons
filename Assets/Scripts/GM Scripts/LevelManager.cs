@@ -1,15 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
-    //Manages a singular level aspect
-
-    public static LevelManager control;
-    
-    
     [HideInInspector]
     public int activeScreen; // starts at 1 to count properly to screenCount
     [SerializeField]
@@ -23,7 +19,6 @@ public class LevelManager : MonoBehaviour
     private float creditsYPos = creditsBeginPos;
     private float creditsScrollRate = 1;
 
-    #region UIButtons
     public void Update()
     {
         if (GameManager.manager.uiManager.credits.enabled == false && creditsYPos != creditsBeginPos)
@@ -35,6 +30,21 @@ public class LevelManager : MonoBehaviour
             ScrollCredits();
         }
     }
+
+    public void CreatePopUp(string message, Vector3 popUpPos, GameObject prefab, Color color)
+    {
+        PopUp popUp;
+        popUp = Instantiate(prefab, new Vector3(popUpPos.x, popUpPos.y + 5, popUpPos.z), Quaternion.identity).GetComponent<PopUp>();
+        popUp.SetUp(message, color);
+    }
+
+    public void DisplayMessage(string message)
+    { 
+        // enable game ui note and input message
+    }
+
+    #region UIButtons
+
     public void ButtonStartNewGame()
     {
         ChangeGameStateToGamePlay();
@@ -52,7 +62,13 @@ public class LevelManager : MonoBehaviour
     {
         GameManager.manager.ChangeState(GameState.GAMEPLAY);
     }
-    
+    public void ChangeGameStateToNewGame()
+    {
+        GameManager.manager.ResetScene();
+        GameManager.manager.playerAndCamera.transform.GetChild(0).GetComponent<PlayerStats>().ResetStats();
+        GameManager.manager.ChangeState(GameState.GAMEPLAY);
+    }
+
     public void ChangeGameStateToWin()
     {
         GameManager.manager.ChangeState(GameState.WIN);
@@ -76,17 +92,6 @@ public class LevelManager : MonoBehaviour
     public void ChangeGameStateToCredits()
     {
         GameManager.manager.ChangeState(GameState.CREDITS);
-    }
-    private void ScrollCredits()
-    {
-        int childOrderNum = 0;
-        GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position = new Vector3(GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.x, creditsYPos, GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.z);
-
-        if (GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y >= creditsBottomPos) { creditsYPos = creditsTopPos; }
-        else if (GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y <= creditsBottomPos && GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y >= creditsTopPos)
-        {
-            creditsYPos = creditsYPos += Time.deltaTime * creditsScrollRate;
-        }
     }
 
     public void LoadButtonFade(bool fileExists)
@@ -130,6 +135,18 @@ public class LevelManager : MonoBehaviour
         Debug.LogError($"newAlpha: {newAlpha.a}, Image colour: {optionUI.brightnessImage.color}");
     }
     #endregion
+
+    private void ScrollCredits()
+    {
+        int childOrderNum = 0;
+        GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position = new Vector3(GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.x, creditsYPos, GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.z);
+
+        if (GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y >= creditsBottomPos) { creditsYPos = creditsTopPos; }
+        else if (GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y <= creditsBottomPos && GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y >= creditsTopPos)
+        {
+            creditsYPos = creditsYPos += Time.deltaTime * creditsScrollRate;
+        }
+    }
 }
 
 [System.Serializable]

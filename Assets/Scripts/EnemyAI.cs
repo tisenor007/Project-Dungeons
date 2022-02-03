@@ -6,16 +6,13 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-public class EnemyAI : MonoBehaviour
+public class EnemyAI : GameCharacter
 {
     enum State
     {
         Idle,
         Chasing,
-        Searching,
-        Attacking,
-        Retreating,
-        Listening
+        Attacking
     }
 
     private State enemyState;
@@ -24,7 +21,7 @@ public class EnemyAI : MonoBehaviour
     //public Animator animator;
     public NavMeshAgent enemy;
 
-    public Player player;
+    public PlayerStats playerStats;
     //public Transform[] points;
 
     //public TextMeshProUGUI currentStateTxt;
@@ -32,229 +29,120 @@ public class EnemyAI : MonoBehaviour
     //public int patrolDestinationPoint;
     //public int patrolDestinationAmount;
     public int viewDistance = 20;
-    public int hearingDistance = 10;
+    public int hearingDistance = 20;
     public int attackDistance = 3;
-    public int attackDamage = 10;
+    //public int attackDamage = 10;
     public float distance;
     public float chasingTime = 4.0f;
-    public float hitTime = 3.0f;
+    public float attackDuration = 0.5f;
+    public float stunnedHitDuration = 3.0f;
+    private float hitTime = 3.0f;
 
-    private Vector3 lastPlayerLocation;
+
     private Vector3 playerLocation;
     private Vector3 enemyLocation;
 
     public Ray enemySight;
     public RaycastHit hitInfo;
 
+    public bool hitable;
+
+    private Image healthColour;
+    private Slider healthBar;
+    private Transform cam;
+
     void Start()
     {
+        health = 30;
+        damage = 5;
         enemy = GetComponent<NavMeshAgent>();
-        //patrolDestinationPoint = 0;
         SwitchState(State.Idle);
+
+        healthColour = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
+        healthBar = transform.GetChild(0).GetChild(0).GetComponent<Slider>();
+        healthBar.maxValue = maxHealth;
+        healthColour.GetComponent<Image>().color = new Color32(74, 227, 14, 255);
+        cam = GameObject.Find("Main Camera").GetComponent<Transform>();
     }
 
     void Update()
     {
-        enemySight = new Ray(transform.position, transform.TransformDirection(Vector3.forward));
+        if (playerStats == null) { playerStats = GameObject.Find("Player").GetComponent<PlayerStats>(); }
 
-        //currentStateTxt.text = "Current State: " + enemyState;
+        UpdateHealth();
+        transform.GetChild(0).transform.LookAt(transform.GetChild(0).transform.position + cam.forward);
+
+        enemySight = new Ray(transform.position, transform.TransformDirection(Vector3.forward));
         enemyLocation = enemy.transform.position;
-        playerLocation = player.gameObject.transform.position;
+        playerLocation = playerStats.gameObject.transform.position;
         distance = Vector3.Distance(playerLocation, enemyLocation);
 
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * viewDistance, Color.white);
 
-        /*if (distance <= hearingDistance && player.running == true && distance > attackDistance)
-        {
-            SwitchState(State.Listening);
-        }*/
-
-
         switch (enemyState)
         {
             case State.Idle:
-                Debug.Log("State: Idle");
                 Idle();
                 break;
 
             case State.Chasing:
-                Debug.Log("State: Chasing");
                 Chasing();
                 break;
 
-            /*case State.Searching:
-                Debug.Log("State: Searching");
-                Searching();
-                break;
-
-            case State.Listening:
-                Debug.Log("State: Listening");
-                Listening();
-                break;
-
-            case State.Retreating:
-                Debug.Log("State: Retreating");
-                Retreating();
-                break;*/
-
             case State.Attacking:
-                Debug.Log("State: Attacking");
                 Attacking();
                 break;
         }
-
     }
 
     void Idle()
     {
-
-
-        /*animator.SetBool("Running", false);
-        animator.SetBool("Searching", false);
-        animator.SetBool("Attacking", false);
-        animator.SetBool("Walking", true);
-
-        playerLocation = player.gameObject.transform.position;
-        enemy.SetDestination(points[patrolDestinationPoint].position);*/
+        playerLocation = playerStats.gameObject.transform.position;
 
         if (Physics.Raycast(enemySight, out hitInfo, viewDistance))
         {
             if (hitInfo.collider.tag == "Player")
             {
-                Debug.Log("triggered!!!!");
                 SwitchState(State.Chasing);
             }
         }
-
-        /*if ((enemyLocation.x == points[patrolDestinationPoint].position.x) && (enemyLocation.z == points[patrolDestinationPoint].position.z))
-        {
-            Debug.Log("triggered");
-
-            patrolDestinationPoint = patrolDestinationPoint + 1;
-
-            if (patrolDestinationPoint >= patrolDestinationAmount)
-            {
-                patrolDestinationPoint = 0;
-            }
-
-            SwitchState(State.Patrolling);
-        }*/
-
-
     }
 
     void Chasing()
     {
-        /*animator.SetBool("Running", true);
-        animator.SetBool("Searching", false);
-        animator.SetBool("Attacking", false);
-        animator.SetBool("Walking", false);*/
-
         enemy.SetDestination(playerLocation);
 
         if (distance <= attackDistance)
         {
-            hitTime = 3.0f;
+            hitTime = attackDuration;
             SwitchState(State.Attacking);
         }
 
         if (distance >= viewDistance)
         {
-            lastPlayerLocation = player.gameObject.transform.position;
             SwitchState(State.Idle);
         }
-
-
     }
-
-    /*void Searching()
-    {
-
-        *//*animator.SetBool("Running", false);
-        animator.SetBool("Searching", true);
-        animator.SetBool("Attacking", false);
-        animator.SetBool("Walking", false);*//*
-
-        enemy.SetDestination(enemyLocation);
-
-        searchTime -= Time.deltaTime;
-
-        if (searchTime <= 0.0f)
-        {
-            SwitchState(State.Retreating);
-        }
-
-        if (Physics.Raycast(enemySight, out hitInfo, viewDistance))
-        {
-            if (hitInfo.collider.tag == "Player")
-            {
-                Debug.Log("triggered!!!!");
-                SwitchState(State.Chasing);
-            }
-        }
-
-    }*/
-
-    /*void Listening()
-    {
-        //transform.LookAt(player.transform);
-        enemy.SetDestination(playerLocation);
-
-        if (distance >= hearingDistance)
-        {
-            SwitchState(State.Chasing);
-        }
-
-    }*/
-
-    /*void Retreating()
-    {
-        *//*animator.SetBool("Running", true);
-        animator.SetBool("Searching", false);
-        animator.SetBool("Attacking", false);
-        animator.SetBool("Walking", false);*//*
-
-        enemy.SetDestination(points[patrolDestinationPoint].position);
-
-        if ((enemyLocation.x == points[patrolDestinationPoint].position.x) && (enemyLocation.z == points[patrolDestinationPoint].position.z))
-        {
-            SwitchState(State.Patrolling);
-        }
-
-        if (Physics.Raycast(enemySight, out hitInfo, viewDistance))
-        {
-            if (hitInfo.collider.tag == "Player")
-            {
-                Debug.Log("triggered!!!!");
-                SwitchState(State.Chasing);
-            }
-        }
-    }*/
 
     void Attacking()
     {
-        /*animator.SetBool("Running", false);
-        animator.SetBool("Searching", false);
-        animator.SetBool("Attacking", true);
-        animator.SetBool("Walking", false);*/
-
         enemy.SetDestination(enemyLocation);
 
         hitTime -= Time.deltaTime;
 
         if (hitTime <= 0.0f)
         {
-            if (player.blocking)
+            if (playerStats.blocking)
             {
-                player.TakeDamage((int)(attackDamage / 4));
-                hitTime = 5.0f; // <----- will be replaced by a possible stunned class
+                playerStats.TakeDamage((int)(damage / 4), playerStats.GetComponent<Transform>());
+                hitTime = stunnedHitDuration; // <----- will be replaced by a possible stunned state
             }
             else
             {
-                player.TakeDamage(attackDamage);
-                hitTime = 3.0f;
+                playerStats.TakeDamage(damage, playerStats.GetComponent<Transform>());
+                hitTime = attackDuration;
             }
-        }
+        }   
 
         if (distance > attackDistance)
         {
@@ -267,6 +155,39 @@ public class EnemyAI : MonoBehaviour
         enemyState = newState;
     }
 
+    void UpdateHealth()
+    {
+        healthBar.value = Health;
+        //miniHealthBar.GetComponent<Slider>().value = health;
 
+        if (Health < maxHealth * 0.8 && Health > maxHealth * 0.6)
+            healthColour.color = new Color32(167, 227, 16, 255);
+
+        if (Health < maxHealth * 0.6 && Health > maxHealth * 0.4)
+            healthColour.color = new Color32(227, 176, 9, 255);
+
+        if (Health < maxHealth * 0.4 && Health > maxHealth * 0.2)
+            healthColour.color = new Color32(240, 86, 48, 255);
+
+        if (Health < maxHealth * 0.2)
+            healthColour.color = new Color32(204, 40, 0, 255);
+    }
+    public override void TakeDamage(int damage, Transform character)
+    {
+        base.TakeDamage(damage, character);
+        DamageFeedback(character, "-" + damage, new Color32(255, 69, 0, 255));
+        if (health <= 0)
+        {
+            Death();
+        }
+    }
+
+    protected override void Death()
+    {
+        base.Death();
+
+        // ENTER CODE FOR DEATH ANIMATIONS, ETC
+        this.gameObject.SetActive(false);
+    }
 
 }

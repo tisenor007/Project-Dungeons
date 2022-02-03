@@ -26,12 +26,12 @@ public enum GameState
 public class GameManager : MonoBehaviour
 {
     public static GameManager manager; //singleton inst
-
     public LevelManager levelManager;
     public UIManager uiManager;
     public TextMeshProUGUI saveText;
     public TextMeshProUGUI loadText;
-
+    public GameObject playerAndCamera;
+    public GameObject popUpPrefab;
     private GameState gameState;
     private GameState savedScreenState;
     // title acts as default state
@@ -47,11 +47,13 @@ public class GameManager : MonoBehaviour
         if (manager == null)
         {
             DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(playerAndCamera);
             manager = this; // setting this object to be THE singleton
         }
         else if (manager != this) // already exist's? DESTROY
         {
             Destroy(this.gameObject);
+            Destroy(playerAndCamera);
         }
 
         // make fading text invisible at start
@@ -67,45 +69,52 @@ public class GameManager : MonoBehaviour
 
         FadeText();
 
-        levelManager.LoadButtonFade(File.Exists(Application.persistentDataPath + "/savedInfo.dat"));        
+        levelManager.LoadButtonFade(File.Exists(Application.persistentDataPath + "/savedInfo.dat"));
+        //Debug.Log(gameState);
 
         switch (gameState)
         {
             case GameState.TITLEMENU:
                 {
-                    if (SceneManager.GetActiveScene().name != GameState.TITLEMENU.ToString())
+                    if (SceneManager.GetActiveScene() != SceneManager.GetSceneByBuildIndex(0))
                     {
-                        SceneManager.LoadScene(GameState.TITLEMENU.ToString(), LoadSceneMode.Single);
+                        SceneManager.LoadScene(0, LoadSceneMode.Single);
                         SaveScreenState();
                     }
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     uiManager.LoadTitleMenu();
+
+                    playerAndCamera.SetActive(false);
                     return; 
                 }
             case GameState.GAMEPLAY:
                 {
-                    if (SceneManager.GetActiveScene().name != GameState.GAMEPLAY.ToString())
+                    if (SceneManager.GetActiveScene() != SceneManager.GetSceneByBuildIndex(1))
                     {
-                        SceneManager.LoadScene(GameState.GAMEPLAY.ToString(), LoadSceneMode.Single);
+                        SceneManager.LoadScene(1, LoadSceneMode.Single);
                         SaveScreenState();
                     }
-                    if (Time.timeScale == 0){Time.timeScale = 1;}
+                    if (Time.timeScale == 0) {Time.timeScale = 1;}
                     uiManager.LoadGameplay();
+
+                    playerAndCamera.SetActive(true);
                     return;
                 }
             case GameState.WIN:
                 {
                     uiManager.LoadWinScreen();
+                    if (Time.timeScale == 1) { Time.timeScale = 0; }
                     return;
                 }
             case GameState.LOSE:
                 {
                     uiManager.LoadLoseScreen();
+                    if (Time.timeScale == 1) { Time.timeScale = 0; }
                     return;
                 }
             case GameState.PAUSE:
                 {
-                    Time.timeScale = 0;
+                    if (Time.timeScale == 1) { Time.timeScale = 0; }
 
                     uiManager.LoadPauseScreen();
                     return;
@@ -117,16 +126,23 @@ public class GameManager : MonoBehaviour
                 }
             case GameState.CREDITS:
                 {
-                    if (SceneManager.GetActiveScene().name != GameState.CREDITS.ToString())
+                    if (SceneManager.GetActiveScene() != SceneManager.GetSceneByBuildIndex(2))
                     {
-                        SceneManager.LoadScene(GameState.CREDITS.ToString(), LoadSceneMode.Single);
+                        SceneManager.LoadScene(2, LoadSceneMode.Single);
                         SaveScreenState();
                     }
-                    if (Time.timeScale == 0) { Time.timeScale = 100; }
+                    if (Time.timeScale == 0) { Time.timeScale = 1; }
                     uiManager.LoadCredits();
+
+                    playerAndCamera.SetActive(false);
                     return;
                 }
         }
+    }
+
+    public void CreatePopUp(string message, Vector3 popUpPos, Color color)
+    {
+        levelManager.CreatePopUp(message, popUpPos, popUpPrefab, color);
     }
 
     public void ChangeState(GameState targetState)
@@ -217,6 +233,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ResetScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+    }
 
     IEnumerator WaitToFadeText(string fade)
     {

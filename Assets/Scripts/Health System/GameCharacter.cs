@@ -1,42 +1,48 @@
 using UnityEngine;
 public class GameCharacter : MonoBehaviour
 {
-    public float Health { get => health; }
+    public int Health { get => health; set => health = value; }
     public bool IsAlive { get => isAlive; }
-    [SerializeField] protected float maxHealth;
-    [SerializeField] protected float health;
+    [SerializeField] public int maxHealth;
+    public int health;
+    public int damage;
     private bool isAlive = true;
     private void Awake()
     {
         ResetStats();
     }
-    public void ResetStats()
+    public virtual void ResetStats()
     {
-        health = maxHealth;
+        Heal(maxHealth);
         isAlive = true;
     }
-    public void TakeDamage(int damage)
+    public virtual void TakeDamage(int damage, Transform character)
     {
-        DamageFeedback();
         health -= damage;
-        if(health <= 0)
-        {
-            Death();
-        }
+        //if(health <= 0)
+        //{
+            //Death();
+        //}
     }
-    public void Heal(float heal)
+    public void Heal(int healValue)
     {
-        health += heal;
+        health += healValue;
+        Debug.Log($"{gameObject.name} healed {healValue}");
         if (health > maxHealth) health = maxHealth;
     }
     protected virtual void Death()
     {
         health = 0;
         isAlive = false;
+        //gameObject.SetActive(false);
     }
-    protected virtual void DamageFeedback()
+    protected virtual void DamageFeedback(Transform character, string message, Color color)
     {
-        // Insert Damage Feedback Code Here
-        // Reminder: This method can be overridden. This should be the "universal" feedback for player and enemies
+        GameManager.manager.CreatePopUp(message, character.transform.position, color);
+    }
+
+    protected void HealFeedback(Transform character, string message, Color color)
+    {
+        GameManager.manager.CreatePopUp(message, character.transform.position, color);
     }
 }
