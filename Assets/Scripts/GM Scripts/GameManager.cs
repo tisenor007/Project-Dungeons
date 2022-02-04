@@ -28,10 +28,10 @@ public class GameManager : MonoBehaviour
     public static GameManager manager; //singleton inst
     public LevelManager levelManager;
     public UIManager uiManager;
-    public TextMeshProUGUI saveText;
-    public TextMeshProUGUI loadText;
     public GameObject playerAndCamera;
-    public GameObject popUpPrefab;
+    [SerializeField] private TextMeshProUGUI saveText;
+    [SerializeField] private TextMeshProUGUI loadText;
+    [SerializeField] private GameObject popUpPrefab;
     private GameState gameState;
     private GameState savedScreenState;
     // title acts as default state

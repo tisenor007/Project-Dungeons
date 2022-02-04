@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerHitArea : MonoBehaviour
 {
-    public PlayerStats player;
+    [SerializeField] private PlayerStats player;
 
     private void OnTriggerEnter(Collider other)
     {
