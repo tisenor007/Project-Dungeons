@@ -17,7 +17,7 @@ public class LevelManager : MonoBehaviour
     private static float creditsTopPos = -1425;
     private static float creditsBeginPos = -500;
     private float creditsYPos = creditsBeginPos;
-    private float creditsScrollRate = 1;
+    private float creditsScrollRate = 100;
 
     public void Update()
     {
