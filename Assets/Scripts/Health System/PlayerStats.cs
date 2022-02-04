@@ -5,58 +5,26 @@ using UnityEngine.UI;
 
 public class PlayerStats : GameCharacter 
 {
-    public bool attacking = false;
-    public bool blocking;
-
-    public float hitTimer = 0.5f;
-
     public GameObject shield;
-    public GameObject hitArea;
+    [SerializeField] private GameObject hitArea;
     [SerializeField] private Slider healthBar;
     [SerializeField] private Text healthText;
     [Space]
-    public Vector3 respawnPos = new Vector3(-56.0f, 5.11f, -63.0f);
+    [SerializeField] private Vector3 respawnPos = new Vector3(-56.0f, 5.11f, -63.0f);
 
     private void Update()
     {
         healthBar.value = Health;
         healthText.text = "" + Health;
-
-        //blocking = Input.GetMouseButton(1);
-
-        //if (blocking)
-        //{
-        //    shield.SetActive(true);
-        //}
-        //if (blocking == false)
-        //{
-        //    shield.SetActive(false);
-
-        //    if (Input.GetMouseButtonDown(0) && attacking == false)
-        //    {
-        //        attacking = true;
-        //    }
-        //    if (attacking)
-        //    {
-        //        hitArea.SetActive(true);
-
-        //        hitTimer -= Time.deltaTime;
-
-        //        if (hitTimer < 0)
-        //        {
-        //            hitArea.SetActive(false);
-        //            hitTimer = attackDuration;
-        //            attacking = false;
-        //        }
-
-        //    }
-        //}
     }
+
     public void Attack() { if (shield.activeSelf == false && hitArea.activeSelf == false) { hitArea.SetActive(true); } }
+
     public void StopAttacking() { if (hitArea.activeSelf == true) hitArea.SetActive(false);}
 
-    public void Block() { if (shield.activeSelf == false) { shield.SetActive(true); } blocking = true; }
-    public void StopBlocking() { if (shield.activeSelf == true) { shield.SetActive(false); blocking = false; } }
+    public void Block() { if (shield.activeSelf == false) { shield.SetActive(true); }}
+
+    public void StopBlocking() { if (shield.activeSelf == true) { shield.SetActive(false);}}
 
     public float GetHealthDividedMaxHealth()
     {
@@ -94,5 +62,6 @@ public class PlayerStats : GameCharacter
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "WIN") { GameManager.manager.levelManager.ChangeGameStateToWin(); }
+        if (other.tag == "DeathBox") { transform.position = respawnPos; }
     }
 }

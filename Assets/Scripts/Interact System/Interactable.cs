@@ -5,16 +5,17 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
-    public float interactableFeedback__Intensity = 10;
+    public bool InteractableEnabled { get { return interactableEnabled; } }
+
+    [SerializeField] private float interactableFeedback__Intensity = 10;
 
     private Light feedbackLight; //feedback to show object is interactable
     private bool feedbackEnabled;
     private bool interactableEnabled = true;
 
     //types of interactables
-    public Item itemType;
+    [SerializeField] private Item itemType;
 
-    public bool InteractableEnabled { get { return interactableEnabled; } }
 
     void Start()
     {
