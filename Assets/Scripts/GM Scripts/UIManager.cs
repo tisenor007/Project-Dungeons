@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -12,6 +13,13 @@ public class UIManager : MonoBehaviour
     public Canvas options;
     public Canvas credits;
 
+    [SerializeField]
+    private GUI gameUI;
+    [SerializeField]
+    private OUI optionUI;
+
+    public GUI GameUI { get { return gameUI; } }
+    public OUI OptionUI { get { return optionUI; } }
 
     private void Awake()
     {
@@ -20,7 +28,7 @@ public class UIManager : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(credits.enabled);
+        //Debug.Log(credits.enabled);
     }
 
     public void DisableAll()
@@ -73,4 +81,19 @@ public class UIManager : MonoBehaviour
         DisableAll();
         credits.enabled = true;
     }
+}
+
+[System.Serializable]
+public class GUI
+{
+    [Tooltip("any button that calls load")]
+    public Button[] allLoadButtons;
+    public Canvas notePlain;
+}
+
+[System.Serializable]
+public class OUI // Option User Interface
+{
+    public Slider brightnessSlider;
+    public Image brightnessImage;
 }

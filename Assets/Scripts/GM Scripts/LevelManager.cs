@@ -6,17 +6,21 @@ using UnityEngine.UI;
 public class LevelManager : MonoBehaviour
 {
     [HideInInspector]
-    public int activeScreen; // starts at 1 to count properly to screenCount
-    [SerializeField]
-    private OUI optionUI;
-    [SerializeField]
-    private GUI gameUI;
+    public int activeScreen;
 
     private static float creditsBottomPos = 2800;
     private static float creditsTopPos = -1425;
     private static float creditsBeginPos = -500;
     private float creditsYPos = creditsBeginPos;
     private float creditsScrollRate = 1;
+    private Canvas notePlain;
+    private Text noteWriting;
+
+    private void Start()
+    {
+        notePlain = GameManager.manager.uiManager.GameUI.notePlain;
+        noteWriting = notePlain.transform.GetChild(0).GetComponentInChildren<Text>();
+    }
 
     public void Update()
     {
@@ -30,14 +34,9 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    //to be put with valuePopup spawner
-    public void DisplayMessage(string message)
-    { 
-        // enable game ui note and input message
-    }
+    #region UIControl
 
-    #region UIButtons
-
+    //buttons
     public void ButtonStartNewGame()
     {
         ChangeGameStateToGamePlay();
@@ -82,16 +81,35 @@ public class LevelManager : MonoBehaviour
         GameManager.manager.ChangeState(GameState.CREDITS);
     }
 
+    //messages
+    public void DisplayPlainNote(string message)
+    {
+        notePlain.enabled = true;
+        
+        noteWriting.text 
+            = message;
+
+        Debug.Log($"displaying Note {message}");
+    }
+
+    public void StopReadingNote()
+    {
+
+        notePlain.enabled = false;
+        noteWriting.text = null;
+    }
+
+    //misc commands
     public void LoadButtonFade(bool fileExists)
     {
         if (!fileExists)
         {
-            foreach (Button button in gameUI.AllLoadButtons)
+            foreach (Button button in GameManager.manager.uiManager.GameUI.allLoadButtons)
                 button.interactable = false;
         }
         else
         {
-            foreach (Button button in gameUI.AllLoadButtons)
+            foreach (Button button in GameManager.manager.uiManager.GameUI.allLoadButtons)
                 button.interactable = true;
         }
     }
@@ -110,19 +128,6 @@ public class LevelManager : MonoBehaviour
     {
         Application.Quit();
     }
-    #endregion
-
-    #region Options
-    public void BrightnessSlider()
-    {
-        // sets the alpha of an image to the value of a slider
-        Color newAlpha = optionUI.brightnessImage.color;
-        newAlpha.a = optionUI.brightnessSlider.value / 100;
-        optionUI.brightnessImage.color = newAlpha;
-
-        Debug.LogError($"newAlpha: {newAlpha.a}, Image colour: {optionUI.brightnessImage.color}");
-    }
-    #endregion
 
     private void ScrollCredits()
     {
@@ -135,17 +140,21 @@ public class LevelManager : MonoBehaviour
             creditsYPos = creditsYPos += Time.deltaTime * creditsScrollRate;
         }
     }
+
+
+    #endregion
+
+    #region Options
+    public void BrightnessSlider()
+    {
+        // sets the alpha of an image to the value of a slider
+        Color newAlpha = GameManager.manager.uiManager.OptionUI.brightnessImage.color;
+        newAlpha.a = GameManager.manager.uiManager.OptionUI.brightnessSlider.value / 100;
+        GameManager.manager.uiManager.OptionUI.brightnessImage.color = newAlpha;
+
+        Debug.LogError($"newAlpha: {newAlpha.a}, Image colour: {GameManager.manager.uiManager.OptionUI.brightnessImage.color}");
+    }
+    #endregion
+    
 }
 
-[System.Serializable]
-class GUI
-{
-    [Tooltip("any button that calls load")]
-    public Button[] AllLoadButtons;
-}
-
-class OUI // Option User Interface
-{
-    public Slider brightnessSlider;
-    public Image brightnessImage;
-}

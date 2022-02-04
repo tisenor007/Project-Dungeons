@@ -42,11 +42,8 @@ public class Interactable : MonoBehaviour
 
     public void Interact(GameObject interactor)
     {
-        Debug.LogError("Interacted");
-        
-        if (itemType != null) { itemType.OnPickup(interactor); }
-        
-        RemoveGameObjectWFeedback();
+        if (itemType != null) { itemType.OnPickup(this.gameObject, interactor); }
+        else { RemoveGameObjectWFeedback(); }
     }
 
     public void EnableFeedback()
@@ -54,7 +51,7 @@ public class Interactable : MonoBehaviour
         if (feedbackEnabled != true && interactableEnabled) //quickfix: only enable feedback if object isnt being deleted
         { 
             feedbackEnabled = true;
-            Debug.Log("enabled feedback");
+            //Debug.Log("enabled feedback");
         }
     }
 
@@ -63,7 +60,7 @@ public class Interactable : MonoBehaviour
         if (feedbackEnabled != false)
         { 
             feedbackEnabled = false;
-            Debug.Log("disabled feedback");
+            //Debug.Log("disabled feedback");
         }
     }
 
