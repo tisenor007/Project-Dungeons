@@ -42,6 +42,10 @@ public class GameManager : MonoBehaviour
     private bool fadeLoad;
     private float textFadeWaitTime = 1.5f;
 
+    //Create a new object within the player, one will be male, the other female
+    [SerializeField] private GameObject malePlayer;
+    [SerializeField] private GameObject femalePlayer;
+
     void Awake()
     {
         if (manager == null)
@@ -63,7 +67,7 @@ public class GameManager : MonoBehaviour
         gameState = GameState.TITLEMENU;
     }
 
-    void Update() 
+    void Update()
     {
         Controls();
 
@@ -85,7 +89,7 @@ public class GameManager : MonoBehaviour
                     uiManager.LoadTitleMenu();
 
                     playerAndCamera.SetActive(false);
-                    return; 
+                    return;
                 }
             case GameState.GAMEPLAY:
                 {
@@ -94,7 +98,7 @@ public class GameManager : MonoBehaviour
                         SceneManager.LoadScene(1, LoadSceneMode.Single);
                         SaveScreenState();
                     }
-                    if (Time.timeScale == 0) {Time.timeScale = 1;}
+                    if (Time.timeScale == 0) { Time.timeScale = 1; }
                     uiManager.LoadGameplay();
 
                     playerAndCamera.SetActive(true);
@@ -173,14 +177,14 @@ public class GameManager : MonoBehaviour
         }*/
 
         if (gameState != GameState.TITLEMENU)
-        { 
+        {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 levelManager.ChangeGameStateToPause();
             }
         }
     }
-    
+
     public void Save() // canned file save method
     {
         BinaryFormatter bf = new BinaryFormatter();
@@ -197,7 +201,7 @@ public class GameManager : MonoBehaviour
         bf.Serialize(file, savedInfo);
         file.Close();
     }
-    
+
     public void Load() // canned file load method
     {
         if (File.Exists(Application.persistentDataPath + "/savedInfo.dat"))
@@ -215,11 +219,11 @@ public class GameManager : MonoBehaviour
             StartCoroutine(WaitToFadeText("load"));
         }
     }
-    
+
     public void FadeText()
     {
         if (Time.timeScale == 0)
-        { 
+        {
             saveText.CrossFadeAlpha(0, 0, true); fadeSave = false;
             loadText.CrossFadeAlpha(0, 0, true); fadeLoad = false;
         }
@@ -245,6 +249,12 @@ public class GameManager : MonoBehaviour
             fadeSave = true;
         else if (fade == "load")
             fadeLoad = true;
+    }
+
+    public void SwitchPlayer(bool isMale)
+    {
+        malePlayer.SetActive(isMale);
+        femalePlayer.SetActive(!isMale);
     }
 }
 
