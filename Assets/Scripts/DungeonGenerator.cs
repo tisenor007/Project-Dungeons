@@ -12,9 +12,14 @@ public class DungeonGenerator : MonoBehaviour
     }
     public GameObject[] roomVariations;
     public GameObject[] hallVariations;
-    public List<GameObject> structures;
+    public List<GameObject> structures = new List<GameObject>();
     private StructureType nextStructureType;
+    private StructureType currentStructureType;
 
+    private int hallwayDirection;
+    private int roomDirection;
+
+    private int roomAmount = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,42 +29,69 @@ public class DungeonGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log(hallwayDirection);
+        if (roomAmount < 20)
+        {
+            GenerateNewRoom();
+            roomAmount++;
+        }
     }
 
-    public void generateNewRoom()
+    public void GenerateNewRoom()
     {
-       
         int structureChoice = Random.Range(0, (int)StructureType.Length);
         nextStructureType = (StructureType)structureChoice;
         if (nextStructureType == StructureType.Room)
         {
-            int roomDirection = Random.Range(1, 5);
+            if (currentStructureType == StructureType.Hallway) { roomDirection = Random.Range(0, 2); }
+            else if (currentStructureType == StructureType.Room) { roomDirection = Random.Range(0, 4); }
+
             int roomVariation = Random.Range(0, roomVariations.Length);
             if (structures.Count <= 0) 
             {
                 structures.Add(Instantiate(roomVariations[roomVariation], Vector3.zero, Quaternion.identity));
+                currentStructureType = (StructureType)nextStructureType;
             }
             else if (structures.Count > 0) 
             {
-                int room = Random.Range(0, roomVariations.Length);
-                structures.Add(Instantiate(roomVariations[roomVariation], roomVariations[roomVariation].transform.GetChild(roomDirection).transform.position, transform.GetChild(roomDirection).transform.localRotation)); 
+                if (IsSpotFree(structures[structures.Count - 1].transform.GetChild(roomDirection).transform.position))
+                {
+                    structures.Add(Instantiate(roomVariations[roomVariation], structures[structures.Count - 1].transform.GetChild(roomDirection).transform.position, structures[structures.Count - 1].transform.GetChild(roomDirection).transform.localRotation));
+                    currentStructureType = (StructureType)nextStructureType;
+                }
             }
         }
         if (nextStructureType == StructureType.Hallway)
         {
-            int hallwayDirection = Random.Range(5, 8);
-            int hallwayVariation = Random.Range(0, roomVariations.Length);
+            if (currentStructureType == StructureType.Hallway) { hallwayDirection = Random.Range(2, 4); }
+            else if (currentStructureType == StructureType.Room) { hallwayDirection = Random.Range(4, 8); }
+
+            int hallwayVariation = Random.Range(0, hallVariations.Length);
             if (structures.Count <= 0)
             {
-                structures.Add(Instantiate(roomVariations[hallwayVariation], Vector3.zero, Quaternion.identity));
+                structures.Add(Instantiate(hallVariations[hallwayVariation], Vector3.zero, Quaternion.identity));
+                currentStructureType = (StructureType)nextStructureType;
             }
             else if (structures.Count > 0)
             {
-                int room = Random.Range(0, roomVariations.Length);
-                structures.Add(Instantiate(roomVariations[hallwayVariation], roomVariations[hallwayVariation].transform.GetChild(hallwayDirection).transform.position, transform.GetChild(hallwayDirection).transform.localRotation));
+                if (IsSpotFree(structures[structures.Count - 1].transform.GetChild(hallwayDirection).transform.position))
+                {
+                    structures.Add(Instantiate(hallVariations[hallwayVariation], structures[structures.Count - 1].transform.GetChild(hallwayDirection).transform.position, structures[structures.Count - 1].transform.GetChild(hallwayDirection).transform.localRotation));
+                    currentStructureType = (StructureType)nextStructureType;
+                }
             }
         }
 
+    }
+    private bool IsSpotFree(Vector3 chosenSpot)
+    {
+        foreach (GameObject structure in structures)
+        {
+            if (structure.transform.position != chosenSpot)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
