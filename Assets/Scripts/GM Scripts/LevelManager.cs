@@ -85,16 +85,12 @@ public class LevelManager : MonoBehaviour
     public void DisplayPlainNote(string message)
     {
         notePlain.enabled = true;
-        
-        noteWriting.text 
-            = message;
-
+        noteWriting.text = message;
         Debug.Log($"displaying Note {message}");
     }
 
     public void StopReadingNote()
     {
-
         notePlain.enabled = false;
         noteWriting.text = null;
     }
