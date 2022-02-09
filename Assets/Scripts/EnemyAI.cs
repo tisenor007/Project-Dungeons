@@ -131,7 +131,7 @@ public class EnemyAI : GameCharacter
         enemyState = newState;
     }
 
-    void UpdateHealth()
+    public void UpdateHealth()
     {
         healthBar.value = Health;
         //miniHealthBar.GetComponent<Slider>().value = health;

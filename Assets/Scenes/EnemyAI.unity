@@ -274,6 +274,9 @@ MonoBehaviour:
   hitDuration: 0
   stunnedHitDuration: 0
   playerLocation: {x: 0, y: 0, z: 0}
+  healthColour: {fileID: 0}
+  healthBar: {fileID: 0}
+  cam: {fileID: 0}
 --- !u!1 &414725896
 GameObject:
   m_ObjectHideFlags: 0
@@ -559,7 +562,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2170660378590186982, guid: 35aa1e1f305a0cd43915048083f4f90a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.6
+      value: -21.27
       objectReference: {fileID: 0}
     - target: {fileID: 2170660378590186982, guid: 35aa1e1f305a0cd43915048083f4f90a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -567,7 +570,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2170660378590186982, guid: 35aa1e1f305a0cd43915048083f4f90a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.2
+      value: 21.81
       objectReference: {fileID: 0}
     - target: {fileID: 2170660378590186982, guid: 35aa1e1f305a0cd43915048083f4f90a, type: 3}
       propertyPath: m_LocalRotation.w

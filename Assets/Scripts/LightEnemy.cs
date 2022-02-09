@@ -9,6 +9,9 @@ public class LightEnemy : EnemyAI
     void Start()
     {
         this.viewDistance = 20;
+        this.health = 100;
+        this.hitDuration = 3.0f;
+        this.damage = 5;
         SetEnemyStats();
         //SwitchState(State.Chasing);
     }
