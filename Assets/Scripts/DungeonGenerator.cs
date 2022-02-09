@@ -13,6 +13,7 @@ public class DungeonGenerator : MonoBehaviour
     public LayerMask playerBody;
     public GameObject[] roomVariations;
     public GameObject[] hallVariations;
+    public int roomLength = 10;
     public List<GameObject> structures = new List<GameObject>();
     private StructureType nextStructureType;
     private StructureType currentStructureType;
@@ -22,6 +23,8 @@ public class DungeonGenerator : MonoBehaviour
 
     private float rayRange;
     private RaycastHit rayHit;
+    private Vector3 nextStructureLoc;
+    private Vector3 nextStructureRot;
 
     private int roomAmount = 0;
     // Start is called before the first frame update
@@ -33,8 +36,8 @@ public class DungeonGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(hallwayDirection);
-        if (roomAmount < 20)
+        //Debug.Log(hallwayDirection);
+        if (roomAmount < 40)
         {
             GenerateNewRoom();
             roomAmount++;
@@ -58,9 +61,29 @@ public class DungeonGenerator : MonoBehaviour
             }
             else if (structures.Count > 0) 
             {
-                if (IsSpotFree(structures[structures.Count - 1].transform.GetChild(roomDirection).transform.position, roomDirection))
+                if (roomDirection <= 0)
                 {
-                    structures.Add(Instantiate(roomVariations[roomVariation], structures[structures.Count - 1].transform.GetChild(roomDirection).transform.position, structures[structures.Count - 1].transform.GetChild(roomDirection).transform.localRotation));
+                    nextStructureRot = new Vector3(0, 0, 0);
+                    nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x + roomLength, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z);
+                }
+                else if (roomDirection == 1)
+                {
+                    nextStructureRot = new Vector3(0, 0, 0);
+                    nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x - roomLength, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z);
+                }
+                else if (roomDirection == 2)
+                {
+                    nextStructureRot = new Vector3(0, -90, 0);
+                    nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z + roomLength);
+                }
+                else if (roomDirection >= 3)
+                {
+                    nextStructureRot = new Vector3(0, 90, 0);
+                    nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z - roomLength);
+                }
+                if (!IsStructureHere(nextStructureLoc))
+                {
+                    structures.Add(Instantiate(roomVariations[roomVariation],  nextStructureLoc, Quaternion.Euler(nextStructureRot)));
                     currentStructureType = (StructureType)nextStructureType;
                 }
             }
@@ -78,26 +101,46 @@ public class DungeonGenerator : MonoBehaviour
             }
             else if (structures.Count > 0)
             {
-                if (IsSpotFree(structures[structures.Count - 1].transform.GetChild(hallwayDirection).transform.position, hallwayDirection))
+                if (roomDirection <= 0)
                 {
-                    structures.Add(Instantiate(hallVariations[hallwayVariation], structures[structures.Count - 1].transform.GetChild(hallwayDirection).transform.position, structures[structures.Count - 1].transform.GetChild(hallwayDirection).transform.localRotation));
-                    currentStructureType = (StructureType)nextStructureType;
+                    nextStructureRot = new Vector3(0, 0, 0);
+                    nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x + roomLength, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z);
                 }
+                else if (roomDirection == 1)
+                {
+                    nextStructureRot = new Vector3(0, 0, 0);
+                    nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x - roomLength, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z);
+                }
+                else if (roomDirection == 2)
+                {
+                    nextStructureRot = new Vector3(0, -90, 0);
+                    nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z + roomLength);
+                }
+                else if (roomDirection >= 3)
+                {
+                    nextStructureRot = new Vector3(0, 90, 0);
+                    nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z - roomLength);
+                }
+                if (!IsStructureHere(nextStructureLoc))
+                {
+                    structures.Add(Instantiate(hallVariations[hallwayVariation], nextStructureLoc, Quaternion.Euler(nextStructureRot)));
+                }
+                currentStructureType = (StructureType)nextStructureType;
             }
         }
-
     }
 
-    private bool IsSpotFree(Vector3 chosenSpot, int direction)
+    private bool IsStructureHere(Vector3 chosenSpot)
     {
-       foreach (GameObject structure in structures)
+       for (int i = 0; i < structures.Count; i++)
        {
-            if (structure.transform.position != chosenSpot)
+            if (structures[i].transform.position == chosenSpot)
             {
                 return true;
             }
        }
-        Debug.Log("failed");
-        return false;
+       Debug.Log("failed");
+        roomAmount = roomAmount - 1;
+       return false;
     }
 }
