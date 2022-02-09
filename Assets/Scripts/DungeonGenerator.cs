@@ -10,6 +10,7 @@ public class DungeonGenerator : MonoBehaviour
         Hallway,
         Length
     }
+    public LayerMask playerBody;
     public GameObject[] roomVariations;
     public GameObject[] hallVariations;
     public List<GameObject> structures = new List<GameObject>();
@@ -18,6 +19,9 @@ public class DungeonGenerator : MonoBehaviour
 
     private int hallwayDirection;
     private int roomDirection;
+
+    private float rayRange;
+    private RaycastHit rayHit;
 
     private int roomAmount = 0;
     // Start is called before the first frame update
@@ -54,7 +58,7 @@ public class DungeonGenerator : MonoBehaviour
             }
             else if (structures.Count > 0) 
             {
-                if (IsSpotFree(structures[structures.Count - 1].transform.GetChild(roomDirection).transform.position))
+                if (IsSpotFree(structures[structures.Count - 1].transform.GetChild(roomDirection).transform.position, roomDirection))
                 {
                     structures.Add(Instantiate(roomVariations[roomVariation], structures[structures.Count - 1].transform.GetChild(roomDirection).transform.position, structures[structures.Count - 1].transform.GetChild(roomDirection).transform.localRotation));
                     currentStructureType = (StructureType)nextStructureType;
@@ -63,8 +67,8 @@ public class DungeonGenerator : MonoBehaviour
         }
         if (nextStructureType == StructureType.Hallway)
         {
-            if (currentStructureType == StructureType.Hallway) { hallwayDirection = Random.Range(2, 4); }
-            else if (currentStructureType == StructureType.Room) { hallwayDirection = Random.Range(4, 8); }
+            if (currentStructureType == StructureType.Hallway) { hallwayDirection = Random.Range(0, 2); }
+            else if (currentStructureType == StructureType.Room) { hallwayDirection = Random.Range(0, 4); }
 
             int hallwayVariation = Random.Range(0, hallVariations.Length);
             if (structures.Count <= 0)
@@ -74,7 +78,7 @@ public class DungeonGenerator : MonoBehaviour
             }
             else if (structures.Count > 0)
             {
-                if (IsSpotFree(structures[structures.Count - 1].transform.GetChild(hallwayDirection).transform.position))
+                if (IsSpotFree(structures[structures.Count - 1].transform.GetChild(hallwayDirection).transform.position, hallwayDirection))
                 {
                     structures.Add(Instantiate(hallVariations[hallwayVariation], structures[structures.Count - 1].transform.GetChild(hallwayDirection).transform.position, structures[structures.Count - 1].transform.GetChild(hallwayDirection).transform.localRotation));
                     currentStructureType = (StructureType)nextStructureType;
@@ -83,15 +87,17 @@ public class DungeonGenerator : MonoBehaviour
         }
 
     }
-    private bool IsSpotFree(Vector3 chosenSpot)
+
+    private bool IsSpotFree(Vector3 chosenSpot, int direction)
     {
-        foreach (GameObject structure in structures)
-        {
+       foreach (GameObject structure in structures)
+       {
             if (structure.transform.position != chosenSpot)
             {
                 return true;
             }
-        }
+       }
+        Debug.Log("failed");
         return false;
     }
 }
