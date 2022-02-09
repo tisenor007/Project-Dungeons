@@ -8,56 +8,50 @@ using System;
 
 public class EnemyAI : GameCharacter
 {
-    enum State
+    public enum State
     {
         Idle,
         Chasing,
         Attacking
     }
-    private State enemyState;
-    [SerializeField] private NavMeshAgent enemy;
-    private PlayerStats playerStats;
-    [SerializeField] private int viewDistance = 20;
-    [SerializeField] private int hearingDistance = 20;
-    [SerializeField] private int attackDistance = 3;
-    private float distance;
-    private float chasingTime = 4.0f;
-    [SerializeField] private float attackDuration = 0.5f;
-    [SerializeField] private float stunnedHitDuration = 3.0f;
-    private float hitTime = 3.0f;
-    private Vector3 playerLocation;
+
+    public State enemyState;
+    public NavMeshAgent enemy;
+    public PlayerStats playerStats;
+
+    public int viewDistance;
+    public int hearingDistance;
+    public int attackDistance;
+
+    public float distanceFromPlayer;
+    public float hitTimer;
+    public float hitDuration;
+    public float stunnedHitDuration;
+
+
+    public Vector3 playerLocation;
     private Vector3 enemyLocation;
-    private Ray enemySight;
-    private RaycastHit hitInfo;
-    [SerializeField] private bool hitable;
-    private Image healthColour;
-    private Slider healthBar;
-    private Transform cam;
+    public Ray enemySight;
+    public RaycastHit hitInfo;
+
+    [SerializeField] private Image healthColour;
+    [SerializeField] private Slider healthBar;
+    [SerializeField] private Transform cam;
 
     void Start()
     {
-        health = 30;
-        damage = 5;
-        enemy = GetComponent<NavMeshAgent>();
-        SwitchState(State.Idle);
-
-        healthColour = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
-        healthBar = transform.GetChild(0).GetChild(0).GetComponent<Slider>();
-        healthBar.maxValue = maxHealth;
-        healthColour.GetComponent<Image>().color = new Color32(74, 227, 14, 255);
-        cam = GameObject.Find("Main Camera").GetComponent<Transform>();
-        playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
+        
     }
 
-    void Update()
+    public void Update()
     {
         UpdateHealth();
         transform.GetChild(0).transform.LookAt(transform.GetChild(0).transform.position + cam.forward);
 
         enemySight = new Ray(transform.position, transform.TransformDirection(Vector3.forward));
-        enemyLocation = enemy.transform.position;
+        enemyLocation = this.enemy.transform.position;
         playerLocation = playerStats.gameObject.transform.position;
-        distance = Vector3.Distance(playerLocation, enemyLocation);
+        distanceFromPlayer = Vector3.Distance(playerLocation, enemyLocation);
 
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * viewDistance, Color.white);
 
@@ -94,13 +88,13 @@ public class EnemyAI : GameCharacter
     {
         enemy.SetDestination(playerLocation);
 
-        if (distance <= attackDistance)
+        if (distanceFromPlayer <= attackDistance)
         {
-            hitTime = attackDuration;
+            hitTimer = hitDuration;
             SwitchState(State.Attacking);
         }
 
-        if (distance >= viewDistance)
+        if (distanceFromPlayer >= viewDistance)
         {
             SwitchState(State.Idle);
         }
@@ -110,29 +104,29 @@ public class EnemyAI : GameCharacter
     {
         enemy.SetDestination(enemyLocation);
 
-        hitTime -= Time.deltaTime;
+        hitTimer -= Time.deltaTime;
 
-        if (hitTime <= 0.0f)
+        if (hitTimer <= 0.0f)
         {
             if (playerStats.shield.activeSelf == true)
             {
                 playerStats.TakeDamage((int)(damage / 4), playerStats.GetComponent<Transform>());
-                hitTime = stunnedHitDuration; // <----- will be replaced by a possible stunned state
+                hitTimer = stunnedHitDuration; // <----- will be replaced by a possible stunned state
             }
             else
             {
                 playerStats.TakeDamage(damage, playerStats.GetComponent<Transform>());
-                hitTime = attackDuration;
+                hitTimer = hitDuration;
             }
         }   
 
-        if (distance > attackDistance)
+        if (distanceFromPlayer > attackDistance)
         {
             SwitchState(State.Chasing);
         }
     }
 
-    void SwitchState(State newState)
+    public void SwitchState(State newState)
     {
         enemyState = newState;
     }
@@ -153,6 +147,18 @@ public class EnemyAI : GameCharacter
 
         if (Health < maxHealth * 0.2)
             healthColour.color = new Color32(204, 40, 0, 255);
+    }
+
+    public void SetEnemyStats()
+    {
+        SwitchState(State.Idle);
+        enemy = GetComponent<NavMeshAgent>();
+        healthColour = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
+        healthBar = transform.GetChild(0).GetChild(0).GetComponent<Slider>();
+        healthBar.maxValue = maxHealth;
+        healthColour.color = new Color32(74, 227, 14, 255);
+        cam = GameObject.Find("Main Camera").GetComponent<Transform>();
+        playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
     }
 
     public override void TakeDamage(int damage, Transform character)

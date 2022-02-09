@@ -13,8 +13,8 @@ public class MetaHealthBar : MonoBehaviour
     void Start()
     {
         enemy = GetComponentInParent<EnemyAI>();
-        healthColour = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
-        healthBar = transform.GetChild(0).GetChild(0).GetComponent<Slider>();
+        healthColour = transform.GetChild(0).GetChild(0).GetComponent<Image>();
+        healthBar = transform.GetChild(0).GetComponent<Slider>();
         healthBar.maxValue = enemy.maxHealth;
         healthColour.GetComponent<Image>().color = new Color32(74, 227, 14, 255);
         cam = GameObject.Find("Main Camera").GetComponent<Transform>();
