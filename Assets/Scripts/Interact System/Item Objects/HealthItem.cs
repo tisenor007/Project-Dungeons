@@ -8,9 +8,11 @@ public class HealthItem : Item
     [SerializeField]
     private int healValue = 10;
 
-    public override void OnPickup(GameObject interactee)
+    public override void OnPickup(GameObject interactable, GameObject interactee)
     {
-        base.OnPickup(interactee);
+        base.OnPickup(interactable, interactee);
+
+        interactable.GetComponent<Interactable>().RemoveGameObjectWFeedback();
         interactee.GetComponent<PlayerStats>().Heal(healValue);
     }
 }

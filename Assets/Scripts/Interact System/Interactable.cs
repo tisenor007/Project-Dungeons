@@ -12,6 +12,7 @@ public class Interactable : MonoBehaviour
     private Light feedbackLight; //feedback to show object is interactable
     private bool feedbackEnabled;
     private bool interactableEnabled = true;
+    private GameObject interactableObject;
 
     //types of interactables
     [SerializeField] private Item itemType;
@@ -19,6 +20,7 @@ public class Interactable : MonoBehaviour
 
     void Start()
     {
+        interactableObject = GetComponentInChildren<GameObject>();
         interactableEnabled = true;
         feedbackLight = GetComponent<Light>();
         feedbackLight.intensity = 0;
@@ -43,11 +45,8 @@ public class Interactable : MonoBehaviour
 
     public void Interact(GameObject interactor)
     {
-        Debug.LogError("Interacted");
-        
-        if (itemType != null) { itemType.OnPickup(interactor); }
-        
-        RemoveGameObjectWFeedback();
+        if (itemType != null) { itemType.OnPickup(this.gameObject, interactor); }
+        else { RemoveGameObjectWFeedback(); }
     }
 
     public void EnableFeedback()
@@ -55,7 +54,7 @@ public class Interactable : MonoBehaviour
         if (feedbackEnabled != true && interactableEnabled) //quickfix: only enable feedback if object isnt being deleted
         { 
             feedbackEnabled = true;
-            Debug.Log("enabled feedback");
+            //Debug.Log("enabled feedback");
         }
     }
 
@@ -64,15 +63,15 @@ public class Interactable : MonoBehaviour
         if (feedbackEnabled != false)
         { 
             feedbackEnabled = false;
-            Debug.Log("disabled feedback");
+            //Debug.Log("disabled feedback");
         }
     }
 
     public void RemoveGameObjectWFeedback()
     {
         interactableEnabled = false;
-        GetComponent<MeshRenderer>().enabled = false;
-        GetComponent<Collider>().enabled = false;
+        interactableObject.GetComponent<MeshRenderer>().enabled = false;
+        interactableObject.GetComponent<Collider>().enabled = false;
         DisableFeedback();
     }
 }
