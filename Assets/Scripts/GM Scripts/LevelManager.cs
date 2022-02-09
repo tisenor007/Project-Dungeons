@@ -93,6 +93,10 @@ public class LevelManager : MonoBehaviour
     {
         GameManager.manager.ChangeState(GameState.CREDITS);
     }
+    public void ChangeGameStateToCharacterSelection()
+    {
+        GameManager.manager.ChangeState(GameState.CHARACTERSELECTION);
+    }
 
     public void LoadButtonFade(bool fileExists)
     {

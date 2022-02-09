@@ -20,7 +20,8 @@ public enum GameState
     LOSE,
     PAUSE,
     OPTIONS,
-    CREDITS
+    CREDITS,
+    CHARACTERSELECTION
 }
 
 public class GameManager : MonoBehaviour
@@ -29,6 +30,8 @@ public class GameManager : MonoBehaviour
     public LevelManager levelManager;
     public UIManager uiManager;
     public GameObject playerAndCamera;
+    public CharacterSelection characterSelection;
+
     [SerializeField] private TextMeshProUGUI saveText;
     [SerializeField] private TextMeshProUGUI loadText;
     [SerializeField] private GameObject popUpPrefab;
@@ -43,6 +46,7 @@ public class GameManager : MonoBehaviour
     private float textFadeWaitTime = 1.5f;
 
     //Create a new object within the player, one will be male, the other female
+    [SerializeField] private PlayerController playerController;
     [SerializeField] private GameObject malePlayer;
     [SerializeField] private GameObject femalePlayer;
 
@@ -87,6 +91,7 @@ public class GameManager : MonoBehaviour
                     }
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     uiManager.LoadTitleMenu();
+                    characterSelection.HideModels();
 
                     playerAndCamera.SetActive(false);
                     return;
@@ -100,6 +105,7 @@ public class GameManager : MonoBehaviour
                     }
                     if (Time.timeScale == 0) { Time.timeScale = 1; }
                     uiManager.LoadGameplay();
+                    characterSelection.HideModels();
 
                     playerAndCamera.SetActive(true);
                     return;
@@ -107,12 +113,14 @@ public class GameManager : MonoBehaviour
             case GameState.WIN:
                 {
                     uiManager.LoadWinScreen();
+                    characterSelection.HideModels();
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     return;
                 }
             case GameState.LOSE:
                 {
                     uiManager.LoadLoseScreen();
+                    characterSelection.HideModels();
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     return;
                 }
@@ -121,11 +129,13 @@ public class GameManager : MonoBehaviour
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
 
                     uiManager.LoadPauseScreen();
+                    characterSelection.HideModels();
                     return;
                 }
             case GameState.OPTIONS:
                 {
                     uiManager.LoadOptions();
+                    characterSelection.HideModels();
                     return;
                 }
             case GameState.CREDITS:
@@ -137,6 +147,20 @@ public class GameManager : MonoBehaviour
                     }
                     if (Time.timeScale == 0) { Time.timeScale = 1; }
                     uiManager.LoadCredits();
+                    characterSelection.HideModels();
+
+                    playerAndCamera.SetActive(false);
+                    return;
+                }
+            case GameState.CHARACTERSELECTION:
+                {
+                    if (SceneManager.GetActiveScene() != SceneManager.GetSceneByBuildIndex(3))
+                    {
+                        SceneManager.LoadScene(3, LoadSceneMode.Single);
+                        SaveScreenState();
+                    }
+                    uiManager.LoadCharacterSelection();
+                    characterSelection.ShowModels();
 
                     playerAndCamera.SetActive(false);
                     return;
@@ -255,6 +279,16 @@ public class GameManager : MonoBehaviour
     {
         malePlayer.SetActive(isMale);
         femalePlayer.SetActive(!isMale);
+
+        if (isMale)
+        {
+            playerController.animator = malePlayer.GetComponent<Animator>();
+        } else
+        {
+            playerController.animator = femalePlayer.GetComponent<Animator>();
+        }
+        PlayerStats playerStats = playerController.GetComponent<PlayerStats>();
+        playerStats.SetGender(isMale);
     }
 }
 
