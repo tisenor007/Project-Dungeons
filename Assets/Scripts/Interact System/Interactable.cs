@@ -10,6 +10,7 @@ public class Interactable : MonoBehaviour
     private Light feedbackLight; //feedback to show object is interactable
     private bool feedbackEnabled;
     private bool interactableEnabled = true;
+    private GameObject interactableObject;
 
     //types of interactables
     public Item itemType;
@@ -18,6 +19,7 @@ public class Interactable : MonoBehaviour
 
     void Start()
     {
+        interactableObject = GetComponentInChildren<GameObject>();
         interactableEnabled = true;
         feedbackLight = GetComponent<Light>();
         feedbackLight.intensity = 0;
@@ -67,8 +69,8 @@ public class Interactable : MonoBehaviour
     public void RemoveGameObjectWFeedback()
     {
         interactableEnabled = false;
-        GetComponent<MeshRenderer>().enabled = false;
-        GetComponent<Collider>().enabled = false;
+        interactableObject.GetComponent<MeshRenderer>().enabled = false;
+        interactableObject.GetComponent<Collider>().enabled = false;
         DisableFeedback();
     }
 }

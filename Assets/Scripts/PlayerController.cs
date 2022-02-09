@@ -123,7 +123,7 @@ public class PlayerController : MonoBehaviour
 
         //Interaction 
         {
-            /// make sure interactable LayerMask is set in PlayerController inspector Interactable
+            ///[errcontrol] make sure interactable LayerMask is set in PlayerController inspector Interactable
             hitColInteraction = Physics.OverlapSphere(transform.position,
                     interactionRadius, interactable.value, QueryTriggerInteraction.Ignore);
 
@@ -146,7 +146,7 @@ public class PlayerController : MonoBehaviour
                         }
                         else { col.gameObject.GetComponent<Interactable>().EnableFeedback(); }
                     }
-                    else { Debug.LogError("INTERACTABLE LAYER BEING USED BY NON INTERACTABLE, CHECK \"Debug.LogError(hit { col.gameObject.name} );\""); }
+                    else { Debug.LogError("INTERACTABLE LAYER BEING USED BY NON-INTERACTABLE, CHECK \"Debug.LogError(hit { col.gameObject.name} );\""); }
                 }
             }
         }
