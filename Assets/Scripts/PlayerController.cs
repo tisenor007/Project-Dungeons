@@ -13,7 +13,7 @@ public class PlayerController : MonoBehaviour
         Falling
     }
 
-    
+
     public Animator animator;
     public GameObject gameCamera;
     public LayerMask body;
@@ -47,31 +47,36 @@ public class PlayerController : MonoBehaviour
     private float rayRange = 0.85f;
     private RaycastHit rayHit;
     private PlayerStats playerStats;
-    [SerializeField]
-    private bool canInteract;
     Collider[] hitColInteraction;
+    private bool canMove;
+
+    public bool CanMove { set{ canMove = value; } } 
 
     void Start()
     {
         playerStats = transform.GetComponent<PlayerStats>();
         rb = this.GetComponent<Rigidbody>();
         movementMode = MovementMode.Idle;
+        canMove = true;
     }
 
     // Update is called once per frame
     void Update()
     {
         //General Move
-        if (Input.GetKey(forwardInput) == true) { moveDirection += new Vector3(-1, 0, 1); }
-        if (Input.GetKey(backwardInput) == true) { moveDirection += new Vector3(1, 0, -1); }
-        if (Input.GetKey(rightInput) == true) { moveDirection += new Vector3(1, 0, 1); }
-        if (Input.GetKey(leftInput) == true) { moveDirection += new Vector3(-1, 0, -1); }
-        else if (Input.GetKey(forwardInput) == false && Input.GetKey(backwardInput) == false && Input.GetKey(rightInput) == false && Input.GetKey(leftInput) == false)
-        {
-            moveDirection = Vector3.zero;
+        if (canMove)
+        { 
+            if (Input.GetKey(forwardInput) == true) { moveDirection += new Vector3(-1, 0, 1); }
+            if (Input.GetKey(backwardInput) == true) { moveDirection += new Vector3(1, 0, -1); }
+            if (Input.GetKey(rightInput) == true) { moveDirection += new Vector3(1, 0, 1); }
+            if (Input.GetKey(leftInput) == true) { moveDirection += new Vector3(-1, 0, -1); }
+            else if (Input.GetKey(forwardInput) == false && Input.GetKey(backwardInput) == false && Input.GetKey(rightInput) == false && Input.GetKey(leftInput) == false)
+            {
+                moveDirection = Vector3.zero;
+            }
+            moveDirection.Normalize();
+            transform.Translate(moveDirection * moveIntensity * Time.deltaTime, Space.World);
         }
-        moveDirection.Normalize();
-        transform.Translate(moveDirection * moveIntensity * Time.deltaTime, Space.World);
 
         //player rotation
         if (moveDirection != Vector3.zero)
@@ -118,14 +123,13 @@ public class PlayerController : MonoBehaviour
 
         //Interaction 
         {
-            /// make sure interactable LayerMask is set in PlayerController inspector Interactable
+            ///[errcontrol] make sure interactable LayerMask is set in PlayerController inspector Interactable
             hitColInteraction = Physics.OverlapSphere(transform.position,
                     interactionRadius, interactable.value, QueryTriggerInteraction.Ignore);
 
             //highlight objects interactable to the player
             if (hitColInteraction.Length != 0)
             {
-                canInteract = true;
                 float r = interactionRadius - .1f; // MN#: -.5 due to radius encompasing hitColInteraction enough to not miss turning off the light
                 //Debug.LogError($"hitting {hitColInteraction.Length} object(s)");
 
@@ -142,7 +146,7 @@ public class PlayerController : MonoBehaviour
                         }
                         else { col.gameObject.GetComponent<Interactable>().EnableFeedback(); }
                     }
-                    else { Debug.LogError("INTERACTABLE LAYER BEING USED BY NON INTERACTABLE, CHECK \"Debug.LogError(hit { col.gameObject.name} );\""); }
+                    else { Debug.LogError("INTERACTABLE LAYER BEING USED BY NON-INTERACTABLE, CHECK \"Debug.LogError(hit { col.gameObject.name} );\""); }
                 }
             }
         }
@@ -192,14 +196,13 @@ public class PlayerController : MonoBehaviour
             movementMode = MovementMode.Idle;
         }
         //interact with object
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E) && canMove)
         {
-            canInteract = false;
-            Debug.LogWarning("call Interact");
+            //Debug.LogWarning("call Interact");
 
             if (hitColInteraction.Length != 0)
             {
-                Debug.LogError($"trying Interaction with {hitColInteraction.Length} object(s)");
+                //Debug.LogError($"trying Interaction with {hitColInteraction.Length} object(s)");
 
                 foreach (Collider col in hitColInteraction)
                 {
@@ -208,11 +211,16 @@ public class PlayerController : MonoBehaviour
 
                     if (interactable.InteractableEnabled == true)
                     {
-                        Debug.LogWarning($"Interacting with {interactable.gameObject.name}");
+                        Debug.LogWarning($"{gameObject.name} interacting with {interactable.gameObject.name}");
                         interactable.Interact(this.gameObject);
                     }
                 }
             }
+        }
+        else if (Input.GetKeyDown(KeyCode.E) && !canMove)
+        {
+            canMove = true;
+            GameManager.manager.levelManager.StopReadingNote();
         }
     }
 
