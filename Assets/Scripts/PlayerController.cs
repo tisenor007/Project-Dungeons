@@ -20,7 +20,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask interactable;
 
     [Header("Interaction")]
-    public float interactionRadius = 7f;
+    [SerializeField] private float interactionRadius = 7f;
 
     private float maxInensity;
     private MovementMode movementMode;

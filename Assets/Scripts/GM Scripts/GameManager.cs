@@ -28,9 +28,10 @@ public class GameManager : MonoBehaviour
     public static GameManager manager; //singleton inst
     public LevelManager levelManager;
     public UIManager uiManager;
-    public TextMeshProUGUI saveText;
-    public TextMeshProUGUI loadText;
     public GameObject playerAndCamera;
+    [SerializeField] private TextMeshProUGUI saveText;
+    [SerializeField] private TextMeshProUGUI loadText;
+    [SerializeField] private GameObject popUpPrefab;
     private GameState gameState;
     private GameState savedScreenState;
     // title acts as default state
@@ -139,6 +140,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void CreatePopUp(string message, Vector3 popUpPos, Color color)
+    {
+        levelManager.CreatePopUp(message, popUpPos, popUpPrefab, color);
+    }
+
     public void ChangeState(GameState targetState)
     {
         gameState = targetState;
@@ -225,6 +231,11 @@ public class GameManager : MonoBehaviour
         {
             loadText.CrossFadeAlpha(0, 3, false); fadeLoad = false;
         }
+    }
+
+    public void ResetScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
 
     IEnumerator WaitToFadeText(string fade)

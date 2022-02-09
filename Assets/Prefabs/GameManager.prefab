@@ -3881,7 +3881,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7676479151454655131}
         m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
-        m_MethodName: ChangeGameStateToGamePlay
+        m_MethodName: ChangeGameStateToNewGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5610,7 +5610,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7676479151454655131}
         m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
-        m_MethodName: ChangeGameStateToGamePlay
+        m_MethodName: ChangeGameStateToNewGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8307,6 +8307,7 @@ MonoBehaviour:
   saveText: {fileID: 5517084552951902533}
   loadText: {fileID: 2902856519019606038}
   playerAndCamera: {fileID: 3401461368770196593}
+  popUpPrefab: {fileID: 7842702970101110197, guid: 00e9483090fbc574eb853cd8b75127a7, type: 3}
 --- !u!1 &7676479150793172941
 GameObject:
   m_ObjectHideFlags: 0

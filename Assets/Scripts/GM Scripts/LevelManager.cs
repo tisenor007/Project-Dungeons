@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,7 +13,7 @@ public class LevelManager : MonoBehaviour
     private static float creditsTopPos = -1425;
     private static float creditsBeginPos = -500;
     private float creditsYPos = creditsBeginPos;
-    private float creditsScrollRate = 1;
+    private float creditsScrollRate = 100;
     private Canvas notePlain;
     private Text noteWriting;
 
@@ -52,10 +53,15 @@ public class LevelManager : MonoBehaviour
     
     public void ChangeGameStateToGamePlay()
     {
+        GameManager.manager.ChangeState(GameState.GAMEPLAY);
+    }
+    public void ChangeGameStateToNewGame()
+    {
+        GameManager.manager.ResetScene();
         GameManager.manager.playerAndCamera.transform.GetChild(0).GetComponent<PlayerStats>().ResetStats();
         GameManager.manager.ChangeState(GameState.GAMEPLAY);
     }
-    
+
     public void ChangeGameStateToWin()
     {
         GameManager.manager.ChangeState(GameState.WIN);
@@ -79,6 +85,14 @@ public class LevelManager : MonoBehaviour
     public void ChangeGameStateToCredits()
     {
         GameManager.manager.ChangeState(GameState.CREDITS);
+    }
+
+    //feedback
+    public void CreatePopUp(string message, Vector3 popUpPos, GameObject prefab, Color color)
+    {
+        PopUp popUp;
+        popUp = Instantiate(prefab, new Vector3(popUpPos.x, popUpPos.y + 5, popUpPos.z), Quaternion.identity).GetComponent<PopUp>();
+        popUp.SetUp(message, color);
     }
 
     //messages
