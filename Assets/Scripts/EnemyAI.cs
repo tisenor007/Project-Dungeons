@@ -149,12 +149,13 @@ public class EnemyAI : GameCharacter
             healthColour.color = new Color32(204, 40, 0, 255);
     }
 
-    public void SetEnemyStats()
+    public void InitEnemy()
     {
         SwitchState(State.Idle);
         enemy = GetComponent<NavMeshAgent>();
         healthColour = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
         healthBar = transform.GetChild(0).GetChild(0).GetComponent<Slider>();
+
         healthBar.maxValue = maxHealth;
         healthColour.color = new Color32(74, 227, 14, 255);
         cam = GameObject.Find("Main Camera").GetComponent<Transform>();
