@@ -4,143 +4,126 @@ using UnityEngine;
 
 public class DungeonGenerator : MonoBehaviour
 {
-    public enum StructureType
+    private enum StructureType
     {
         Room,
         Hallway,
         Length
     }
-    public LayerMask playerBody;
-    public GameObject[] roomVariations;
-    public GameObject[] hallVariations;
-    public int roomLength = 10;
-    public List<GameObject> structures = new List<GameObject>();
+    [SerializeField] private GameObject[] roomVariations;
+    [SerializeField] private GameObject[] hallwayVariations;
+    [SerializeField] private int structureSpacing = 10;
+    [SerializeField] private int maxStructures = 10;
+    private List<GameObject> structures = new List<GameObject>();
     private StructureType nextStructureType;
-    private StructureType currentStructureType;
-
-    private int hallwayDirection;
-    private int roomDirection;
-
-    private float rayRange;
-    private RaycastHit rayHit;
+    private StructureType currentStructureType = StructureType.Room;
     private Vector3 nextStructureLoc;
     private Vector3 nextStructureRot;
-
-    private int roomAmount = 0;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
+    private int nextStructureDirection;
+    private int roomVariation;
+    private int hallwayVariation;
+   
     // Update is called once per frame
     void Update()
     {
-        //Debug.Log(hallwayDirection);
-        if (roomAmount < 40)
+        GenerateNewDungeon();
+    }
+
+    //master method
+    public void GenerateNewDungeon()
+    {
+        //adds rooms to dungeon until max number is met
+        if (structures.Count < maxStructures)
         {
             GenerateNewRoom();
-            roomAmount++;
+        }
+        //makes them all children after generation
+        else if (structures.Count >= maxStructures) 
+        {
+            foreach (GameObject structure in structures)
+            {
+                structure.transform.parent = this.transform;
+            }
         }
     }
 
-    public void GenerateNewRoom()
+    //tries to add room to dungeon
+    private void GenerateNewRoom()
     {
-        int structureChoice = Random.Range(0, (int)StructureType.Length);
-        nextStructureType = (StructureType)structureChoice;
-        if (nextStructureType == StructureType.Room)
-        {
-            if (currentStructureType == StructureType.Hallway) { roomDirection = Random.Range(0, 2); }
-            else if (currentStructureType == StructureType.Room) { roomDirection = Random.Range(0, 4); }
+        nextStructureType = (StructureType)Random.Range(0, (int)StructureType.Length);
+        roomVariation = Random.Range(0, roomVariations.Length);
+        hallwayVariation = Random.Range(0, hallwayVariations.Length);
 
-            int roomVariation = Random.Range(0, roomVariations.Length);
-            if (structures.Count <= 0) 
-            {
-                structures.Add(Instantiate(roomVariations[roomVariation], Vector3.zero, Quaternion.identity));
-                currentStructureType = (StructureType)nextStructureType;
-            }
-            else if (structures.Count > 0) 
-            {
-                if (roomDirection <= 0)
-                {
-                    nextStructureRot = new Vector3(0, 0, 0);
-                    nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x + roomLength, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z);
-                }
-                else if (roomDirection == 1)
-                {
-                    nextStructureRot = new Vector3(0, 0, 0);
-                    nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x - roomLength, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z);
-                }
-                else if (roomDirection == 2)
-                {
-                    nextStructureRot = new Vector3(0, -90, 0);
-                    nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z + roomLength);
-                }
-                else if (roomDirection >= 3)
-                {
-                    nextStructureRot = new Vector3(0, 90, 0);
-                    nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z - roomLength);
-                }
-                if (!IsStructureHere(nextStructureLoc))
-                {
-                    structures.Add(Instantiate(roomVariations[roomVariation],  nextStructureLoc, Quaternion.Euler(nextStructureRot)));
-                    currentStructureType = (StructureType)nextStructureType;
-                }
-            }
+        if (structures.Count <= 0) 
+        {
+            if (nextStructureType == StructureType.Room){InstantiateStructure(roomVariations, roomVariation, Vector3.zero, Vector3.zero);}
+            else if (nextStructureType == StructureType.Hallway) { InstantiateStructure(hallwayVariations, hallwayVariation, Vector3.zero, Vector3.zero); }
         }
-        if (nextStructureType == StructureType.Hallway)
+       
+        if (structures.Count > 0) 
         {
-            if (currentStructureType == StructureType.Hallway) { hallwayDirection = Random.Range(0, 2); }
-            else if (currentStructureType == StructureType.Room) { hallwayDirection = Random.Range(0, 4); }
-
-            int hallwayVariation = Random.Range(0, hallVariations.Length);
-            if (structures.Count <= 0)
+            if (nextStructureType == StructureType.Room)
             {
-                structures.Add(Instantiate(hallVariations[hallwayVariation], Vector3.zero, Quaternion.identity));
-                currentStructureType = (StructureType)nextStructureType;
+                ChooseNextRoomDirection();
+                InstantiateStructure(roomVariations, roomVariation, nextStructureLoc, nextStructureRot);
             }
-            else if (structures.Count > 0)
+            else if (nextStructureType == StructureType.Hallway)
             {
-                if (roomDirection <= 0)
-                {
-                    nextStructureRot = new Vector3(0, 0, 0);
-                    nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x + roomLength, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z);
-                }
-                else if (roomDirection == 1)
-                {
-                    nextStructureRot = new Vector3(0, 0, 0);
-                    nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x - roomLength, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z);
-                }
-                else if (roomDirection == 2)
-                {
-                    nextStructureRot = new Vector3(0, -90, 0);
-                    nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z + roomLength);
-                }
-                else if (roomDirection >= 3)
-                {
-                    nextStructureRot = new Vector3(0, 90, 0);
-                    nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z - roomLength);
-                }
-                if (!IsStructureHere(nextStructureLoc))
-                {
-                    structures.Add(Instantiate(hallVariations[hallwayVariation], nextStructureLoc, Quaternion.Euler(nextStructureRot)));
-                }
-                currentStructureType = (StructureType)nextStructureType;
+                ChooseNextRoomDirection();
+                InstantiateStructure(hallwayVariations, hallwayVariation, nextStructureLoc, nextStructureRot);
             }
         }
     }
 
+    //instantiates & stores room
+    private void InstantiateStructure(GameObject[] structureVariations, int structureVariation, Vector3 instantiateLoc, Vector3 instantiateRot)
+    {
+        if (!IsStructureHere(instantiateLoc))
+        {
+            structures.Add(Instantiate(structureVariations[structureVariation], instantiateLoc, Quaternion.Euler(instantiateRot)));
+            currentStructureType = (StructureType)nextStructureType;
+        }
+    }
+
+    //makes random direction that next room / structure can go
+    private void ChooseNextRoomDirection()
+    {
+        if (currentStructureType == StructureType.Hallway && structures[structures.Count - 1].transform.eulerAngles.y == 0) { nextStructureDirection = Random.Range(0, 2); }
+        else if (currentStructureType == StructureType.Hallway && structures[structures.Count - 1].transform.eulerAngles.y == 90) { nextStructureDirection = Random.Range(2, 3); }
+        else if (currentStructureType == StructureType.Room) { nextStructureDirection = Random.Range(0, 3); }
+
+        if (nextStructureDirection <= 0)
+        {
+            nextStructureRot = new Vector3(0, 0, 0);
+            nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x + structureSpacing, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z);
+        }
+        else if (nextStructureDirection == 1)
+        {
+            nextStructureRot = new Vector3(0, 0, 0);
+            nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x - structureSpacing, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z);
+        }
+        else if (nextStructureDirection == 2)
+        {
+            nextStructureRot = new Vector3(0, 90, 0);
+            nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z + structureSpacing);
+        }
+        else if (nextStructureDirection >= 3)
+        {
+            nextStructureRot = new Vector3(0, 90, 0);
+            nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z - structureSpacing);
+        }
+    }
+
+    //prevents ovelapping
     private bool IsStructureHere(Vector3 chosenSpot)
     {
-       for (int i = 0; i < structures.Count; i++)
-       {
+        for (int i = 0; i < structures.Count; i++)
+        {
             if (structures[i].transform.position == chosenSpot)
             {
                 return true;
             }
-       }
-       Debug.Log("failed");
-        roomAmount = roomAmount - 1;
-       return false;
+        }
+        return false;
     }
 }
