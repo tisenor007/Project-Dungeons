@@ -135,16 +135,24 @@ public class PlayerController : MonoBehaviour
 
                 foreach (Collider col in hitColInteraction)
                 {
+
                     float distance = Vector3.Distance(transform.position, col.transform.position);
                     //Debug.LogError($"hit {col.gameObject.name}");
 
                     if (col.gameObject.GetComponent<Interactable>() != null)
                     {
-                        if (distance >= r)
+                        Interactable interactable = col.gameObject.GetComponent<Interactable>();
+
+                        if (distance >= r && interactable.FeedbackEnabled)
                         {
-                            col.gameObject.GetComponent<Interactable>().DisableFeedback();
+                            interactable.DisableFeedback();
                         }
-                        else { col.gameObject.GetComponent<Interactable>().EnableFeedback(); }
+                        else if (distance <= r && !interactable.FeedbackEnabled)
+                        {
+                            Physics.IgnoreCollision(this.transform.GetChild(0).GetComponent<Collider>(), col, true);
+
+                            interactable.EnableFeedback(); 
+                        }
                     }
                     else { Debug.LogError("INTERACTABLE LAYER BEING USED BY NON-INTERACTABLE, CHECK \"Debug.LogError(hit { col.gameObject.name} );\""); }
                 }
@@ -206,7 +214,7 @@ public class PlayerController : MonoBehaviour
 
                 foreach (Collider col in hitColInteraction)
                 {
-                    Interactable interactable = col.gameObject.GetComponent<Interactable>();
+                    Interactable interactable = col.gameObject.GetComponentInParent<Interactable>();
                     //Debug.LogWarning($"trying Interaction with {interactable.gameObject.name}");
 
                     if (interactable.InteractableEnabled == true)

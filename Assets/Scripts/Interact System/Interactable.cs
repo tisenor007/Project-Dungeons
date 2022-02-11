@@ -5,35 +5,51 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
-    public bool InteractableEnabled { get { return interactableEnabled; } }
+    public bool rotates = false;
 
-    [SerializeField] private float interactableFeedback__Intensity = 10;
-
+    private float feedback__Intensity = 3;
     private Light feedbackLight; //feedback to show object is interactable
     private bool feedbackEnabled;
     private bool interactableEnabled = true;
     private GameObject interactableObject;
+    private float rotationSpeed = 40f;
+    private float bounceSpeed = 30f;
 
     //types of interactables
     [SerializeField] private Item itemType;
 
+    public bool FeedbackEnabled { get { return feedbackEnabled; } }
+    public bool InteractableEnabled { get { return interactableEnabled; } }
 
     void Start()
     {
-        interactableObject = GetComponentInChildren<GameObject>();
+        interactableObject = this.gameObject.transform.GetChild(0).gameObject;
+        feedbackLight = this.gameObject.GetComponent<Light>();
+
         interactableEnabled = true;
-        feedbackLight = GetComponent<Light>();
+        feedbackEnabled = false;
         feedbackLight.intensity = 0;
+
         DisableFeedback();
     }
 
     void Update()
     {
+        if (rotates)
+        {
+            this.gameObject.transform.Rotate(Vector3.up * -rotationSpeed * Time.deltaTime, Space.World);
+            if (this.transform.localPosition.y >= 10)
+            { 
+                
+            
+            } 
+        }
+
         if (feedbackEnabled == false && feedbackLight.intensity > 0)
         {
             feedbackLight.intensity -= Time.deltaTime * 10;
         }
-        else if (feedbackEnabled == true && feedbackLight.intensity < interactableFeedback__Intensity)
+        else if (feedbackEnabled == true && feedbackLight.intensity < feedback__Intensity)
         {
             feedbackLight.intensity += Time.deltaTime * 30;
         }
