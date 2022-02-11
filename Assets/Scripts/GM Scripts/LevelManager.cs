@@ -86,6 +86,10 @@ public class LevelManager : MonoBehaviour
     {
         GameManager.manager.ChangeState(GameState.CREDITS);
     }
+    public void ChangeGameStateToCharacterSelection()
+    {
+        GameManager.manager.ChangeState(GameState.CHARACTERSELECTION);
+    }
 
     //feedback
     public void CreatePopUp(string message, Vector3 popUpPos, GameObject prefab, Color color)

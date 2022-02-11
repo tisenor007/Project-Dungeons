@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     public Canvas pause;
     public Canvas options;
     public Canvas credits;
+    public Canvas characterSelection;
 
     [SerializeField]
     private GUI gameUI;
@@ -40,6 +41,7 @@ public class UIManager : MonoBehaviour
         winDisplay.enabled = false;
         loseDisplay.enabled = false;
         pause.enabled = false;
+        characterSelection.enabled = false;
     }
 
     public void LoadTitleMenu()
@@ -80,6 +82,11 @@ public class UIManager : MonoBehaviour
     {
         DisableAll();
         credits.enabled = true;
+    }
+    public void LoadCharacterSelection()
+    {
+        DisableAll();
+        characterSelection.enabled = true;
     }
 }
 
