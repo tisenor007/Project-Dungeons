@@ -174,6 +174,7 @@ public class PlayerController : MonoBehaviour
 
     private void CheckPlayerInputandPerformPlayerActions()
     {
+        //CLEAN THIS LOGIC IN THE FUTURE!
         //attacking
         if (Input.GetMouseButton(0) == true && attackBlend < 1 && movementMode != MovementMode.Sprinting && movementMode != MovementMode.Falling && Time.time > attackTimer && Input.GetMouseButton(1) == false) 
         {

@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 45157137}
   - component: {fileID: 45157136}
   m_Layer: 0
-  m_Name: Dungeon Generator
+  m_Name: DungeonGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -152,6 +152,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4dce550a6e013b64896911da2a5222fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  structureSpacing: 10
+  structures: []
   roomVariations:
   - {fileID: 6625516151259467916, guid: 8b356c10c51dc93469b8205ef12d1c2d, type: 3}
   - {fileID: 6625516151259467916, guid: 8b356c10c51dc93469b8205ef12d1c2d, type: 3}
@@ -160,8 +162,7 @@ MonoBehaviour:
   hallwayVariations:
   - {fileID: 3988556011143349939, guid: bb1165fae0dfab14f937c553c2107ef2, type: 3}
   - {fileID: 3988556011143349939, guid: bb1165fae0dfab14f937c553c2107ef2, type: 3}
-  structureSpacing: 10
-  maxStructures: 50
+  maxStructures: 200
 --- !u!4 &45157137
 Transform:
   m_ObjectHideFlags: 0

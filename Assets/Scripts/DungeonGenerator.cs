@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class DungeonGenerator : MonoBehaviour
 {
-    private enum StructureType
+    public enum StructureType
     {
         Room,
         Hallway,
         Length
     }
+    public int structureSpacing = 10;
+    [HideInInspector] public List<GameObject> structures = new List<GameObject>();
     [SerializeField] private GameObject[] roomVariations;
     [SerializeField] private GameObject[] hallwayVariations;
-    [SerializeField] private int structureSpacing = 10;
     [SerializeField] private int maxStructures = 10;
-    private List<GameObject> structures = new List<GameObject>();
     private StructureType nextStructureType;
     private StructureType currentStructureType = StructureType.Room;
     private Vector3 nextStructureLoc;
@@ -82,6 +82,7 @@ public class DungeonGenerator : MonoBehaviour
         {
             structures.Add(Instantiate(structureVariations[structureVariation], instantiateLoc, Quaternion.Euler(instantiateRot)));
             currentStructureType = (StructureType)nextStructureType;
+            structureVariations[structureVariation].GetComponentInChildren<StructureBehavior>().thisStructureType = currentStructureType;
         }
     }
 
@@ -104,12 +105,14 @@ public class DungeonGenerator : MonoBehaviour
         }
         else if (nextStructureDirection == 2)
         {
-            nextStructureRot = new Vector3(0, 90, 0);
+            if (nextStructureType == StructureType.Hallway) { nextStructureRot = new Vector3(0, 90, 0); }
+            else if (nextStructureType != StructureType.Hallway) { nextStructureRot = new Vector3(0, 0, 0); }
             nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z + structureSpacing);
         }
         else if (nextStructureDirection >= 3)
         {
-            nextStructureRot = new Vector3(0, 90, 0);
+            if (nextStructureType == StructureType.Hallway) { nextStructureRot = new Vector3(0, 90, 0); }
+            else if (nextStructureType != StructureType.Hallway) { nextStructureRot = new Vector3(0, 0, 0); }
             nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z - structureSpacing);
         }
     }
