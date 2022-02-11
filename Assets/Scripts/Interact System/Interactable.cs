@@ -43,7 +43,7 @@ public class Interactable : MonoBehaviour
 
     public void Interact(GameObject interactor)
     {
-        Debug.LogError("Interacted");
+       // Debug.LogError("Interacted");
         
         if (itemType != null) { itemType.OnPickup(interactor); }
         
