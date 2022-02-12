@@ -96,11 +96,11 @@ public class GUI
     [Tooltip("any button that calls load")]
     public Button[] allLoadButtons;
     public Canvas notePlain;
-}
 
-[System.Serializable]
-public class OUI // Option User Interface
-{
+
+    [Header("Options")]
     public Slider brightnessSlider;
+    [Tooltip("")]
     public Image brightnessImage;
 }
+
