@@ -166,7 +166,7 @@ public class LevelManager : MonoBehaviour
         newAlpha.a = GameManager.manager.uiManager.OptionUI.brightnessSlider.value / 100;
         GameManager.manager.uiManager.OptionUI.brightnessImage.color = newAlpha;
 
-        Debug.LogError($"newAlpha: {newAlpha.a}, Image colour: {GameManager.manager.uiManager.OptionUI.brightnessImage.color}");
+        Debug.Log($"newAlpha: {newAlpha.a}, Image colour: {GameManager.manager.uiManager.OptionUI.brightnessImage.color}");
     }
     #endregion
     
