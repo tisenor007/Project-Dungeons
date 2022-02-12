@@ -19,7 +19,7 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        notePlain = GameManager.manager.uiManager.GameUI.notePlain;
+        notePlain = GameManager.manager.uiManager.notePlain;
         noteWriting = notePlain.transform.GetChild(0).GetComponentInChildren<Text>();
     }
 
@@ -118,12 +118,12 @@ public class LevelManager : MonoBehaviour
     {
         if (!fileExists)
         {
-            foreach (Button button in GameManager.manager.uiManager.GameUI.allLoadButtons)
+            foreach (Button button in GameManager.manager.uiManager.allLoadButtons)
                 button.interactable = false;
         }
         else
         {
-            foreach (Button button in GameManager.manager.uiManager.GameUI.allLoadButtons)
+            foreach (Button button in GameManager.manager.uiManager.allLoadButtons)
                 button.interactable = true;
         }
     }
@@ -162,11 +162,11 @@ public class LevelManager : MonoBehaviour
     public void BrightnessSlider()
     {
         // sets the alpha of an image to the value of a slider
-        Color newAlpha = GameManager.manager.uiManager.OptionUI.brightnessImage.color;
-        newAlpha.a = GameManager.manager.uiManager.OptionUI.brightnessSlider.value / 100;
-        GameManager.manager.uiManager.OptionUI.brightnessImage.color = newAlpha;
+        Color newAlpha = GameManager.manager.uiManager.brightnessImage.color;
+        newAlpha.a = GameManager.manager.uiManager.brightnessSlider.value / 100;
+        GameManager.manager.uiManager.brightnessImage.color = newAlpha;
 
-        Debug.Log($"newAlpha: {newAlpha.a}, Image colour: {GameManager.manager.uiManager.OptionUI.brightnessImage.color}");
+        Debug.Log($"newAlpha: {newAlpha.a}, Image colour: {GameManager.manager.uiManager.brightnessImage.color}");
     }
     #endregion
     

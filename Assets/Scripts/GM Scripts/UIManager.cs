@@ -14,13 +14,17 @@ public class UIManager : MonoBehaviour
     public Canvas credits;
     public Canvas characterSelection;
 
-    [SerializeField]
-    private GUI gameUI;
-    [SerializeField]
-    private OUI optionUI;
+    [Space(20)]
 
-    public GUI GameUI { get { return gameUI; } }
-    public OUI OptionUI { get { return optionUI; } }
+    [Tooltip("any button that calls load")]
+    public Button[] allLoadButtons;
+    public Canvas notePlain;
+
+    [Header("Options")]
+
+    [Tooltip("The Background Image in SystemContants")] 
+    public Image brightnessImage;
+    public Slider brightnessSlider;
 
     private void Awake()
     {
@@ -93,14 +97,6 @@ public class UIManager : MonoBehaviour
 [System.Serializable]
 public class GUI
 {
-    [Tooltip("any button that calls load")]
-    public Button[] allLoadButtons;
-    public Canvas notePlain;
-
-
-    [Header("Options")]
-    public Slider brightnessSlider;
-    [Tooltip("")]
-    public Image brightnessImage;
+    
 }
 

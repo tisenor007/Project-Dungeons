@@ -55,13 +55,11 @@ public class GameManager : MonoBehaviour
         if (manager == null)
         {
             DontDestroyOnLoad(this.gameObject);
-            DontDestroyOnLoad(playerAndCamera);
             manager = this; // setting this object to be THE singleton
         }
         else if (manager != this) // already exist's? DESTROY
         {
             Destroy(this.gameObject);
-            Destroy(playerAndCamera);
         }
 
         // make fading text invisible at start
