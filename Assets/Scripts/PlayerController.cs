@@ -198,7 +198,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(jumpInput)) { Jump(); }
 
         //checking to be idle
-        if (IsMoving() == false) { moveDirection = Vector3.zero; movementMode = MovementMode.Idle; }
+        else if (IsMoving() == false) { moveDirection = Vector3.zero; movementMode = MovementMode.Idle; }
 
         //interact with object
         if (Input.GetKeyDown(interactInput) && canMove)
