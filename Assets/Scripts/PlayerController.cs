@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public enum MovementDirection
+    {
+        Forward,
+        Backward,
+        Left,
+        Right
+    }
+
     public enum MovementMode
     {
         Idle,
@@ -13,11 +21,19 @@ public class PlayerController : MonoBehaviour
         Falling
     }
 
-
     public Animator animator;
     public GameObject gameCamera;
     public LayerMask body;
     public LayerMask interactable;
+    public int runSpeed = 5;
+    public int sprintSpeed = 10;
+
+    private enum BlendState
+    {
+        Idle_Running_Sprinting,
+        Jumping,
+        Falling
+    }
 
     [Header("Interaction")]
     [SerializeField] private float interactionRadius = 7f;
@@ -26,9 +42,9 @@ public class PlayerController : MonoBehaviour
     private MovementMode movementMode;
     private Rigidbody rb;
     private float moveIntensity = 0.0f;
-    private float velocityAcceleration = 4.0f;
-    private float velocityDeceleration = 15.0f;
-    private float playerRotationSpeed = 450;
+    private float velocityAcceleration = 8.0f;
+    private float velocityDeceleration = 20.0f;
+    private float playerRotationSpeed = 650;
     private float jumpHeight = 4f;
     private KeyCode forwardInput = KeyCode.W;
     private KeyCode backwardInput = KeyCode.S;
@@ -36,6 +52,7 @@ public class PlayerController : MonoBehaviour
     private KeyCode rightInput = KeyCode.D;
     private KeyCode jumpInput = KeyCode.Space;
     private KeyCode sprintInput = KeyCode.LeftShift;
+    private KeyCode interactInput = KeyCode.E;
     private float attackBlend;
     private float attackBlendAcceleration = 10.0f;
     private float attackBlendDeceleration = 3.5f;
@@ -63,21 +80,6 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //General Move
-        if (canMove)
-        { 
-            if (Input.GetKey(forwardInput) == true) { moveDirection += new Vector3(-1, 0, 1); }
-            if (Input.GetKey(backwardInput) == true) { moveDirection += new Vector3(1, 0, -1); }
-            if (Input.GetKey(rightInput) == true) { moveDirection += new Vector3(1, 0, 1); }
-            if (Input.GetKey(leftInput) == true) { moveDirection += new Vector3(-1, 0, -1); }
-            else if (Input.GetKey(forwardInput) == false && Input.GetKey(backwardInput) == false && Input.GetKey(rightInput) == false && Input.GetKey(leftInput) == false)
-            {
-                moveDirection = Vector3.zero;
-            }
-            moveDirection.Normalize();
-            transform.Translate(moveDirection * moveIntensity * Time.deltaTime, Space.World);
-        }
-
         //player rotation
         if (moveDirection != Vector3.zero)
         {
@@ -99,24 +101,24 @@ public class PlayerController : MonoBehaviour
             switch (movementMode)
             {
                 case MovementMode.Idle:
-                    animator.SetFloat("AnimState", 0);
-                    if (moveIntensity > 0.0f) { moveIntensity -= Time.deltaTime * velocityDeceleration; }
+                    animator.SetFloat("AnimState", (int)BlendState.Idle_Running_Sprinting);
+                    UpdateMoveIntensity(movementMode);
                     break;
                 case MovementMode.Running:
-                    animator.SetFloat("AnimState", 0);
-                    maxInensity = 5;
-                    AdjustMoveIntensity();
+                    animator.SetFloat("AnimState", (int)BlendState.Idle_Running_Sprinting);
+                    maxInensity = runSpeed;
+                    UpdateMoveIntensity(movementMode);
                     break;
                 case MovementMode.Sprinting:
-                    animator.SetFloat("AnimState", 0);
-                    maxInensity = 10;
-                    AdjustMoveIntensity();
+                    animator.SetFloat("AnimState", (int)BlendState.Idle_Running_Sprinting);
+                    maxInensity = sprintSpeed;
+                    UpdateMoveIntensity(movementMode);
                     break;
                 case MovementMode.Jumping:
-                    animator.SetFloat("AnimState", 1);
+                    animator.SetFloat("AnimState", (int)BlendState.Jumping);
                     break;
                 case MovementMode.Falling:
-                    animator.SetFloat("AnimState", 2);
+                    animator.SetFloat("AnimState", (int)BlendState.Falling);
                     break;
             }
         }
@@ -163,41 +165,35 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void AdjustMoveIntensity()
-    {
-        if (moveIntensity < maxInensity) { moveIntensity += Time.deltaTime * velocityAcceleration; }
-        else
-        {
-            moveIntensity -= Time.deltaTime * velocityDeceleration;
-        }
-    }
-
     private void CheckPlayerInputandPerformPlayerActions()
     {
         //CLEAN THIS LOGIC IN THE FUTURE!
+        if (Input.GetKey(forwardInput) == true) { Move(MovementDirection.Forward); }
+        if (Input.GetKey(backwardInput) == true) { Move(MovementDirection.Backward); }
+        if (Input.GetKey(rightInput) == true) { Move(MovementDirection.Right); }
+        if (Input.GetKey(leftInput) == true) { Move(MovementDirection.Left); }
+        moveDirection.Normalize();
+        transform.Translate(moveDirection * moveIntensity * Time.deltaTime, Space.World);
+
         //attacking
-        if (Input.GetMouseButton(0) == true && attackBlend < 1 && movementMode != MovementMode.Sprinting && movementMode != MovementMode.Falling && Time.time > attackTimer && Input.GetMouseButton(1) == false) 
-        {
-            attackBlend = 1; attackTimer = Time.time + attackTimeDuration; playerStats.Attack();
-        }
-        if (Input.GetMouseButton(0) == false && attackBlend > 0 && Time.time > attackTimer) { attackBlend -= Time.deltaTime * attackBlendDeceleration; playerStats.StopAttacking(); }
+        if (Input.GetMouseButton(0)){ Attack(); }
+        if(IsAttacking() == false) { attackBlend -= Time.deltaTime * attackBlendDeceleration; playerStats.StopAttacking(); }
+
         //blocking
-        if (Input.GetMouseButton(1) == true && Time.time > attackTimer && movementMode != MovementMode.Sprinting && movementMode != MovementMode.Falling) { playerStats.Block(); }
-        if (Input.GetMouseButton(1) == false) { playerStats.StopBlocking(); }
+        if (Input.GetMouseButton(1)) { Block(); }
+        if (IsBlocking() == false) { playerStats.StopBlocking(); }
+
         //movemonet/sprinting
-        if (Input.GetKey(sprintInput) && movementMode != MovementMode.Jumping && isGrounded() == true) { movementMode = MovementMode.Sprinting; }
-        if (Input.GetKey(forwardInput) == true && Input.GetKey(sprintInput) == false && movementMode != MovementMode.Jumping && isGrounded() == true || Input.GetKey(leftInput) && Input.GetKey(sprintInput) == false && movementMode != MovementMode.Jumping && isGrounded() == true || Input.GetKey(backwardInput) && Input.GetKey(sprintInput) == false && movementMode != MovementMode.Jumping && isGrounded() == true || Input.GetKey(rightInput) && Input.GetKey(sprintInput) == false && movementMode != MovementMode.Jumping && isGrounded() == true)
-        {
-            movementMode = MovementMode.Running;
-        }
+        if (Input.GetKey(sprintInput)) { Sprint(); }
+
         //jumping
-        if (Input.GetKey(jumpInput) && isGrounded() == true && Time.time > jumpTimer) { movementMode = MovementMode.Jumping; rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y + jumpHeight, rb.velocity.z); jumpTimer = Time.time + jumpTimeDuration;}
-        else if (Input.GetKey(forwardInput) == false && Input.GetKey(leftInput) == false && Input.GetKey(backwardInput) == false && Input.GetKey(rightInput) == false && movementMode != MovementMode.Jumping && isGrounded() == true)
-        {
-            movementMode = MovementMode.Idle;
-        }
+        if (Input.GetKey(jumpInput)) { Jump(); }
+
+        //checking to be idle
+        if (IsMoving() == false) { moveDirection = Vector3.zero; movementMode = MovementMode.Idle; }
+
         //interact with object
-        if (Input.GetKeyDown(KeyCode.E) && canMove)
+        if (Input.GetKeyDown(interactInput) && canMove)
         {
             //Debug.LogWarning("call Interact");
 
@@ -223,6 +219,103 @@ public class PlayerController : MonoBehaviour
             canMove = true;
             GameManager.manager.levelManager.StopReadingNote();
         }
+    }
+
+    private void UpdateMoveIntensity(MovementMode movementMode)
+    {
+        if (movementMode == MovementMode.Idle)
+        {
+            if (moveIntensity > 0.0f) { moveIntensity -= Time.deltaTime * velocityDeceleration; }
+        }
+        else if (movementMode != MovementMode.Idle)
+        {
+            if (moveIntensity < maxInensity) { moveIntensity += Time.deltaTime * velocityAcceleration; }
+            else { moveIntensity -= Time.deltaTime * velocityDeceleration; }
+        }
+    }
+
+    private void Move(MovementDirection direction)
+    {
+        if (canMove == false) { return; }
+
+        if (direction == MovementDirection.Forward) { moveDirection += new Vector3(-1, 0, 1); }
+        if (direction == MovementDirection.Backward) { moveDirection += new Vector3(1, 0, -1); }
+        if (direction == MovementDirection.Right) { moveDirection += new Vector3(1, 0, 1); }
+        if (direction == MovementDirection.Left) { moveDirection += new Vector3(-1, 0, -1); }
+
+        if (Input.GetKey(sprintInput) == true) { return; }
+        if (movementMode == MovementMode.Jumping) { return; }
+        if (isGrounded() == false) { return; }
+
+        movementMode = MovementMode.Running;
+    }
+
+    private bool IsMoving()
+    {
+        if (Input.GetKey(forwardInput) == true) { return true; }
+        if (Input.GetKey(backwardInput) == true) { return true; }
+        if (Input.GetKey(rightInput) == true) { return true; }
+        if (Input.GetKey(leftInput) == true) { return true; }
+        if (movementMode == MovementMode.Jumping) { return true; }
+        if (isGrounded() == false) { return true; }
+
+        return false;
+    }
+
+    private void Sprint()
+    {
+        if (movementMode == MovementMode.Jumping) { return; }
+        if (isGrounded() == false) { return; }
+
+        movementMode = MovementMode.Sprinting;
+    }
+
+    private void Jump()
+    {
+        if (isGrounded() == false) { return; }
+        if (Time.time <= jumpTimer) { return; }
+
+        movementMode = MovementMode.Jumping;
+        rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y + jumpHeight, rb.velocity.z);
+        jumpTimer = Time.time + jumpTimeDuration;
+    }
+
+    private void Attack()
+    {
+        if (attackBlend >= 1) { return; }
+        if (Time.time <= attackTimer) { return; }
+        if (movementMode == MovementMode.Sprinting) { return; }
+        if (movementMode == MovementMode.Falling) { return; }
+        if (movementMode == MovementMode.Jumping) { return; }
+        if (Input.GetMouseButton(1) == true) { return; }
+
+        attackBlend = 1;
+        attackTimer = Time.time + attackTimeDuration;
+        playerStats.Attack();
+    }
+
+    private bool IsAttacking()
+    {
+        if (Time.time <= attackTimer) { return true; }
+        if (attackBlend <= 0) { return true; }
+
+        return false;
+    }
+
+    private void Block()
+    {
+        if (Time.time <= attackTimer) { return; }
+        if (movementMode == MovementMode.Sprinting) { return; }
+        if (movementMode == MovementMode.Falling) { return; }
+
+        playerStats.Block();
+    }
+
+    private bool IsBlocking()
+    {
+        if (Input.GetMouseButton(1) == true) { return true; }
+
+        return false;
     }
 
     private bool isGrounded()
