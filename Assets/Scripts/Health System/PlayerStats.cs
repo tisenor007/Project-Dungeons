@@ -7,6 +7,8 @@ public class PlayerStats : GameCharacter
 {
     public GameObject shield;
     [SerializeField] private GameObject hitArea;
+    [SerializeField] private GameObject maleHitArea;
+    [SerializeField] private GameObject femaleHitArea;
     [SerializeField] private Slider healthBar;
     [SerializeField] private Text healthText;
     [Space]
@@ -31,10 +33,21 @@ public class PlayerStats : GameCharacter
         return (health / maxHealth);
     }
 
+    public void SetGender(bool isMale)
+    {
+        if (isMale)
+        {
+            hitArea = maleHitArea;
+        } else
+        {
+            hitArea = femaleHitArea;
+        }
+    }
+
     public override void ResetStats()
     {
         base.ResetStats();
-        transform.GetChild(0).gameObject.SetActive(true);
+        // transform.GetChild(0).gameObject.SetActive(true); Removed to prevent issues with character selection, since this is handled there to create the ability for multiple genders
         transform.localPosition = respawnPos;
         transform.parent.localEulerAngles = Vector3.zero;
         StopAttacking();

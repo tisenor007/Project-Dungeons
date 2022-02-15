@@ -6,16 +6,21 @@ public class GameCharacter : MonoBehaviour
     [SerializeField] public int maxHealth;
     public int health;
     public int damage;
+
     private bool isAlive = true;
+
+
     private void Awake()
     {
         ResetStats();
     }
+
     public virtual void ResetStats()
     {
-        Heal(maxHealth);
+        health = maxHealth; // bypass feedback by setting value without healw
         isAlive = true;
     }
+
     public virtual void TakeDamage(int damage, Transform character)
     {
         health -= damage;
@@ -24,18 +29,22 @@ public class GameCharacter : MonoBehaviour
             //Death();
         //}
     }
+
     public void Heal(int healValue)
     {
         health += healValue;
+        HealFeedback(this.transform, healValue.ToString(), Color.green);
         //Debug.Log($"{gameObject.name} healed {healValue}");
         if (health > maxHealth) health = maxHealth;
     }
+
     protected virtual void Death()
     {
         health = 0;
         isAlive = false;
         //gameObject.SetActive(false);
     }
+
     protected virtual void DamageFeedback(Transform character, string message, Color color)
     {
         GameManager.manager.CreatePopUp(message, character.transform.position, color);
@@ -43,6 +52,6 @@ public class GameCharacter : MonoBehaviour
 
     protected void HealFeedback(Transform character, string message, Color color)
     {
-        GameManager.manager.CreatePopUp(message, character.transform.position, color);
+        GameManager.manager.CreatePopUp($"+{message}", character.transform.position, color);
     }
 }
