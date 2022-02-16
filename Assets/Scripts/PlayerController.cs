@@ -175,7 +175,6 @@ public class PlayerController : MonoBehaviour
 
     private void CheckPlayerInputandPerformPlayerActions()
     {
-        //CLEAN THIS LOGIC IN THE FUTURE!
         if (Input.GetKey(forwardInput) == true) { Move(MovementDirection.Forward); }
         if (Input.GetKey(backwardInput) == true) { Move(MovementDirection.Backward); }
         if (Input.GetKey(rightInput) == true) { Move(MovementDirection.Right); }

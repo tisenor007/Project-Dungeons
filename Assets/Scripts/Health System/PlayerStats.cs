@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class PlayerStats : GameCharacter 
 {
     public GameObject shield;
-    [SerializeField] private GameObject hitArea;
+    private GameObject hitArea;
     [SerializeField] private GameObject maleHitArea;
     [SerializeField] private GameObject femaleHitArea;
     [SerializeField] private Slider healthBar;
@@ -22,7 +22,7 @@ public class PlayerStats : GameCharacter
 
     public void Attack() { if (shield.activeSelf == false && hitArea.activeSelf == false) { hitArea.SetActive(true); } }
 
-    public void StopAttacking() { if (hitArea.activeSelf == true) hitArea.SetActive(false);}
+    public void StopAttacking() { if (hitArea.activeSelf == true) { hitArea.SetActive(false); } }
 
     public void Block() { if (shield.activeSelf == false) { shield.SetActive(true); }}
 

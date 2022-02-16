@@ -30,12 +30,13 @@ public class GameManager : MonoBehaviour
     public LevelManager levelManager;
     public UIManager uiManager;
     public GameObject playerAndCamera;
+    public PlayerStats playerStats;
     public CharacterSelection characterSelection;
+    [HideInInspector]public GameState gameState;
 
     [SerializeField] private TextMeshProUGUI saveText;
     [SerializeField] private TextMeshProUGUI loadText;
     [SerializeField] private GameObject popUpPrefab;
-    private GameState gameState;
     private GameState savedScreenState;
     // title acts as default state
     private bool gameplay;
@@ -104,6 +105,11 @@ public class GameManager : MonoBehaviour
                     if (Time.timeScale == 0) { Time.timeScale = 1; }
                     uiManager.LoadGameplay();
                     characterSelection.HideModels();
+
+                    //if (Input.GetKey(KeyCode.Return) == true)
+                    //{
+                    //    Save();
+                    //}
 
                     playerAndCamera.SetActive(true);
                     return;
@@ -216,12 +222,15 @@ public class GameManager : MonoBehaviour
         savedInfo.scene = SceneManager.GetActiveScene().buildIndex;
         savedInfo.activeScreen = levelManager.activeScreen;
         savedInfo.gameState = gameState;
+        savedInfo.health = playerStats.health;
+        savedInfo.genderStatus = characterSelection.isMale;
 
         saveText.CrossFadeAlpha(1, .1f, true);
         StartCoroutine(WaitToFadeText("save"));
 
         bf.Serialize(file, savedInfo);
         file.Close();
+        Debug.Log("SAVED");
     }
 
     public void Load() // canned file load method
@@ -233,9 +242,15 @@ public class GameManager : MonoBehaviour
             SaveInfo loadedInfo = (SaveInfo)bf.Deserialize(file);
             file.Close();
 
+            //temp Q&D
+            playerStats.ResetStats();
+            //
             SceneManager.LoadScene(loadedInfo.scene);
             levelManager.activeScreen = loadedInfo.activeScreen;
             gameState = loadedInfo.gameState;
+            playerStats.health = loadedInfo.health;
+            characterSelection.isMale = loadedInfo.genderStatus;
+            characterSelection.SetPlayerModel();
 
             loadText.CrossFadeAlpha(1, .1f, true);
             StartCoroutine(WaitToFadeText("load"));
@@ -296,5 +311,7 @@ class SaveInfo
     public int activeScreen;
     public GameState gameState;
     public int scene;
+    public int health;
+    public bool genderStatus;
 }
 

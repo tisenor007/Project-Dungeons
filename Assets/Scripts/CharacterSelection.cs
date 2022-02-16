@@ -3,10 +3,10 @@ using UnityEngine.UI;
 
 public class CharacterSelection : MonoBehaviour
 {
+    [HideInInspector] public bool isMale = true;
     [SerializeField] private GameObject maleDisplay;
     [SerializeField] private GameObject femaleDisplay;
     [SerializeField] private Text characterNameText;
-    private bool isMale = true;
 
     private enum Character
     {
