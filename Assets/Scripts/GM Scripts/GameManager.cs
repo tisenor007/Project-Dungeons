@@ -20,7 +20,8 @@ public enum GameState
     LOSE,
     PAUSE,
     OPTIONS,
-    CREDITS
+    CREDITS,
+    CHARACTERSELECTION
 }
 
 public class GameManager : MonoBehaviour
@@ -29,10 +30,13 @@ public class GameManager : MonoBehaviour
     public LevelManager levelManager;
     public UIManager uiManager;
     public GameObject playerAndCamera;
+    public PlayerStats playerStats;
+    public CharacterSelection characterSelection;
+    [HideInInspector]public GameState gameState;
+
     [SerializeField] private TextMeshProUGUI saveText;
     [SerializeField] private TextMeshProUGUI loadText;
     [SerializeField] private GameObject popUpPrefab;
-    private GameState gameState;
     private GameState savedScreenState;
     // title acts as default state
     private bool gameplay;
@@ -42,18 +46,21 @@ public class GameManager : MonoBehaviour
     private bool fadeLoad;
     private float textFadeWaitTime = 1.5f;
 
+    //Create a new object within the player, one will be male, the other female
+    [SerializeField] private PlayerController playerController;
+    [SerializeField] private GameObject malePlayer;
+    [SerializeField] private GameObject femalePlayer;
+
     void Awake()
     {
         if (manager == null)
         {
             DontDestroyOnLoad(this.gameObject);
-            DontDestroyOnLoad(playerAndCamera);
             manager = this; // setting this object to be THE singleton
         }
         else if (manager != this) // already exist's? DESTROY
         {
             Destroy(this.gameObject);
-            Destroy(playerAndCamera);
         }
 
         // make fading text invisible at start
@@ -63,7 +70,7 @@ public class GameManager : MonoBehaviour
         gameState = GameState.TITLEMENU;
     }
 
-    void Update() 
+    void Update()
     {
         Controls();
 
@@ -83,9 +90,10 @@ public class GameManager : MonoBehaviour
                     }
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     uiManager.LoadTitleMenu();
+                    characterSelection.HideModels();
 
                     playerAndCamera.SetActive(false);
-                    return; 
+                    return;
                 }
             case GameState.GAMEPLAY:
                 {
@@ -94,8 +102,14 @@ public class GameManager : MonoBehaviour
                         SceneManager.LoadScene(1, LoadSceneMode.Single);
                         SaveScreenState();
                     }
-                    if (Time.timeScale == 0) {Time.timeScale = 1;}
+                    if (Time.timeScale == 0) { Time.timeScale = 1; }
                     uiManager.LoadGameplay();
+                    characterSelection.HideModels();
+
+                    //if (Input.GetKey(KeyCode.Return) == true)
+                    //{
+                    //    Save();
+                    //}
 
                     playerAndCamera.SetActive(true);
                     return;
@@ -103,12 +117,14 @@ public class GameManager : MonoBehaviour
             case GameState.WIN:
                 {
                     uiManager.LoadWinScreen();
+                    characterSelection.HideModels();
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     return;
                 }
             case GameState.LOSE:
                 {
                     uiManager.LoadLoseScreen();
+                    characterSelection.HideModels();
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     return;
                 }
@@ -117,11 +133,13 @@ public class GameManager : MonoBehaviour
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
 
                     uiManager.LoadPauseScreen();
+                    characterSelection.HideModels();
                     return;
                 }
             case GameState.OPTIONS:
                 {
                     uiManager.LoadOptions();
+                    characterSelection.HideModels();
                     return;
                 }
             case GameState.CREDITS:
@@ -133,6 +151,20 @@ public class GameManager : MonoBehaviour
                     }
                     if (Time.timeScale == 0) { Time.timeScale = 1; }
                     uiManager.LoadCredits();
+                    characterSelection.HideModels();
+
+                    playerAndCamera.SetActive(false);
+                    return;
+                }
+            case GameState.CHARACTERSELECTION:
+                {
+                    if (SceneManager.GetActiveScene() != SceneManager.GetSceneByBuildIndex(3))
+                    {
+                        SceneManager.LoadScene(3, LoadSceneMode.Single);
+                        SaveScreenState();
+                    }
+                    uiManager.LoadCharacterSelection();
+                    characterSelection.ShowModels();
 
                     playerAndCamera.SetActive(false);
                     return;
@@ -173,14 +205,14 @@ public class GameManager : MonoBehaviour
         }*/
 
         if (gameState != GameState.TITLEMENU)
-        { 
+        {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 levelManager.ChangeGameStateToPause();
             }
         }
     }
-    
+
     public void Save() // canned file save method
     {
         BinaryFormatter bf = new BinaryFormatter();
@@ -190,14 +222,17 @@ public class GameManager : MonoBehaviour
         savedInfo.scene = SceneManager.GetActiveScene().buildIndex;
         savedInfo.activeScreen = levelManager.activeScreen;
         savedInfo.gameState = gameState;
+        savedInfo.health = playerStats.health;
+        savedInfo.genderStatus = characterSelection.isMale;
 
         saveText.CrossFadeAlpha(1, .1f, true);
         StartCoroutine(WaitToFadeText("save"));
 
         bf.Serialize(file, savedInfo);
         file.Close();
+        Debug.Log("SAVED");
     }
-    
+
     public void Load() // canned file load method
     {
         if (File.Exists(Application.persistentDataPath + "/savedInfo.dat"))
@@ -207,19 +242,25 @@ public class GameManager : MonoBehaviour
             SaveInfo loadedInfo = (SaveInfo)bf.Deserialize(file);
             file.Close();
 
+            //temp Q&D
+            playerStats.ResetStats();
+            //
             SceneManager.LoadScene(loadedInfo.scene);
             levelManager.activeScreen = loadedInfo.activeScreen;
             gameState = loadedInfo.gameState;
+            playerStats.health = loadedInfo.health;
+            characterSelection.isMale = loadedInfo.genderStatus;
+            characterSelection.SetPlayerModel();
 
             loadText.CrossFadeAlpha(1, .1f, true);
             StartCoroutine(WaitToFadeText("load"));
         }
     }
-    
+
     public void FadeText()
     {
         if (Time.timeScale == 0)
-        { 
+        {
             saveText.CrossFadeAlpha(0, 0, true); fadeSave = false;
             loadText.CrossFadeAlpha(0, 0, true); fadeLoad = false;
         }
@@ -246,6 +287,22 @@ public class GameManager : MonoBehaviour
         else if (fade == "load")
             fadeLoad = true;
     }
+
+    public void SwitchPlayer(bool isMale)
+    {
+        malePlayer.SetActive(isMale);
+        femalePlayer.SetActive(!isMale);
+
+        if (isMale)
+        {
+            playerController.animator = malePlayer.GetComponent<Animator>();
+        } else
+        {
+            playerController.animator = femalePlayer.GetComponent<Animator>();
+        }
+        PlayerStats playerStats = playerController.GetComponent<PlayerStats>();
+        playerStats.SetGender(isMale);
+    }
 }
 
 [Serializable]
@@ -254,5 +311,7 @@ class SaveInfo
     public int activeScreen;
     public GameState gameState;
     public int scene;
+    public int health;
+    public bool genderStatus;
 }
 

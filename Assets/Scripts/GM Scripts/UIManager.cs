@@ -12,14 +12,19 @@ public class UIManager : MonoBehaviour
     public Canvas pause;
     public Canvas options;
     public Canvas credits;
+    public Canvas characterSelection;
 
-    [SerializeField]
-    private GUI gameUI;
-    [SerializeField]
-    private OUI optionUI;
+    [Space(20)]
 
-    public GUI GameUI { get { return gameUI; } }
-    public OUI OptionUI { get { return optionUI; } }
+    [Tooltip("any button that calls load")]
+    public Button[] allLoadButtons;
+    public Canvas notePlain;
+
+    [Header("Options")]
+
+    [Tooltip("The Background Image in SystemContants")] 
+    public Image brightnessImage;
+    public Slider brightnessSlider;
 
     private void Awake()
     {
@@ -40,6 +45,7 @@ public class UIManager : MonoBehaviour
         winDisplay.enabled = false;
         loseDisplay.enabled = false;
         pause.enabled = false;
+        characterSelection.enabled = false;
     }
 
     public void LoadTitleMenu()
@@ -81,19 +87,16 @@ public class UIManager : MonoBehaviour
         DisableAll();
         credits.enabled = true;
     }
+    public void LoadCharacterSelection()
+    {
+        DisableAll();
+        characterSelection.enabled = true;
+    }
 }
 
 [System.Serializable]
 public class GUI
 {
-    [Tooltip("any button that calls load")]
-    public Button[] allLoadButtons;
-    public Canvas notePlain;
+    
 }
 
-[System.Serializable]
-public class OUI // Option User Interface
-{
-    public Slider brightnessSlider;
-    public Image brightnessImage;
-}
