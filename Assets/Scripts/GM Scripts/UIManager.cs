@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
     public Canvas options;
     public Canvas credits;
     public Canvas characterSelection;
+    public Canvas saveOption;
 
     [Space(20)]
 
@@ -46,6 +47,7 @@ public class UIManager : MonoBehaviour
         loseDisplay.enabled = false;
         pause.enabled = false;
         characterSelection.enabled = false;
+        saveOption.enabled = false;
     }
 
     public void LoadTitleMenu()
@@ -87,10 +89,17 @@ public class UIManager : MonoBehaviour
         DisableAll();
         credits.enabled = true;
     }
+
     public void LoadCharacterSelection()
     {
         DisableAll();
         characterSelection.enabled = true;
+    }
+
+    public void LoadSaveOption()
+    {
+        DisableAll();
+        saveOption.enabled = true;
     }
 }
 

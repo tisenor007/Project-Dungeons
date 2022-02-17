@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2670989893615682036}
   m_Layer: 6
   m_Name: RestingStation
-  m_TagString: Untagged
+  m_TagString: RestStation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,7 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotates: 0
-  itemType: {fileID: 11400000, guid: 104b816c491307840b461075a9163354, type: 2}
+  itemType: {fileID: 0}
+  stationType: {fileID: 11400000, guid: 104b816c491307840b461075a9163354, type: 2}
 --- !u!108 &4626795926936421843
 Light:
   m_ObjectHideFlags: 0
@@ -136,8 +137,8 @@ GameObject:
   - component: {fileID: 7406344108962007427}
   - component: {fileID: 3012831609232603417}
   m_Layer: 0
-  m_Name: Cube
-  m_TagString: Untagged
+  m_Name: BBQ
+  m_TagString: RestStation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -216,5 +217,5 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2, y: 2, z: 2}
+  m_Size: {x: 4, y: 1, z: 4}
   m_Center: {x: 0, y: 0, z: 0}

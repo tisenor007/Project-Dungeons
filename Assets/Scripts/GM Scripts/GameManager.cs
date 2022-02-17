@@ -21,7 +21,8 @@ public enum GameState
     PAUSE,
     OPTIONS,
     CREDITS,
-    CHARACTERSELECTION
+    CHARACTERSELECTION,
+    SAVEOPTION
 }
 
 public class GameManager : MonoBehaviour
@@ -167,6 +168,14 @@ public class GameManager : MonoBehaviour
                     characterSelection.ShowModels();
 
                     playerAndCamera.SetActive(false);
+                    return;
+                }
+            case GameState.SAVEOPTION:
+                {
+                    if (Time.timeScale == 1) { Time.timeScale = 0; }
+
+                    uiManager.LoadSaveOption();
+                    characterSelection.HideModels();
                     return;
                 }
         }

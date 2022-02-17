@@ -4,13 +4,13 @@ using UnityEngine;
 
 [RequireComponent(typeof(Interactable))] // all subclasses should also require interactable
 [CreateAssetMenu]
-public class RestStation : Item
+public class RestStation : Station
 {
-    public override void OnPickup(GameObject interactable, GameObject interactee)
+    public override void OnTriggerStation(GameObject interactable, GameObject interactee)
     {
-        base.OnPickup(interactable, interactee);
+        base.OnTriggerStation(interactable, interactee);
 
-        interactable.GetComponent<Interactable>().RemoveGameObjectWFeedback();
-        GameManager.manager.Save();
+        //interactable.GetComponent<Interactable>().RemoveGameObjectWFeedback();
+        GameManager.manager.levelManager.ChangeGameStateToSaveOption();
     }
 }

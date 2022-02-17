@@ -17,7 +17,7 @@ public class Interactable : MonoBehaviour
 
     //types of interactables
     [SerializeField] private Item itemType;
-
+    [SerializeField] private Station stationType;
     public bool FeedbackEnabled { get { return feedbackEnabled; } }
     public bool InteractableEnabled { get { return interactableEnabled; } }
 
@@ -62,6 +62,7 @@ public class Interactable : MonoBehaviour
     public void Interact(GameObject interactor)
     {
         if (itemType != null) { itemType.OnPickup(this.gameObject, interactor); }
+        else if (stationType != null) { stationType.OnTriggerStation(this.gameObject, interactor); }
         else { RemoveGameObjectWFeedback(); }
     }
 

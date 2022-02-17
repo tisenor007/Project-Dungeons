@@ -6,23 +6,35 @@ using UnityEngine.UI;
 public class PlayerStats : GameCharacter 
 {
     public GameObject shield;
-    private GameObject hitArea;
     [SerializeField] private GameObject maleHitArea;
     [SerializeField] private GameObject femaleHitArea;
     [SerializeField] private Slider healthBar;
     [SerializeField] private Text healthText;
     [Space]
     [SerializeField] private Vector3 respawnPos = new Vector3(-56.0f, 5.11f, -63.0f);
+    private GameObject hitArea;
+    private bool healing;
+
+    private float restStationHealDuration = 10;
+    private float restStationHealAmount = 5;
+    private float restStationHealTimer = 0;
 
     private void Update()
     {
         healthBar.value = Health;
         healthText.text = "" + Health;
+
+        if (healing) { HealAtRestStation(); }
     }
 
     public void Attack() { if (shield.activeSelf == false && hitArea.activeSelf == false) { hitArea.SetActive(true); } }
 
-    public void StopAttacking() { if (hitArea.activeSelf == true) { hitArea.SetActive(false); } }
+    public void StopAttacking() 
+    {
+        if (hitArea == null) { return; }
+        if (hitArea.activeSelf == false) { return; }
+        hitArea.SetActive(false);
+    }
 
     public void Block() { if (shield.activeSelf == false) { shield.SetActive(true); }}
 
@@ -72,9 +84,24 @@ public class PlayerStats : GameCharacter
         // ENTER CODE FOR DEATH ANIMATIONS, ETC
     }
 
+    private void HealAtRestStation()
+    {
+        if (Time.time > restStationHealTimer)
+        {
+            Heal((int)restStationHealAmount);
+            restStationHealTimer = Time.time + restStationHealDuration;
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
+        if (other.tag == "RestStation") { healing = true; }
         if (other.tag == "WIN") { GameManager.manager.levelManager.ChangeGameStateToWin(); }
         if (other.tag == "DeathBox") { transform.position = respawnPos; }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "RestStation") { healing = false; }
     }
 }

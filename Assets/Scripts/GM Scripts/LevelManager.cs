@@ -55,6 +55,7 @@ public class LevelManager : MonoBehaviour
     {
         GameManager.manager.ChangeState(GameState.GAMEPLAY);
     }
+
     public void ChangeGameStateToNewGame()
     {
         GameManager.manager.ResetScene();
@@ -86,9 +87,15 @@ public class LevelManager : MonoBehaviour
     {
         GameManager.manager.ChangeState(GameState.CREDITS);
     }
+
     public void ChangeGameStateToCharacterSelection()
     {
         GameManager.manager.ChangeState(GameState.CHARACTERSELECTION);
+    }
+
+    public void ChangeGameStateToSaveOption()
+    {
+        GameManager.manager.ChangeState(GameState.SAVEOPTION);
     }
 
     //feedback
@@ -130,6 +137,7 @@ public class LevelManager : MonoBehaviour
 
     public void Save()
     {
+        ChangeGameStateToGamePlay();
         GameManager.manager.Save();
     }
 
