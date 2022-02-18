@@ -16,11 +16,16 @@ public class CharacterSelection : MonoBehaviour
 
     private void Awake()
     {
+        isMale = true;
         maleDisplay.SetActive(isMale);
         femaleDisplay.SetActive(!isMale);
-        SetPlayerModel();
         if (isMale) characterNameText.text = Character.Captain_Pi.ToString();
         else characterNameText.text = Character.Ratspirilla.ToString();
+    }
+
+    private void Start()
+    {
+        SetPlayerModel();
     }
 
 

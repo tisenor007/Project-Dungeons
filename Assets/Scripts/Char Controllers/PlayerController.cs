@@ -123,43 +123,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        //Interaction 
-        {
-            ///[errcontrol] make sure interactable LayerMask is set in PlayerController inspector Interactable
-            hitColInteraction = Physics.OverlapSphere(transform.position,
-                    interactionRadius, interactable.value, QueryTriggerInteraction.Ignore);
-
-            //highlight objects interactable to the player
-            if (hitColInteraction.Length != 0)
-            {
-                float r = interactionRadius - .1f; // MN#: -.5 due to radius encompasing hitColInteraction enough to not miss turning off the light
-                //Debug.LogError($"hitting {hitColInteraction.Length} object(s)");
-
-                foreach (Collider col in hitColInteraction)
-                {
-
-                    float distance = Vector3.Distance(transform.position, col.transform.position);
-                    //Debug.LogError($"hit {col.gameObject.name}");
-
-                    if (col.gameObject.GetComponent<Interactable>() != null)
-                    {
-                        Interactable interactable = col.gameObject.GetComponent<Interactable>();
-
-                        if (distance >= r && interactable.FeedbackEnabled)
-                        {
-                            interactable.DisableFeedback();
-                        }
-                        else if (distance <= r && !interactable.FeedbackEnabled)
-                        {
-                            Physics.IgnoreCollision(this.transform.GetChild(0).GetComponent<Collider>(), col, true);
-
-                            interactable.EnableFeedback(); 
-                        }
-                    }
-                    else { Debug.LogError("INTERACTABLE LAYER BEING USED BY NON-INTERACTABLE, CHECK \"Debug.LogError(hit { col.gameObject.name} );\""); }
-                }
-            }
-        }
+        EnableInteractionFeedbackWithinRange();
     }
 
     private void OnDrawGizmosSelected()
@@ -226,6 +190,44 @@ public class PlayerController : MonoBehaviour
             canMove = true;
             GameManager.manager.levelManager.StopReadingNote();
         }
+    }
+
+    private void EnableInteractionFeedbackWithinRange()
+    {
+        ///[errcontrol] make sure interactable LayerMask is set in PlayerController inspector Interactable
+        hitColInteraction = Physics.OverlapSphere(transform.position, // setting detection range
+                interactionRadius, interactable.value, QueryTriggerInteraction.Ignore);
+
+        //Only follow through if interactable is hit
+        if (hitColInteraction.Length == 0) { return; }
+        
+        float r = interactionRadius - .1f; // MN#: -.1 due to radius encompasing hitColInteraction enough to not miss turning off the light
+        
+
+            foreach (Collider col in hitColInteraction)
+            {
+
+                float distance = Vector3.Distance(transform.position, col.transform.position);
+                //Debug.LogError($"hit {col.gameObject.name}");
+
+                if (col.gameObject.GetComponent<Interactable>() != null)
+                {
+                    Interactable interactable = col.gameObject.GetComponent<Interactable>();
+
+                    if (distance >= r && interactable.FeedbackEnabled)
+                    {
+                        interactable.DisableFeedback();
+                    }
+                    else if (distance <= r && !interactable.FeedbackEnabled)
+                    {
+                        Physics.IgnoreCollision(this.transform.GetChild(0).GetComponent<Collider>(), col, true);
+
+                        interactable.EnableFeedback();
+                    }
+                }
+                else { Debug.LogError("INTERACTABLE LAYER BEING USED BY NON-INTERACTABLE, CHECK \"Debug.LogError(hit { col.gameObject.name} );\""); }
+            }
+        
     }
 
     private void UpdateMoveIntensity(MovementMode movementMode)

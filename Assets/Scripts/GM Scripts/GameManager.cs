@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     public CharacterSelection characterSelection;
     [HideInInspector]public GameState gameState;
 
+    [Space]
     [SerializeField] private TextMeshProUGUI saveText;
     [SerializeField] private TextMeshProUGUI loadText;
     [SerializeField] private GameObject popUpPrefab;

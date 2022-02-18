@@ -14,6 +14,10 @@ public class PlayerStats : GameCharacter
     [Space]
     [SerializeField] private Vector3 respawnPos = new Vector3(-56.0f, 5.11f, -63.0f);
 
+    private void Start()
+    {
+        
+    }
     private void Update()
     {
         healthBar.value = Health;

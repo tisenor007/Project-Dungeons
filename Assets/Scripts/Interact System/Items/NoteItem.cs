@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[RequireComponent(typeof(Interactable))] // all subclasses should also require interactable
+[RequireComponent(typeof(Interactable))] 
 [CreateAssetMenu]
 public class NoteItem : Item
 {

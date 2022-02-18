@@ -9,12 +9,6 @@ public class GameCharacter : MonoBehaviour
 
     private bool isAlive = true;
 
-
-    private void Awake()
-    {
-        ResetStats();
-    }
-
     public virtual void ResetStats()
     {
         health = maxHealth; // bypass feedback by setting value without healw
