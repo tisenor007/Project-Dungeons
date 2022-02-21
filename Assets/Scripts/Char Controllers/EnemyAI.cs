@@ -22,9 +22,8 @@ public class EnemyAI : GameCharacter
     [SerializeField] private int attackDistance = 3;
     private float distance;
     private float chasingTime = 4.0f;
-    [SerializeField] private float attackDuration = 0.5f;
-    [SerializeField] private float stunnedHitDuration = 3.0f;
-    private float hitTime = 3.0f;
+    [Tooltip("The time added till next attack, when stunned.")][SerializeField] private float stunnedHitDurationAddition = 3.0f;
+    private float hitTime = 3.0f; // Time until next attack
     private Vector3 playerLocation;
     private Vector3 enemyLocation;
     private Ray enemySight;
@@ -96,7 +95,7 @@ public class EnemyAI : GameCharacter
 
         if (distance <= attackDistance)
         {
-            hitTime = attackDuration;
+            hitTime = attackSpeed;
             SwitchState(State.Attacking);
         }
 
@@ -117,12 +116,12 @@ public class EnemyAI : GameCharacter
             if (playerStats.shield.activeSelf == true)
             {
                 playerStats.TakeDamage((int)(damage / 4), playerStats.GetComponent<Transform>());
-                hitTime = stunnedHitDuration; // <----- will be replaced by a possible stunned state
+                hitTime = stunnedHitDurationAddition; // <----- will be replaced by a possible stunned state
             }
             else
             {
                 playerStats.TakeDamage(damage, playerStats.GetComponent<Transform>());
-                hitTime = attackDuration;
+                hitTime = attackSpeed;
             }
         }   
 
