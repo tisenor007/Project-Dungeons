@@ -1,13 +1,19 @@
 using UnityEngine;
-public class GameCharacter : MonoBehaviour
+public abstract class CharacterStats : MonoBehaviour
 {
-    public int Health { get => health; set => health = value; }
-    public bool IsAlive { get => isAlive; }
-    [SerializeField] public int maxHealth;
-    public int health;
-    public int damage;
+    [SerializeField] protected int health;
+    [SerializeField] protected int maxHealth;
+    [SerializeField] protected bool isAlive = true;
 
-    private bool isAlive = true;
+    [SerializeField] protected int damage;
+    [SerializeField] protected float attackSpeed = 0.5f;
+
+    public int Health { get => health; set => health = value; }
+    public int MaxHealth { get { return health; } }
+    public bool IsAlive { get => isAlive; }
+    public int Damage { get => damage; set => damage = value; }
+    public float AttackSpeed { get => attackSpeed; set => attackSpeed = value; }
+
 
     public virtual void ResetStats()
     {

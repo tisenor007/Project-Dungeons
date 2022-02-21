@@ -223,7 +223,7 @@ public class GameManager : MonoBehaviour
         savedInfo.scene = SceneManager.GetActiveScene().buildIndex;
         savedInfo.activeScreen = levelManager.activeScreen;
         savedInfo.gameState = gameState;
-        savedInfo.health = playerStats.health;
+        savedInfo.health = playerStats.Health;
         savedInfo.genderStatus = characterSelection.isMale;
 
         saveText.CrossFadeAlpha(1, .1f, true);
@@ -249,7 +249,7 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(loadedInfo.scene);
             levelManager.activeScreen = loadedInfo.activeScreen;
             gameState = loadedInfo.gameState;
-            playerStats.health = loadedInfo.health;
+            playerStats.Health = loadedInfo.health;
             characterSelection.isMale = loadedInfo.genderStatus;
             characterSelection.SetPlayerModel();
 

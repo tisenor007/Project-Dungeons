@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-public class EnemyAI : GameCharacter
+public class EnemyAI : CharacterStats
 {
     enum State
     {
@@ -113,7 +113,7 @@ public class EnemyAI : GameCharacter
 
         if (hitTime <= 0.0f)
         {
-            if (playerStats.shield.activeSelf == true)
+            if (playerStats.Shield.activeSelf == true)
             {
                 playerStats.TakeDamage((int)(damage / 4), playerStats.GetComponent<Transform>());
                 hitTime = stunnedHitDurationAddition; // <----- will be replaced by a possible stunned state

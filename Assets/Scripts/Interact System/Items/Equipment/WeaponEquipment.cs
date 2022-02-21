@@ -18,14 +18,19 @@ public class Weapon : Equipment
         PlayerStats playerStats = FindPlayerStats(interactor);
 
         // set player stats
-        playerStats.damage = damage;
+        playerStats.Damage = damage;
+        Debug.LogWarning($"Setting {interactor.name} damage to {damage}.");
 
         // set attack speed
+        playerStats.AttackSpeed = attackSpeed;
+        Debug.LogWarning($"Setting {interactor.name} attack speed to {attackSpeed}");
 
         /// make gameobject trigger
-        
-        
+
+
         /// set hitarea as current playerstats hit area and vice versa
+        
+
     }
 
     public HitArea FindHitArea(GameObject equipment)

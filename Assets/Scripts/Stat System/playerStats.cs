@@ -3,30 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerStats : GameCharacter 
+public class PlayerStats : CharacterStats 
 {
-    public GameObject shield;
-    private GameObject hitArea;
+    //initialization
     [SerializeField] private GameObject maleHitArea;
     [SerializeField] private GameObject femaleHitArea;
+
+    //equipment
+    [SerializeField] private GameObject weaponHitArea;
+    [SerializeField] private GameObject shield;
+
+    //HUD
     [SerializeField] private Slider healthBar;
     [SerializeField] private Text healthText;
     [Space]
     [SerializeField] private Vector3 respawnPos = new Vector3(-56.0f, 5.11f, -63.0f);
 
-    private void Start()
-    {
-        
-    }
+    public GameObject Shield { get { return shield; } }
+
     private void Update()
+    {
+        UpdateHud();
+    }
+
+    public void UpdateHud()
     {
         healthBar.value = Health;
         healthText.text = "" + Health;
     }
 
-    public void Attack() { if (shield.activeSelf == false && hitArea.activeSelf == false) { hitArea.SetActive(true); } }
+    public void Attack() { if (shield.activeSelf == false && weaponHitArea.activeSelf == false) { weaponHitArea.SetActive(true); } }
 
-    public void StopAttacking() { if (hitArea.activeSelf == true) { hitArea.SetActive(false); } }
+    public void StopAttacking() { if (weaponHitArea.activeSelf == true) { weaponHitArea.SetActive(false); } }
 
     public void Block() { if (shield.activeSelf == false) { shield.SetActive(true); }}
 
@@ -41,10 +49,10 @@ public class PlayerStats : GameCharacter
     {
         if (isMale)
         {
-            hitArea = maleHitArea;
+            weaponHitArea = maleHitArea;
         } else
         {
-            hitArea = femaleHitArea;
+            weaponHitArea = femaleHitArea;
         }
     }
 
