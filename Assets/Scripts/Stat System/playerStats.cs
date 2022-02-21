@@ -8,6 +8,7 @@ public class PlayerStats : CharacterStats
     //initialization
     [SerializeField] private GameObject maleHitArea;
     [SerializeField] private GameObject femaleHitArea;
+    [SerializeField] private float unarmedAttackSpeed = 1.34f;
 
     //equipment
     [SerializeField] private GameObject weaponHitArea;
@@ -24,7 +25,7 @@ public class PlayerStats : CharacterStats
 
     private void Start()
     {
-        attackSpeed = 1.34f;
+        attackSpeed = unarmedAttackSpeed;
     }
 
     private void Update()
