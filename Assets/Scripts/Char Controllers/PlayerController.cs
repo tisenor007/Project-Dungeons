@@ -147,12 +147,12 @@ public class PlayerController : MonoBehaviour
         transform.Translate(moveDirection * moveIntensity * Time.deltaTime, Space.World);
 
         //attacking
-        if (Input.GetMouseButton(0)){ Attack(); }
+        if (Input.GetMouseButton(0)){ ActivateAttack(); }
         if(IsAttacking() == false) { attackBlend -= Time.deltaTime * attackBlendDeceleration; playerStats.StopAttacking(); }
 
         //blocking
-        if (Input.GetMouseButton(1)) { Block(); }
-        if (IsBlocking() == false) { playerStats.StopBlocking(); }
+        if (Input.GetMouseButton(1)) { ActivateBlock(); }
+        if (IsBlocking() == false) { StopBlocking(); }
 
         //movemonet/sprinting
         if (Input.GetKey(sprintInput)) { Sprint(); }
@@ -289,7 +289,7 @@ public class PlayerController : MonoBehaviour
         jumpTimer = Time.time + jumpTimeDuration;
     }
 
-    private void Attack()
+    private void ActivateAttack()
     {
         if (attackBlend >= 1) { return; }
         if (Time.time <= attackTimer) { return; }
@@ -300,7 +300,19 @@ public class PlayerController : MonoBehaviour
 
         attackBlend = 1;
         attackTimer = Time.time + attackTimeDuration;
-        playerStats.Attack();
+        Attack();
+    }
+    public void Attack() 
+    { 
+        if (playerStats.Shield.activeSelf == false && 
+            playerStats.WeaponHitArea.activeSelf == false) 
+        { playerStats.WeaponHitArea.SetActive(true); } 
+    }
+
+    public void StopAttacking() 
+    {
+        if (playerStats.WeaponHitArea.activeSelf == true) 
+        { playerStats.WeaponHitArea.SetActive(false); } 
     }
 
     private bool IsAttacking()
@@ -311,15 +323,27 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    private void Block()
+    private void ActivateBlock()
     {
         if (Time.time <= attackTimer) { return; }
         if (movementMode == MovementMode.Sprinting) { return; }
         if (movementMode == MovementMode.Falling) { return; }
 
-        playerStats.Block();
+        Block();
     }
 
+    public void Block() 
+    { 
+        if (playerStats.Shield.activeSelf == false) 
+        { playerStats.Shield.SetActive(true); } 
+    }
+
+    public void StopBlocking() 
+    { 
+        if (playerStats.Shield.activeSelf == true) 
+        { playerStats.Shield.SetActive(false); } 
+    }
+    
     private bool IsBlocking()
     {
         if (Input.GetMouseButton(1) == true) { return true; }

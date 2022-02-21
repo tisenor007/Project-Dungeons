@@ -19,6 +19,7 @@ public class PlayerStats : CharacterStats
     [Space]
     [SerializeField] private Vector3 respawnPos = new Vector3(-56.0f, 5.11f, -63.0f);
 
+    public GameObject WeaponHitArea { get { return WeaponHitArea; } }
     public GameObject Shield { get { return shield; } }
 
     private void Update()
@@ -26,44 +27,19 @@ public class PlayerStats : CharacterStats
         UpdateHud();
     }
 
-    public void UpdateHud()
-    {
-        healthBar.value = Health;
-        healthText.text = "" + Health;
-    }
-
-    public void Attack() { if (shield.activeSelf == false && weaponHitArea.activeSelf == false) { weaponHitArea.SetActive(true); } }
-
-    public void StopAttacking() { if (weaponHitArea.activeSelf == true) { weaponHitArea.SetActive(false); } }
-
-    public void Block() { if (shield.activeSelf == false) { shield.SetActive(true); }}
-
-    public void StopBlocking() { if (shield.activeSelf == true) { shield.SetActive(false);}}
-
-    public float GetHealthDividedMaxHealth()
-    {
-        return (health / maxHealth);
-    }
-
-    public void SetGender(bool isMale)
-    {
-        if (isMale)
-        {
-            weaponHitArea = maleHitArea;
-        } else
-        {
-            weaponHitArea = femaleHitArea;
-        }
-    }
-
+    #region Stat modifying Methods
     public override void ResetStats()
     {
         base.ResetStats();
+
+        PlayerController playerController = gameObject.GetComponent<PlayerController>();
+        
         // transform.GetChild(0).gameObject.SetActive(true); Removed to prevent issues with character selection, since this is handled there to create the ability for multiple genders
         transform.localPosition = respawnPos;
         transform.parent.localEulerAngles = Vector3.zero;
-        StopAttacking();
-        StopBlocking();
+
+        playerController.StopAttacking();
+        playerController.StopBlocking();
     }
 
     public override void TakeDamage(int damage, Transform character)
@@ -83,6 +59,32 @@ public class PlayerStats : CharacterStats
         transform.GetChild(0).gameObject.SetActive(false);
         // ENTER CODE FOR DEATH ANIMATIONS, ETC
     }
+    #endregion
+
+    #region tools
+    public void UpdateHud()
+    {
+        healthBar.value = Health;
+        healthText.text = "" + Health;
+    }
+
+    public float GetHealthDividedMaxHealth()
+    {
+        return (health / maxHealth);
+    }
+
+    public void SetGender(bool isMale)
+    {
+        if (isMale)
+        {
+            weaponHitArea = maleHitArea;
+        }
+        else
+        {
+            weaponHitArea = femaleHitArea;
+        }
+    }
+    #endregion
 
     private void OnTriggerEnter(Collider other)
     {
