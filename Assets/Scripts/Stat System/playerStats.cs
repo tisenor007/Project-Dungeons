@@ -22,6 +22,11 @@ public class PlayerStats : CharacterStats
     public GameObject WeaponHitArea { get { return WeaponHitArea; } }
     public GameObject Shield { get { return shield; } }
 
+    private void Start()
+    {
+        attackSpeed = 1.34f;
+    }
+
     private void Update()
     {
         UpdateHud();

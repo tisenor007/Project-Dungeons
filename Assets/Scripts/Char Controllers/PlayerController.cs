@@ -56,7 +56,6 @@ public class PlayerController : MonoBehaviour
     private float attackBlend;
     private float attackBlendAcceleration = 10.0f;
     private float attackBlendDeceleration = 3.5f;
-    private float attackTimeDuration = 1.34f;
     private float attackTimer;
     private Vector3 moveDirection;
     private float jumpTimeDuration = 1.34f;
@@ -148,7 +147,7 @@ public class PlayerController : MonoBehaviour
 
         //attacking
         if (Input.GetMouseButton(0)){ ActivateAttack(); }
-        if(IsAttacking() == false) { attackBlend -= Time.deltaTime * attackBlendDeceleration; playerStats.StopAttacking(); }
+        if(IsAttacking() == false) { attackBlend -= Time.deltaTime * attackBlendDeceleration; StopAttacking(); }
 
         //blocking
         if (Input.GetMouseButton(1)) { ActivateBlock(); }
@@ -299,7 +298,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetMouseButton(1) == true) { return; }
 
         attackBlend = 1;
-        attackTimer = Time.time + attackTimeDuration;
+        attackTimer = Time.time + playerStats.AttackSpeed;
         Attack();
     }
     public void Attack() 
