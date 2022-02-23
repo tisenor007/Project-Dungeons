@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
     public GameObject playerAndCamera;
     public PlayerStats playerStats;
     public CharacterSelection characterSelection;
+    public GameObject dungeonGenerator;
     [HideInInspector]public GameState gameState;
 
     [SerializeField] private TextMeshProUGUI saveText;

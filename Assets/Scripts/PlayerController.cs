@@ -42,9 +42,9 @@ public class PlayerController : MonoBehaviour
     private MovementMode movementMode;
     private Rigidbody rb;
     private float moveIntensity = 0.0f;
-    private float velocityAcceleration = 8.0f;
+    private float velocityAcceleration = 15.0f;
     private float velocityDeceleration = 20.0f;
-    private float playerRotationSpeed = 650;
+    private float playerRotationSpeed = 850;
     private float jumpHeight = 4f;
     private KeyCode forwardInput = KeyCode.W;
     private KeyCode backwardInput = KeyCode.S;

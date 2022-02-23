@@ -13,6 +13,7 @@ public class DungeonGenerator : MonoBehaviour
     public int structureSpacing = 10;
     public int roomChance = 80;
     public int hallwayChance = 10;
+    [HideInInspector] public bool dungeonGenerated = false;
     [HideInInspector] public List<GameObject> structures = new List<GameObject>();
     [SerializeField] private GameObject[] roomVariations;
     [SerializeField] private GameObject[] hallwayVariations;
@@ -46,6 +47,7 @@ public class DungeonGenerator : MonoBehaviour
             {
                 structure.transform.parent = this.transform;
             }
+            dungeonGenerated = true;
         }
     }
 
