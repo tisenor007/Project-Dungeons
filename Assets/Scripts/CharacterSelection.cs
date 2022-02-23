@@ -14,13 +14,16 @@ public class CharacterSelection : MonoBehaviour
         Ratspirilla
     }
 
-    private void Awake()
+    void Start()
     {
         maleDisplay.SetActive(isMale);
         femaleDisplay.SetActive(!isMale);
         SetPlayerModel();
-        if (isMale) characterNameText.text = Character.Captain_Pi.ToString();
-        else characterNameText.text = Character.Ratspirilla.ToString();
+    }
+
+    void Update()
+    {
+        
     }
 
 
@@ -30,14 +33,14 @@ public class CharacterSelection : MonoBehaviour
         maleDisplay.SetActive(isMale);
         femaleDisplay.SetActive(!isMale);
         SetPlayerModel();
-        if (isMale) characterNameText.text = Character.Captain_Pi.ToString();
-        else characterNameText.text = Character.Ratspirilla.ToString();
     }
 
 
     public void SetPlayerModel()
     {
         GameManager.manager.SwitchPlayer(isMale);
+        if (isMale) characterNameText.text = Character.Captain_Pi.ToString();
+        else characterNameText.text = Character.Ratspirilla.ToString();
     }
 
 
