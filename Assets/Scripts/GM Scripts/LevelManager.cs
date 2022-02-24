@@ -155,6 +155,27 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    public void CreateInteractable(GameObject objectBecomingInteractable, Vector3 newPosition, bool floating, Color lightColour, Item itemType = null)
+    {
+        GameObject interactableObject = new GameObject($"Interactable {objectBecomingInteractable.name}");
+        LayerMask interactableLayer = LayerMask.NameToLayer("Interactable");
+
+        interactableObject.AddComponent(typeof(BoxCollider));
+
+        Light lightSetup = interactableObject.AddComponent(typeof(Light)) as Light;
+        lightSetup.color = lightColour;
+        lightSetup.renderingLayerMask = interactableLayer;
+
+        Interactable interactableSetup = interactableObject.AddComponent(typeof(Interactable)) as Interactable;
+        interactableSetup.floatingObject = floating;
+        if (itemType != null) { interactableSetup.ItemType = itemType; }
+
+        objectBecomingInteractable.transform.localPosition = Vector3.zero;
+        objectBecomingInteractable.transform.localEulerAngles = Vector3.zero;
+        objectBecomingInteractable.transform.SetParent(interactableObject.transform);
+
+        interactableObject.transform.position = newPosition;
+    }
     #endregion
 
     #region Options
@@ -168,6 +189,5 @@ public class LevelManager : MonoBehaviour
         Debug.Log($"newAlpha: {newAlpha.a}, Image colour: {GameManager.manager.uiManager.brightnessImage.color}");
     }
     #endregion
-    
 }
 
