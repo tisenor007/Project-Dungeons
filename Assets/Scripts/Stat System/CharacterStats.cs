@@ -1,19 +1,28 @@
 using UnityEngine;
 public abstract class CharacterStats : MonoBehaviour
 {
+    [Header("Stats")]
+    [SerializeField] protected bool isAlive = true;
     [SerializeField] protected int health;
     [SerializeField] protected int maxHealth;
-    [SerializeField] protected bool isAlive = true;
-
     [SerializeField] protected int damage;
     [SerializeField] protected float attackSpeed = 0.5f;
+
+    [Header("Equipment")]
+    [SerializeField] protected Weapon currentWeapon;
+    [SerializeField] protected Weapon defaultWeapon;
 
     public int Health { get => health; set => health = value; }
     public int MaxHealth { get { return health; } }
     public bool IsAlive { get => isAlive; }
     public int Damage { get => damage; set => damage = value; }
     public float AttackSpeed { get => attackSpeed; set => attackSpeed = value; }
+    public Weapon CurrentWeapon { get => currentWeapon; set => currentWeapon = value; }
 
+    private void Start()
+    {
+        defaultWeapon = currentWeapon;
+    }
 
     public virtual void ResetStats()
     {

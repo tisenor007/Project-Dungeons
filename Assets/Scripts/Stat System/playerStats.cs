@@ -11,8 +11,9 @@ public class PlayerStats : CharacterStats
     [SerializeField] private float unarmedAttackSpeed = 1.34f;
 
     //equipment
-    [SerializeField] private GameObject weaponHitArea;
-    [SerializeField] private GameObject shield;
+    [SerializeField] private GameObject weaponObject;
+    public GameObject weaponHitArea;
+    public GameObject shield;
 
     //HUD
     [SerializeField] private Slider healthBar;
@@ -20,8 +21,6 @@ public class PlayerStats : CharacterStats
     [Space]
     [SerializeField] private Vector3 respawnPos = new Vector3(-56.0f, 5.11f, -63.0f);
 
-    public GameObject WeaponHitArea { get { return WeaponHitArea; } }
-    public GameObject Shield { get { return shield; } }
 
     private void Start()
     {
@@ -33,13 +32,13 @@ public class PlayerStats : CharacterStats
         UpdateHud();
     }
 
-    #region Stat modifying Methods
+    #region Stat Modification
     public override void ResetStats()
     {
         base.ResetStats();
 
         PlayerController playerController = gameObject.GetComponent<PlayerController>();
-        
+
         // transform.GetChild(0).gameObject.SetActive(true); Removed to prevent issues with character selection, since this is handled there to create the ability for multiple genders
         transform.localPosition = respawnPos;
         transform.parent.localEulerAngles = Vector3.zero;
@@ -89,6 +88,25 @@ public class PlayerStats : CharacterStats
         {
             weaponHitArea = femaleHitArea;
         }
+    }
+
+    public void EquipWeapon(GameObject newWeaponObject)
+    {
+        weaponObject = Instantiate(newWeaponObject, weaponHitArea.transform.parent);
+
+        HitArea hitArea = weaponObject.transform.GetChild(0).GetComponentInChildren<HitArea>();
+
+        hitArea.PlayerStats = this;
+        hitArea.PlayerController = gameObject.GetComponent<PlayerController>();
+        weaponHitArea = hitArea.gameObject;
+    }
+
+    public void DiscardWeapon() // should be replaced by unequip if inventory is established
+    {
+        if (currentWeapon == null) return;
+
+        GameManager.manager.levelManager.CreateInteractable(weaponObject,
+            transform.position, true, Color.red, CurrentWeapon);
     }
     #endregion
 

@@ -113,7 +113,7 @@ public class EnemyAI : CharacterStats
 
         if (hitTime <= 0.0f)
         {
-            if (playerStats.Shield.activeSelf == true)
+            if (playerStats.shield.activeSelf == true)
             {
                 playerStats.TakeDamage((int)(damage / 4), playerStats.GetComponent<Transform>());
                 hitTime = stunnedHitDurationAddition; // <----- will be replaced by a possible stunned state
