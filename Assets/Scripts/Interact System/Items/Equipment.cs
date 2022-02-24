@@ -4,20 +4,31 @@ using UnityEngine;
 
 public abstract class Equipment : Item
 {
-    // basic equipment will be equiped on pickup, 
-    
-    //needs polish to eject old equipment
+    GameObject equipmentObject;
+    // basic equip type method
+    // will be equiped on pickup, 
+    // should eject overidden equipment!
+
     public override void OnPickup(GameObject interactable, GameObject interactor)
     {
+        base.OnPickup(interactable, interactor);
+
+        interactable.GetComponent<Interactable>().RemoveGameObjectWFeedback();
         GameObject equipment = interactable.transform.GetChild(0).gameObject; // breaking off the interactable shell/GameObject
 
-        base.OnPickup(interactable, interactor);
         Equip(equipment, interactor);
+
     }
 
     public virtual void Equip(GameObject equipment, GameObject interactor)
     {
-        Debug.LogWarning($"Equiping {nameOfItem} Item");
+        FindEquipmentObject(equipment);
+        Debug.Log($"Equiping {nameOfItem}");
+    }
+
+    public virtual void FindEquipmentObject(GameObject equipmentGameObject)
+    {
+        equipmentObject = equipmentGameObject;
     }
 
     public PlayerStats FindPlayerStats(GameObject interactor)

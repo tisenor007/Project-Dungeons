@@ -7,6 +7,8 @@ using UnityEngine;
 public abstract class Item : ScriptableObject
 {
     public string nameOfItem;
+    public Color colorOfItemShine; // rude, make one with Enums to choose from
+
     public virtual void OnPickup(GameObject interactable, GameObject interactor)
     {
         Debug.Log($"{interactor.name} picked up {interactable.name}, {nameOfItem}.");
