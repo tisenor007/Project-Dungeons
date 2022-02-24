@@ -10,7 +10,7 @@ public class DungeonGenerator : MonoBehaviour
         Hallway,
         Length
     }
-    public int structureSpacing = 10;
+    public float structureSpacing = 10;
     public int roomChance = 80;
     public int hallwayChance = 10;
     [HideInInspector] public bool dungeonGenerated = false;
