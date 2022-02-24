@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5104423128015295831}
   - component: {fileID: 1659192524908891017}
   m_Layer: 6
-  m_Name: Interact Bottle
+  m_Name: Bottle Interactable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1c65a64333a7644ea1c0fdb5a18162d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotates: 1
+  floatingObject: 1
   itemType: {fileID: 11400000, guid: a907c8f448affb84a989fdd8d8a05968, type: 2}
 --- !u!108 &5104423128015295831
 Light:

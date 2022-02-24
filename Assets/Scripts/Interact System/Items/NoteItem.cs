@@ -7,7 +7,6 @@ using UnityEngine.UI;
 [CreateAssetMenu]
 public class NoteItem : Item
 {
-
     [SerializeField] [TextArea(30,1)] private string message;
 
     public override void OnPickup(GameObject interactable, GameObject interactor)
