@@ -1,106 +1,106 @@
 Using pre-set license
 Built from '2020.3/staging' branch; Version is '2020.3.14f1 (d0d1bb862f9d) revision 13685179'; Using compiler version '192528614'; Build Type 'Release'
-OS: 'Windows 10 Pro; OS build 19042.1466; Version 2009; 64bit' Language: 'en' Physical Memory: 32659 MB
+OS: 'Windows 10 Home; OS build 19044.1526; Version 2009; 64bit' Language: 'en' Physical Memory: 16302 MB
 BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
 
  COMMAND LINE ARGUMENTS:
-C:\Program Files\Unity\Editor\Unity.exe
+C:\Program Files\Unity\Hub\Editor\2020.3.14f1\Editor\Unity.exe
 -adb2
 -batchMode
 -noUpm
 -name
 AssetImportWorker0
 -projectPath
-D:/Unity/Project Dungeons
+C:/Users/macdu/OneDrive/Desktop/GitHubProjectDungeonsDONOTDELETE/Project-Dungeons
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-51696
-Successfully changed project path to: D:/Unity/Project Dungeons
-D:/Unity/Project Dungeons
+63079
+Successfully changed project path to: C:/Users/macdu/OneDrive/Desktop/GitHubProjectDungeonsDONOTDELETE/Project-Dungeons
+C:/Users/macdu/OneDrive/Desktop/GitHubProjectDungeonsDONOTDELETE/Project-Dungeons
 Using Asset Import Pipeline V2.
-Refreshing native plugins compatible for Editor in 21.02 ms, found 2 plugins.
+Refreshing native plugins compatible for Editor in 21.08 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2020.3.14f1 (d0d1bb862f9d)
-[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Editor/Data/Resources/UnitySubsystems
-[Subsystems] Discovering subsystems at path D:/Unity/Project Dungeons/Assets
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2020.3.14f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/macdu/OneDrive/Desktop/GitHubProjectDungeonsDONOTDELETE/Project-Dungeons/Assets
 GfxDevice: creating device client; threaded=0
 Direct3D:
     Version:  Direct3D 11.0 [level 11.1]
-    Renderer: NVIDIA GeForce RTX 2060 (ID=0x1e89)
+    Renderer: NVIDIA GeForce RTX 2080 SUPER (ID=0x1e81)
     Vendor:   
-    VRAM:     5968 MB
-    Driver:   30.0.14.7212
+    VRAM:     8010 MB
+    Driver:   30.0.15.1179
 Initialize mono
-Mono path[0] = 'C:/Program Files/Unity/Editor/Data/Managed'
-Mono path[1] = 'C:/Program Files/Unity/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
-Mono config path = 'C:/Program Files/Unity/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56324
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2020.3.14f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2020.3.14f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/2020.3.14f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56412
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
-Register platform support module: C:/Program Files/Unity/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.001458 seconds.
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.3.14f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Registered in 0.001624 seconds.
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 22.50 ms, found 2 plugins.
+Refreshing native plugins compatible for Editor in 20.20 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  0.753 seconds
+- Completed reload, in  0.772 seconds
 Domain Reload Profiling:
-	ReloadAssembly (753ms)
+	ReloadAssembly (772ms)
 		BeginReloadAssembly (39ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (0ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
 			CreateAndSetChildDomain (1ms)
-		EndReloadAssembly (330ms)
+		EndReloadAssembly (308ms)
 			LoadAssemblies (38ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (119ms)
+			SetupTypeCache (114ms)
 			ReleaseScriptCaches (0ms)
-			RebuildScriptCaches (27ms)
-			SetupLoadedEditorAssemblies (127ms)
+			RebuildScriptCaches (25ms)
+			SetupLoadedEditorAssemblies (112ms)
 				LogAssemblyErrors (0ms)
 				InitializePlatformSupportModulesInManaged (3ms)
 				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (23ms)
-				BeforeProcessingInitializeOnLoad (11ms)
-				ProcessInitializeOnLoadAttributes (67ms)
-				ProcessInitializeOnLoadMethodAttributes (23ms)
+				RefreshPlugins (20ms)
+				BeforeProcessingInitializeOnLoad (5ms)
+				ProcessInitializeOnLoadAttributes (62ms)
+				ProcessInitializeOnLoadMethodAttributes (22ms)
 				AfterProcessingInitializeOnLoad (0ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (0ms)
 Platform modules already initialized, skipping
 Registering precompiled user dll's ...
-Registered in 0.001857 seconds.
+Registered in 0.002830 seconds.
 Begin MonoManager ReloadAssembly
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 0.27 ms, found 2 plugins.
+Refreshing native plugins compatible for Editor in 0.22 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  0.767 seconds
+- Completed reload, in  0.731 seconds
 Domain Reload Profiling:
-	ReloadAssembly (767ms)
-		BeginReloadAssembly (110ms)
+	ReloadAssembly (732ms)
+		BeginReloadAssembly (107ms)
 			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (5ms)
+			DisableScriptedObjects (4ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (14ms)
-		EndReloadAssembly (611ms)
-			LoadAssemblies (63ms)
+			CreateAndSetChildDomain (13ms)
+		EndReloadAssembly (578ms)
+			LoadAssemblies (62ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (211ms)
+			SetupTypeCache (196ms)
 			ReleaseScriptCaches (0ms)
-			RebuildScriptCaches (32ms)
-			SetupLoadedEditorAssemblies (231ms)
+			RebuildScriptCaches (31ms)
+			SetupLoadedEditorAssemblies (219ms)
 				LogAssemblyErrors (0ms)
 				InitializePlatformSupportModulesInManaged (4ms)
 				SetLoadedEditorAssemblies (0ms)
 				RefreshPlugins (0ms)
-				BeforeProcessingInitializeOnLoad (64ms)
-				ProcessInitializeOnLoadAttributes (155ms)
+				BeforeProcessingInitializeOnLoad (40ms)
+				ProcessInitializeOnLoadAttributes (166ms)
 				ProcessInitializeOnLoadMethodAttributes (3ms)
 				AfterProcessingInitializeOnLoad (5ms)
 				EditorAssembliesLoaded (0ms)
@@ -110,14 +110,14 @@ Platform modules already initialized, skipping
 ========================================================================
 Worker process is ready to serve import requests
 Launched and connected shader compiler UnityShaderCompiler.exe after 0.03 seconds
-Refreshing native plugins compatible for Editor in 0.25 ms, found 2 plugins.
+Refreshing native plugins compatible for Editor in 0.24 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 1417 Unused Serialized files (Serialized files now loaded: 0)
 System memory in use before: 67.5 MB.
 System memory in use after: 67.6 MB.
 
-Unloading 18 unused Assets to reduce memory usage. Loaded Objects now: 1852.
-Total: 1.414500 ms (FindLiveObjects: 0.125200 ms CreateObjectMapping: 0.042000 ms MarkObjects: 1.200600 ms  DeleteObjects: 0.046100 ms)
+Unloading 18 unused Assets to reduce memory usage. Loaded Objects now: 1851.
+Total: 1.549400 ms (FindLiveObjects: 0.099600 ms CreateObjectMapping: 0.031100 ms MarkObjects: 1.373200 ms  DeleteObjects: 0.044600 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
@@ -131,318 +131,385 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
 Received Import Request.
-  path: Assets/Scripts/GM Scripts/GameManager.cs
-  artifactKey: Guid(92a880f09c68cb94ea343d43222eccef) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/GM Scripts/GameManager.cs using Guid(92a880f09c68cb94ea343d43222eccef) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd3fae40d2c6c5506d3537d917e50df04') in 0.015776 seconds 
-  Import took 0.017421 seconds .
+  path: Assets/Art
+  artifactKey: Guid(0e749c53723724147856813729c6f20a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art using Guid(0e749c53723724147856813729c6f20a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c5e4c6bc212a792d5e5fdca30d908dec') in 0.006999 seconds 
+  Import took 0.008541 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 43.000390 seconds.
-  path: Assets/Scripts/GM Scripts/GameManager.cs
-  artifactKey: Guid(92a880f09c68cb94ea343d43222eccef) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Scripts/GM Scripts/GameManager.cs using Guid(92a880f09c68cb94ea343d43222eccef) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f9ac87d92ffb9beee5747f7e1f0058b6') in 0.000962 seconds 
-  Import took 0.002805 seconds .
+  Time since last request: 28.528605 seconds.
+  path: Assets/Art/Room Templates
+  artifactKey: Guid(048153b32abb1ad458e7efc7e4160912) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Templates using Guid(048153b32abb1ad458e7efc7e4160912) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e7df8bcc0f6ae1b1fa99d3c1f4e2083b') in 0.005895 seconds 
+  Import took 0.007787 seconds .
 
 ========================================================================
-Received Prepare
-Registering precompiled user dll's ...
-Registered in 0.001548 seconds.
-Begin MonoManager ReloadAssembly
-Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 0.26 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  0.693 seconds
-Domain Reload Profiling:
-	ReloadAssembly (693ms)
-		BeginReloadAssembly (84ms)
-			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (4ms)
-			BackupInstance (0ms)
-			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (22ms)
-		EndReloadAssembly (563ms)
-			LoadAssemblies (59ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (199ms)
-			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (28ms)
-			SetupLoadedEditorAssemblies (207ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (4ms)
-				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (0ms)
-				BeforeProcessingInitializeOnLoad (57ms)
-				ProcessInitializeOnLoadAttributes (138ms)
-				ProcessInitializeOnLoadMethodAttributes (3ms)
-				AfterProcessingInitializeOnLoad (4ms)
-				EditorAssembliesLoaded (0ms)
-			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (5ms)
-Platform modules already initialized, skipping
-Refreshing native plugins compatible for Editor in 0.27 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 1398 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 66.1 MB.
-System memory in use after: 66.2 MB.
+Received Import Request.
+  Time since last request: 7.321575 seconds.
+  path: Assets/Art/Room Models
+  artifactKey: Guid(762161d116e2cf54c9c27898a5dc9986) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models using Guid(762161d116e2cf54c9c27898a5dc9986) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '603bcb74095f17838fa0d2816d5b8692') in 0.005811 seconds 
+  Import took 0.007655 seconds .
 
-Unloading 13 unused Assets to reduce memory usage. Loaded Objects now: 1855.
-Total: 1.486200 ms (FindLiveObjects: 0.136300 ms CreateObjectMapping: 0.045300 ms MarkObjects: 1.292400 ms  DeleteObjects: 0.011500 ms)
-
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
-Received Prepare
-Registering precompiled user dll's ...
-Registered in 0.001604 seconds.
-Begin MonoManager ReloadAssembly
-Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 0.31 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  0.697 seconds
-Domain Reload Profiling:
-	ReloadAssembly (697ms)
-		BeginReloadAssembly (92ms)
-			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (3ms)
-			BackupInstance (0ms)
-			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (26ms)
-		EndReloadAssembly (559ms)
-			LoadAssemblies (58ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (195ms)
-			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (27ms)
-			SetupLoadedEditorAssemblies (207ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (4ms)
-				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (0ms)
-				BeforeProcessingInitializeOnLoad (58ms)
-				ProcessInitializeOnLoadAttributes (137ms)
-				ProcessInitializeOnLoadMethodAttributes (3ms)
-				AfterProcessingInitializeOnLoad (4ms)
-				EditorAssembliesLoaded (0ms)
-			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (5ms)
-Platform modules already initialized, skipping
-Refreshing native plugins compatible for Editor in 0.29 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 1398 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 66.1 MB.
-System memory in use after: 66.2 MB.
+Received Import Request.
+  Time since last request: 39.519899 seconds.
+  path: Assets/Art/Room Models/Barrel.fbx
+  artifactKey: Guid(43af28c61a3847a4ea107153e9715c3a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Barrel.fbx using Guid(43af28c61a3847a4ea107153e9715c3a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a58b50bc62f6ab7176262a87904ec003') in 0.277203 seconds 
+  Import took 0.279528 seconds .
 
-Unloading 13 unused Assets to reduce memory usage. Loaded Objects now: 1858.
-Total: 1.479400 ms (FindLiveObjects: 0.107800 ms CreateObjectMapping: 0.033100 ms MarkObjects: 1.326800 ms  DeleteObjects: 0.011200 ms)
-
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
-Received Prepare
-Registering precompiled user dll's ...
-Registered in 0.001638 seconds.
-Begin MonoManager ReloadAssembly
-Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 0.26 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  0.714 seconds
-Domain Reload Profiling:
-	ReloadAssembly (714ms)
-		BeginReloadAssembly (86ms)
-			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (3ms)
-			BackupInstance (0ms)
-			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (25ms)
-		EndReloadAssembly (581ms)
-			LoadAssemblies (59ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (202ms)
-			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (30ms)
-			SetupLoadedEditorAssemblies (213ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (4ms)
-				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (0ms)
-				BeforeProcessingInitializeOnLoad (58ms)
-				ProcessInitializeOnLoadAttributes (143ms)
-				ProcessInitializeOnLoadMethodAttributes (3ms)
-				AfterProcessingInitializeOnLoad (5ms)
-				EditorAssembliesLoaded (0ms)
-			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (5ms)
-Platform modules already initialized, skipping
-Refreshing native plugins compatible for Editor in 0.26 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 1398 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 66.2 MB.
-System memory in use after: 66.3 MB.
+Received Import Request.
+  Time since last request: 0.000205 seconds.
+  path: Assets/Art/Room Models/SmallRock2.fbx
+  artifactKey: Guid(3fd6b802257b6374cadbca10384df26f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/SmallRock2.fbx using Guid(3fd6b802257b6374cadbca10384df26f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e36a08ea5a2f1cf1fa4eb946d8955c8b') in 0.013489 seconds 
+  Import took 0.015075 seconds .
 
-Unloading 13 unused Assets to reduce memory usage. Loaded Objects now: 1861.
-Total: 1.460100 ms (FindLiveObjects: 0.128200 ms CreateObjectMapping: 0.043800 ms MarkObjects: 1.273400 ms  DeleteObjects: 0.013800 ms)
-
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
-Received Prepare
-Registering precompiled user dll's ...
-Registered in 0.001616 seconds.
-Begin MonoManager ReloadAssembly
-Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 0.29 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  0.698 seconds
-Domain Reload Profiling:
-	ReloadAssembly (698ms)
-		BeginReloadAssembly (88ms)
-			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (3ms)
-			BackupInstance (0ms)
-			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (21ms)
-		EndReloadAssembly (566ms)
-			LoadAssemblies (59ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (198ms)
-			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (28ms)
-			SetupLoadedEditorAssemblies (209ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (4ms)
-				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (0ms)
-				BeforeProcessingInitializeOnLoad (58ms)
-				ProcessInitializeOnLoadAttributes (139ms)
-				ProcessInitializeOnLoadMethodAttributes (4ms)
-				AfterProcessingInitializeOnLoad (5ms)
-				EditorAssembliesLoaded (0ms)
-			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (5ms)
-Platform modules already initialized, skipping
-Refreshing native plugins compatible for Editor in 0.27 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 1398 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 66.2 MB.
-System memory in use after: 66.3 MB.
+Received Import Request.
+  Time since last request: 0.000211 seconds.
+  path: Assets/Art/Room Models/FloorBoards.fbx
+  artifactKey: Guid(21106732f032b3a43b3e5ce74a268f70) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/FloorBoards.fbx using Guid(21106732f032b3a43b3e5ce74a268f70) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '99e251220a308ca8c5c64796b5fea81e') in 0.013535 seconds 
+  Import took 0.015116 seconds .
 
-Unloading 13 unused Assets to reduce memory usage. Loaded Objects now: 1864.
-Total: 1.382900 ms (FindLiveObjects: 0.117500 ms CreateObjectMapping: 0.037000 ms MarkObjects: 1.216800 ms  DeleteObjects: 0.010900 ms)
-
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
-Received Prepare
-Registering precompiled user dll's ...
-Registered in 0.001742 seconds.
-Begin MonoManager ReloadAssembly
-Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 0.29 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  0.682 seconds
-Domain Reload Profiling:
-	ReloadAssembly (682ms)
-		BeginReloadAssembly (75ms)
-			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (3ms)
-			BackupInstance (0ms)
-			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (20ms)
-		EndReloadAssembly (562ms)
-			LoadAssemblies (58ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (190ms)
-			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (29ms)
-			SetupLoadedEditorAssemblies (209ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (4ms)
-				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (0ms)
-				BeforeProcessingInitializeOnLoad (58ms)
-				ProcessInitializeOnLoadAttributes (138ms)
-				ProcessInitializeOnLoadMethodAttributes (3ms)
-				AfterProcessingInitializeOnLoad (5ms)
-				EditorAssembliesLoaded (0ms)
-			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (5ms)
-Platform modules already initialized, skipping
-Refreshing native plugins compatible for Editor in 0.26 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 1398 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 66.2 MB.
-System memory in use after: 66.3 MB.
+Received Import Request.
+  Time since last request: 0.000194 seconds.
+  path: Assets/Art/Room Models/Stool.fbx
+  artifactKey: Guid(949fa4a0989248043b799c602fd3b24b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Stool.fbx using Guid(949fa4a0989248043b799c602fd3b24b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0a62fdd0d7be5e57224419f07c0b5a31') in 0.013124 seconds 
+  Import took 0.014748 seconds .
 
-Unloading 13 unused Assets to reduce memory usage. Loaded Objects now: 1867.
-Total: 1.543600 ms (FindLiveObjects: 0.110900 ms CreateObjectMapping: 0.033400 ms MarkObjects: 1.387200 ms  DeleteObjects: 0.011300 ms)
-
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
-Received Prepare
-Refreshing native plugins compatible for Editor in 1.51 ms, found 2 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 11 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 38.7 MB.
-System memory in use after: 38.8 MB.
+Received Import Request.
+  Time since last request: 0.000157 seconds.
+  path: Assets/Art/Room Models/Torch.fbx
+  artifactKey: Guid(d2630237cdc54e945a4f7f0bdd9ab6f8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Torch.fbx using Guid(d2630237cdc54e945a4f7f0bdd9ab6f8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '282ac2808e52329a64954e1853fbdd4b') in 0.018777 seconds 
+  Import took 0.020368 seconds .
 
-Unloading 11 unused Assets to reduce memory usage. Loaded Objects now: 1867.
-Total: 1.519500 ms (FindLiveObjects: 0.123300 ms CreateObjectMapping: 0.037100 ms MarkObjects: 1.350000 ms  DeleteObjects: 0.008400 ms)
+========================================================================
+Received Import Request.
+  Time since last request: 0.000158 seconds.
+  path: Assets/Art/Room Models/Rock1.fbx
+  artifactKey: Guid(4aceb78dde92f4b448ba962b8e41a863) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Rock1.fbx using Guid(4aceb78dde92f4b448ba962b8e41a863) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'dbe7e2954fa16ed66654bee7127c6d43') in 0.012905 seconds 
+  Import took 0.014495 seconds .
 
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 0.000254 seconds.
+  path: Assets/Art/Room Models/Floorsupport.fbx
+  artifactKey: Guid(060ebd6ca1c34f74782a8d5a778f6847) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Floorsupport.fbx using Guid(060ebd6ca1c34f74782a8d5a778f6847) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ee438b89338dd1ede8dd8d896c55a402') in 0.012691 seconds 
+  Import took 0.014260 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000148 seconds.
+  path: Assets/Art/Room Models/Cannonball.fbx
+  artifactKey: Guid(4c92439c3210055479b8a0e6fca5f6cb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Cannonball.fbx using Guid(4c92439c3210055479b8a0e6fca5f6cb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '291f0311ab24a1c4ff0b8e6b78fff293') in 0.014511 seconds 
+  Import took 0.016108 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000160 seconds.
+  path: Assets/Art/Room Models/Rock2.fbx
+  artifactKey: Guid(0aa22cc85a778ca499be6714156156b4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Rock2.fbx using Guid(0aa22cc85a778ca499be6714156156b4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ceb0f3fb4e8442e8fb44da1751987c90') in 0.012453 seconds 
+  Import took 0.014053 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000160 seconds.
+  path: Assets/Art/Room Models/SmallRock1.fbx
+  artifactKey: Guid(31feb304f00a9cd479d9530b3b6b9da4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/SmallRock1.fbx using Guid(31feb304f00a9cd479d9530b3b6b9da4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '39775c233f5bc50d98eea8fac4d7799d') in 0.012584 seconds 
+  Import took 0.014165 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000154 seconds.
+  path: Assets/Art/Room Models/Bread.fbx
+  artifactKey: Guid(2196338a3e07cfb45ab945ef3ae6f674) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Bread.fbx using Guid(2196338a3e07cfb45ab945ef3ae6f674) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '84c9cfda17e9d5cab1dfcad398cfde4c') in 0.014988 seconds 
+  Import took 0.016587 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000175 seconds.
+  path: Assets/Art/Room Models/Rock1Varient2.fbx
+  artifactKey: Guid(59f3f8c4791c5e445a9f8a71bcb41139) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Rock1Varient2.fbx using Guid(59f3f8c4791c5e445a9f8a71bcb41139) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c4393a9d1b898bf25ecb7a77cdeb654c') in 0.012535 seconds 
+  Import took 0.014140 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000154 seconds.
+  path: Assets/Art/Room Models/Crate.fbx
+  artifactKey: Guid(f3ae69ed1da2f6746b1ccb0e0d4e5e19) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Crate.fbx using Guid(f3ae69ed1da2f6746b1ccb0e0d4e5e19) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '39b4ec4ccec9ebeb07fbec7a1f820496') in 0.015811 seconds 
+  Import took 0.017451 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000151 seconds.
+  path: Assets/Art/Room Models/Table.fbx
+  artifactKey: Guid(93bee3479bf4bcb4da310143fd1ce9e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Table.fbx using Guid(93bee3479bf4bcb4da310143fd1ce9e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a0d5aad044ce872f970be995e0f5891e') in 0.012460 seconds 
+  Import took 0.014056 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000155 seconds.
+  path: Assets/Art/Room Models/SmallRock3.fbx
+  artifactKey: Guid(83898e8df6342d440afb386bb41f8ac6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/SmallRock3.fbx using Guid(83898e8df6342d440afb386bb41f8ac6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9c7cfe09059164fd9f40b0bf4148459b') in 0.013030 seconds 
+  Import took 0.014622 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000157 seconds.
+  path: Assets/Art/Room Models/Cannon.fbx
+  artifactKey: Guid(4e17358c1d3caa44abceaa891643b7bf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Cannon.fbx using Guid(4e17358c1d3caa44abceaa891643b7bf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'effaa1dd45c8330a0ab69e09248845c6') in 0.020932 seconds 
+  Import took 0.022552 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000228 seconds.
+  path: Assets/Art/Room Models/Rock2.1.fbx
+  artifactKey: Guid(babd3f91fe3cb9d429fca50db8263652) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Rock2.1.fbx using Guid(babd3f91fe3cb9d429fca50db8263652) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2c768f397ac7941fdcd865092599795a') in 0.012726 seconds 
+  Import took 0.014357 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.018418 seconds.
+  path: Assets/Art/Room Models/Crate.fbx
+  artifactKey: Guid(f3ae69ed1da2f6746b1ccb0e0d4e5e19) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Crate.fbx using Guid(f3ae69ed1da2f6746b1ccb0e0d4e5e19) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '39b4ec4ccec9ebeb07fbec7a1f820496') in 0.015163 seconds 
+  Import took 0.016945 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 7.494478 seconds.
+  path: Assets/Art/Room Models/Barrel.fbx
+  artifactKey: Guid(43af28c61a3847a4ea107153e9715c3a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Barrel.fbx using Guid(43af28c61a3847a4ea107153e9715c3a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f9a0f68e94e946540036dc60c2094472') in 0.016945 seconds 
+  Import took 0.018671 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.063653 seconds.
+  path: Assets/Art/Room Models/Barrel.fbx
+  artifactKey: Guid(43af28c61a3847a4ea107153e9715c3a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Barrel.fbx using Guid(43af28c61a3847a4ea107153e9715c3a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f9a0f68e94e946540036dc60c2094472') in 0.014970 seconds 
+  Import took 0.016763 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 4.485014 seconds.
+  path: Assets/Art/Room Models/Bread.fbx
+  artifactKey: Guid(2196338a3e07cfb45ab945ef3ae6f674) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Bread.fbx using Guid(2196338a3e07cfb45ab945ef3ae6f674) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '62742e662540a4baac7f6200a2d288af') in 0.017064 seconds 
+  Import took 0.018827 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.411260 seconds.
+  path: Assets/Art/Room Models/Cannon.fbx
+  artifactKey: Guid(4e17358c1d3caa44abceaa891643b7bf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Cannon.fbx using Guid(4e17358c1d3caa44abceaa891643b7bf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0c7957772489be17469b5d3dbb6aaf27') in 0.022307 seconds 
+  Import took 0.024097 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 7.676009 seconds.
+  path: Assets/Art/Room Models/Floorsupport.fbx
+  artifactKey: Guid(060ebd6ca1c34f74782a8d5a778f6847) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Floorsupport.fbx using Guid(060ebd6ca1c34f74782a8d5a778f6847) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8d544f1456c74cb229b7767c10d799e3') in 0.012585 seconds 
+  Import took 0.014755 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.004426 seconds.
+  path: Assets/Art/Room Models/Cannonball.fbx
+  artifactKey: Guid(4c92439c3210055479b8a0e6fca5f6cb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Cannonball.fbx using Guid(4c92439c3210055479b8a0e6fca5f6cb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5fb052fc95dd01118038cd2be874fa8e') in 0.015758 seconds 
+  Import took 0.017461 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000205 seconds.
+  path: Assets/Art/Room Models/SmallRock2.fbx
+  artifactKey: Guid(3fd6b802257b6374cadbca10384df26f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/SmallRock2.fbx using Guid(3fd6b802257b6374cadbca10384df26f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f905ff3d5bea3d332d39ba3565644c95') in 0.011942 seconds 
+  Import took 0.013544 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000179 seconds.
+  path: Assets/Art/Room Models/FloorBoards.fbx
+  artifactKey: Guid(21106732f032b3a43b3e5ce74a268f70) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/FloorBoards.fbx using Guid(21106732f032b3a43b3e5ce74a268f70) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7d4c88c03a8c44035e9268c78429c355') in 0.012471 seconds 
+  Import took 0.014101 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000180 seconds.
+  path: Assets/Art/Room Models/Stool.fbx
+  artifactKey: Guid(949fa4a0989248043b799c602fd3b24b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Stool.fbx using Guid(949fa4a0989248043b799c602fd3b24b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b74fa639f8cccb183163897aa34850da') in 0.012599 seconds 
+  Import took 0.014204 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000201 seconds.
+  path: Assets/Art/Room Models/Torch.fbx
+  artifactKey: Guid(d2630237cdc54e945a4f7f0bdd9ab6f8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Torch.fbx using Guid(d2630237cdc54e945a4f7f0bdd9ab6f8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '17e9357047a54d7b6d0aa38174e99096') in 0.018802 seconds 
+  Import took 0.020422 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000156 seconds.
+  path: Assets/Art/Room Models/Rock1.fbx
+  artifactKey: Guid(4aceb78dde92f4b448ba962b8e41a863) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Rock1.fbx using Guid(4aceb78dde92f4b448ba962b8e41a863) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'dd3ea87c968ab73a0a4ed179480031f0') in 0.012306 seconds 
+  Import took 0.013956 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000164 seconds.
+  path: Assets/Art/Room Models/Rock2.fbx
+  artifactKey: Guid(0aa22cc85a778ca499be6714156156b4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Rock2.fbx using Guid(0aa22cc85a778ca499be6714156156b4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '245e519808ce5151e616482d453758ac') in 0.012643 seconds 
+  Import took 0.014263 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000196 seconds.
+  path: Assets/Art/Room Models/SmallRock1.fbx
+  artifactKey: Guid(31feb304f00a9cd479d9530b3b6b9da4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/SmallRock1.fbx using Guid(31feb304f00a9cd479d9530b3b6b9da4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '09d575418033583c71578e95548affe7') in 0.012232 seconds 
+  Import took 0.013865 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000164 seconds.
+  path: Assets/Art/Room Models/Rock1Varient2.fbx
+  artifactKey: Guid(59f3f8c4791c5e445a9f8a71bcb41139) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Rock1Varient2.fbx using Guid(59f3f8c4791c5e445a9f8a71bcb41139) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b174c1eb0f0e719766eb60055ec71ab3') in 0.012179 seconds 
+  Import took 0.013762 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000195 seconds.
+  path: Assets/Art/Room Models/Crate.fbx
+  artifactKey: Guid(f3ae69ed1da2f6746b1ccb0e0d4e5e19) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Crate.fbx using Guid(f3ae69ed1da2f6746b1ccb0e0d4e5e19) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5918770499a11959ae0b58dac9e15b99') in 0.015280 seconds 
+  Import took 0.016870 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000158 seconds.
+  path: Assets/Art/Room Models/Table.fbx
+  artifactKey: Guid(93bee3479bf4bcb4da310143fd1ce9e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Table.fbx using Guid(93bee3479bf4bcb4da310143fd1ce9e4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c1aa6b80f93b97d654136074b9dc8b77') in 0.012183 seconds 
+  Import took 0.013760 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000160 seconds.
+  path: Assets/Art/Room Models/SmallRock3.fbx
+  artifactKey: Guid(83898e8df6342d440afb386bb41f8ac6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/SmallRock3.fbx using Guid(83898e8df6342d440afb386bb41f8ac6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9d4e1db0ae6c93ad62a373efe7747989') in 0.012482 seconds 
+  Import took 0.014087 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000192 seconds.
+  path: Assets/Art/Room Models/Rock2.1.fbx
+  artifactKey: Guid(babd3f91fe3cb9d429fca50db8263652) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Rock2.1.fbx using Guid(babd3f91fe3cb9d429fca50db8263652) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0642d0ce27c3cc31bb37a5c593575d00') in 0.012818 seconds 
+  Import took 0.014447 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.002357 seconds.
+  path: Assets/Art/Room Models/Rock1Varient2.fbx
+  artifactKey: Guid(59f3f8c4791c5e445a9f8a71bcb41139) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Models/Rock1Varient2.fbx using Guid(59f3f8c4791c5e445a9f8a71bcb41139) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b174c1eb0f0e719766eb60055ec71ab3') in 0.012633 seconds 
+  Import took 0.014411 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 6.493196 seconds.
+  path: Assets/Art/Room Templates/RoomBaseLayout.fbx
+  artifactKey: Guid(789f366aed7b85146826bd17cdff7459) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Templates/RoomBaseLayout.fbx using Guid(789f366aed7b85146826bd17cdff7459) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fc0f3a8ea95cb37d8768571fa388dda6') in 0.079417 seconds 
+  Import took 0.081364 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000212 seconds.
+  path: Assets/Art/Room Templates/RoomBaseLayout2.fbx
+  artifactKey: Guid(25925568a8cf5174981b44c4c70c20d9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Templates/RoomBaseLayout2.fbx using Guid(25925568a8cf5174981b44c4c70c20d9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4dafd6797ee906db0cb8e56ad198b856') in 0.082670 seconds 
+  Import took 0.084477 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.006053 seconds.
+  path: Assets/Art/Room Templates/RoomBaseLayout2.fbx
+  artifactKey: Guid(25925568a8cf5174981b44c4c70c20d9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Templates/RoomBaseLayout2.fbx using Guid(25925568a8cf5174981b44c4c70c20d9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4dafd6797ee906db0cb8e56ad198b856') in 0.079409 seconds 
+  Import took 0.081375 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 5.153886 seconds.
+  path: Assets/Art/Room Templates/RoomBaseLayout.fbx
+  artifactKey: Guid(789f366aed7b85146826bd17cdff7459) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Templates/RoomBaseLayout.fbx using Guid(789f366aed7b85146826bd17cdff7459) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b58ee1aa44bb36658ac162aaf3d8f312') in 0.078773 seconds 
+  Import took 0.080744 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000203 seconds.
+  path: Assets/Art/Room Templates/RoomBaseLayout2.fbx
+  artifactKey: Guid(25925568a8cf5174981b44c4c70c20d9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Templates/RoomBaseLayout2.fbx using Guid(25925568a8cf5174981b44c4c70c20d9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2cb30048a43db471323c28cc3ab94c82') in 0.080728 seconds 
+  Import took 0.082475 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.024689 seconds.
+  path: Assets/Art/Room Templates/RoomBaseLayout2.fbx
+  artifactKey: Guid(25925568a8cf5174981b44c4c70c20d9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Room Templates/RoomBaseLayout2.fbx using Guid(25925568a8cf5174981b44c4c70c20d9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2cb30048a43db471323c28cc3ab94c82') in 0.080362 seconds 
+  Import took 0.082301 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 8.339257 seconds.
+  path: Assets/Scenes/Test Level.unity
+  artifactKey: Guid(cf4f8fa61113f124caf30238b4756264) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/Test Level.unity using Guid(cf4f8fa61113f124caf30238b4756264) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '81243dbfc83e910b77f8c352b924cad9') in 0.005228 seconds 
+  Import took 0.007004 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 15.505055 seconds.
+  path: Assets/Scenes/GamePlay.unity
+  artifactKey: Guid(7580cd8f981710f42bf556624be9c0b8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/GamePlay.unity using Guid(7580cd8f981710f42bf556624be9c0b8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '094b75c86eac24df7b0820155fa596f4') in 0.005114 seconds 
+  Import took 0.006863 seconds .
+
 AssetImportWorkerClient::OnTransportError - code=2 error=End of file
