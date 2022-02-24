@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 public class MetaHealthBar : MonoBehaviour
 {
-    public EnemyAI enemy;
+    public Enemy enemy;
     public Image healthColour;
     public Slider healthBar;
     public Transform cam;
 
     void Start()
     {
-        enemy = GetComponentInParent<EnemyAI>();
+        enemy = GetComponentInParent<Enemy>();
         healthColour = transform.GetChild(0).GetChild(0).GetComponent<Image>();
         healthBar = transform.GetChild(0).GetComponent<Slider>();
         healthBar.maxValue = enemy.maxHealth;

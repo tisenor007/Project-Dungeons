@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-public class EnemyAI : GameCharacter
+public class Enemy : GameCharacter
 {
     public enum State
     {
@@ -16,12 +16,13 @@ public class EnemyAI : GameCharacter
     }
 
     public State enemyState;
-    public NavMeshAgent enemy;
+    public NavMeshAgent enemyNavMeshAgent;
     public PlayerStats playerStats;
 
     public int viewDistance;
     public int hearingDistance;
     public int attackDistance;
+    public float speed;
 
     public float distanceFromPlayer;
     public float hitTimer;
@@ -49,7 +50,7 @@ public class EnemyAI : GameCharacter
         transform.GetChild(0).transform.LookAt(transform.GetChild(0).transform.position + cam.forward);
 
         enemySight = new Ray(transform.position, transform.TransformDirection(Vector3.forward));
-        enemyLocation = this.enemy.transform.position;
+        enemyLocation = this.enemyNavMeshAgent.transform.position;
         playerLocation = playerStats.gameObject.transform.position;
         distanceFromPlayer = Vector3.Distance(playerLocation, enemyLocation);
 
@@ -69,9 +70,11 @@ public class EnemyAI : GameCharacter
                 Attacking();
                 break;
         }
+
+        //Debug.Log(enemyState);
     }
 
-    void Idle()
+    public virtual void Idle()
     {
         playerLocation = playerStats.gameObject.transform.position;
 
@@ -82,11 +85,13 @@ public class EnemyAI : GameCharacter
                 SwitchState(State.Chasing);
             }
         }
+
+        Debug.Log("enemy ai running");
     }
 
-    void Chasing()
+    public virtual void Chasing()
     {
-        enemy.SetDestination(playerLocation);
+        enemyNavMeshAgent.SetDestination(playerLocation);
 
         if (distanceFromPlayer <= attackDistance)
         {
@@ -102,7 +107,7 @@ public class EnemyAI : GameCharacter
 
     void Attacking()
     {
-        enemy.SetDestination(enemyLocation);
+        enemyNavMeshAgent.SetDestination(enemyLocation);
 
         hitTimer -= Time.deltaTime;
 
@@ -152,7 +157,7 @@ public class EnemyAI : GameCharacter
     public void InitEnemy()
     {
         SwitchState(State.Idle);
-        enemy = GetComponent<NavMeshAgent>();
+        enemyNavMeshAgent = GetComponent<NavMeshAgent>();
         healthColour = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
         healthBar = transform.GetChild(0).GetChild(0).GetComponent<Slider>();
 
