@@ -136,6 +136,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void FixStats(PlayerStats newplayerStats)
+    {
+        playerStats = newplayerStats;
+    }
+
     private void CheckPlayerInputandPerformPlayerActions()
     {
         if (Input.GetKey(forwardInput) == true) { Move(MovementDirection.Forward); }
@@ -165,30 +170,35 @@ public class PlayerController : MonoBehaviour
         //interact with object
         if (Input.GetKeyDown(interactInput) && canMove)
         {
-            //Debug.LogWarning("call Interact");
-
-            if (hitColInteraction.Length != 0)
-            {
-                //Debug.LogError($"trying Interaction with {hitColInteraction.Length} object(s)");
-
-                foreach (Collider col in hitColInteraction)
-                {
-                    Interactable interactable = col.gameObject.GetComponentInParent<Interactable>();
-                    //Debug.LogWarning($"trying Interaction with {interactable.gameObject.name}");
-
-                    if (interactable.InteractableEnabled == true)
-                    {
-                        Debug.LogWarning($"{gameObject.name} interacting with {interactable.gameObject.name}");
-                        interactable.Interact(this.gameObject);
-                    }
-                }
-            }
+            Interact();
         }
         else if (Input.GetKeyDown(KeyCode.E) && !canMove)
         {
             canMove = true;
             GameManager.manager.levelManager.StopReadingNote();
         }
+    }
+
+    public void Interact()
+    {
+        //Debug.LogWarning("call Interact");
+
+        if (hitColInteraction.Length == 0) return;
+
+        //Debug.LogError($"trying Interaction with {hitColInteraction.Length} object(s)");
+
+        foreach (Collider col in hitColInteraction)
+        {
+            Interactable interactable = col.gameObject.GetComponentInParent<Interactable>();
+            //Debug.LogWarning($"trying Interaction with {interactable.gameObject.name}");
+
+            if (interactable.InteractableEnabled == true)
+            {
+                interactable.Interact(this.gameObject);
+                //Debug.LogWarning($"{gameObject.name} interacting with {interactable.gameObject.name}");
+            }
+        }
+
     }
 
     private void EnableInteractionFeedbackWithinRange()
@@ -202,7 +212,6 @@ public class PlayerController : MonoBehaviour
         
         float r = interactionRadius - .1f; // MN#: -.1 due to radius encompasing hitColInteraction enough to not miss turning off the light
         
-
             foreach (Collider col in hitColInteraction)
             {
 
@@ -301,20 +310,20 @@ public class PlayerController : MonoBehaviour
         attackTimer = Time.time + playerStats.AttackSpeed;
         Attack();
     }
+
     public void Attack() 
-    { 
-        if (playerStats.Shield.activeSelf == false && 
-            playerStats.WeaponHitArea.activeSelf == false) 
-        { playerStats.WeaponHitArea.SetActive(true); } 
+    {
+        if (playerStats.shield.activeSelf == false && playerStats.weaponHitArea.activeSelf == false) 
+        { playerStats.weaponHitArea.SetActive(true); } 
     }
 
     public void StopAttacking() 
     {
-        if (playerStats.WeaponHitArea.activeSelf == true) 
-        { playerStats.WeaponHitArea.SetActive(false); } 
+        if (playerStats.weaponHitArea.activeSelf == true) 
+        { playerStats.weaponHitArea.SetActive(false); } 
     }
 
-    private bool IsAttacking()
+    public bool IsAttacking()
     {
         if (Time.time <= attackTimer) { return true; }
         if (attackBlend <= 0) { return true; }
@@ -333,14 +342,14 @@ public class PlayerController : MonoBehaviour
 
     public void Block() 
     { 
-        if (playerStats.Shield.activeSelf == false) 
-        { playerStats.Shield.SetActive(true); } 
+        if (playerStats.shield.activeSelf == false) 
+        { playerStats.shield.SetActive(true); } 
     }
 
     public void StopBlocking() 
     { 
-        if (playerStats.Shield.activeSelf == true) 
-        { playerStats.Shield.SetActive(false); } 
+        if (playerStats.shield.activeSelf == true) 
+        { playerStats.shield.SetActive(false); } 
     }
     
     private bool IsBlocking()
