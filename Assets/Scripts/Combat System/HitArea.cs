@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class HitArea : MonoBehaviour
 {
-    [SerializeField] private PlayerStats pS_Damage;
+    [SerializeField] private PlayerStats playerStats;
+    [SerializeField] private PlayerController playerController;
 
-    public PlayerStats PS_Damage { get { return pS_Damage; } }
+    public PlayerStats PlayerStats { set { playerStats = value; } }
+    public PlayerController PlayerController { set { playerController = value; } }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Enemy")
+        if (other.tag == "Enemy" && playerController.IsAttacking())
         {
-            other.GetComponent<EnemyAI>().TakeDamage(pS_Damage.Damage, other.GetComponent<Transform>());
+            other.GetComponent<EnemyAI>().TakeDamage(playerStats.Damage, other.GetComponent<Transform>());
             Debug.Log("ENEMY HEALTH: " + other.GetComponent<EnemyAI>().Health);
         }
     }
