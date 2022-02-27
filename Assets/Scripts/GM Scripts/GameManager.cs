@@ -6,6 +6,7 @@ using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.SceneManagement;
+using UnityEditor;
 using System;
 
 // disappearing text
@@ -33,9 +34,9 @@ public class GameManager : MonoBehaviour
     public GameObject playerAndCamera;
     public PlayerStats playerStats;
     public CharacterSelection characterSelection;
-    public GameObject dungeonGenerator;
+    public GameObject[] levels;
     [HideInInspector]public GameState gameState;
-
+    [HideInInspector] public int currentLevel = 0;
     [SerializeField] private TextMeshProUGUI saveText;
     [SerializeField] private TextMeshProUGUI loadText;
     [SerializeField] private GameObject popUpPrefab;
@@ -90,6 +91,7 @@ public class GameManager : MonoBehaviour
                         SceneManager.LoadScene(0, LoadSceneMode.Single);
                         SaveScreenState();
                     }
+                    if (levels[currentLevel].activeSelf == true) { levels[currentLevel].SetActive(false); }
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     uiManager.LoadTitleMenu();
                     characterSelection.HideModels();
@@ -107,11 +109,11 @@ public class GameManager : MonoBehaviour
                     if (Time.timeScale == 0) { Time.timeScale = 1; }
                     uiManager.LoadGameplay();
                     characterSelection.HideModels();
-
-                    //if (Input.GetKey(KeyCode.Return) == true)
-                    //{
-                    //    Save();
-                    //}
+                    if (levels[currentLevel].activeSelf == false) { levels[currentLevel].SetActive(true); }
+                    if (levels[currentLevel].GetComponent<DungeonGenerator>().dungeonGenerated == false && levels[currentLevel].GetComponent<DungeonGenerator>().dungeonIsBeingLoaded == false) 
+                    { 
+                        levels[currentLevel].GetComponent<DungeonGenerator>().dungeonIsGenerating = true;
+                    }
 
                     playerAndCamera.SetActive(true);
                     return;
@@ -120,6 +122,7 @@ public class GameManager : MonoBehaviour
                 {
                     uiManager.LoadWinScreen();
                     characterSelection.HideModels();
+                    if (levels[currentLevel].activeSelf == false) { levels[currentLevel].SetActive(true); }
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     return;
                 }
@@ -127,11 +130,19 @@ public class GameManager : MonoBehaviour
                 {
                     uiManager.LoadLoseScreen();
                     characterSelection.HideModels();
+                    if (levels[currentLevel].activeSelf == false) { levels[currentLevel].SetActive(true); }
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     return;
                 }
             case GameState.PAUSE:
                 {
+                    if (SceneManager.GetActiveScene() != SceneManager.GetSceneByBuildIndex(1))
+                    {
+                        SceneManager.LoadScene(1, LoadSceneMode.Single);
+                        SaveScreenState();
+                    }
+                    playerAndCamera.SetActive(true);
+                    if (levels[currentLevel].activeSelf == false) { levels[currentLevel].SetActive(true); }
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
 
                     uiManager.LoadPauseScreen();
@@ -140,6 +151,8 @@ public class GameManager : MonoBehaviour
                 }
             case GameState.OPTIONS:
                 {
+                    if (levels[currentLevel].activeSelf == true) { levels[currentLevel].SetActive(false); }
+                    if (Time.timeScale == 1) { Time.timeScale = 0; }
                     uiManager.LoadOptions();
                     characterSelection.HideModels();
                     return;
@@ -151,6 +164,7 @@ public class GameManager : MonoBehaviour
                         SceneManager.LoadScene(2, LoadSceneMode.Single);
                         SaveScreenState();
                     }
+                    if (levels[currentLevel].activeSelf == true) { levels[currentLevel].SetActive(false); }
                     if (Time.timeScale == 0) { Time.timeScale = 1; }
                     uiManager.LoadCredits();
                     characterSelection.HideModels();
@@ -165,6 +179,8 @@ public class GameManager : MonoBehaviour
                         SceneManager.LoadScene(3, LoadSceneMode.Single);
                         SaveScreenState();
                     }
+                    if (levels[currentLevel].activeSelf == true) { levels[currentLevel].SetActive(false); }
+                    if (Time.timeScale == 1) { Time.timeScale = 0; }
                     uiManager.LoadCharacterSelection();
                     characterSelection.ShowModels();
 
@@ -173,8 +189,8 @@ public class GameManager : MonoBehaviour
                 }
             case GameState.SAVEOPTION:
                 {
+                    if (levels[currentLevel].activeSelf == false) { levels[currentLevel].SetActive(true); }
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
-
                     uiManager.LoadSaveOption();
                     characterSelection.HideModels();
                     return;
@@ -234,6 +250,11 @@ public class GameManager : MonoBehaviour
         savedInfo.gameState = gameState;
         savedInfo.health = playerStats.health;
         savedInfo.genderStatus = characterSelection.isMale;
+        savedInfo.playerSpawnPosX = playerAndCamera.transform.GetChild(0).gameObject.transform.position.x;
+        savedInfo.playerSpawnPosY = playerAndCamera.transform.GetChild(0).gameObject.transform.position.y;
+        savedInfo.playerSpawnPosZ = playerAndCamera.transform.GetChild(0).gameObject.transform.position.z;
+        savedInfo.savedLevel = currentLevel;
+        savedInfo.SaveDungeon(ref levels[currentLevel].GetComponent<DungeonGenerator>().structures);
 
         saveText.CrossFadeAlpha(1, .1f, true);
         StartCoroutine(WaitToFadeText("save"));
@@ -256,10 +277,13 @@ public class GameManager : MonoBehaviour
             playerStats.ResetStats();
             //
             SceneManager.LoadScene(loadedInfo.scene);
+            loadedInfo.LoadSavedDungeon(ref currentLevel, ref levels);
             levelManager.activeScreen = loadedInfo.activeScreen;
             gameState = loadedInfo.gameState;
             playerStats.health = loadedInfo.health;
             characterSelection.isMale = loadedInfo.genderStatus;
+            playerStats.respawnPos = new Vector3(loadedInfo.playerSpawnPosX, loadedInfo.playerSpawnPosY, loadedInfo.playerSpawnPosZ);
+            playerAndCamera.transform.GetChild(0).position = playerStats.respawnPos;
             characterSelection.SetPlayerModel();
 
             loadText.CrossFadeAlpha(1, .1f, true);
@@ -323,5 +347,58 @@ class SaveInfo
     public int scene;
     public int health;
     public bool genderStatus;
+    public float playerSpawnPosX;
+    public float playerSpawnPosY;
+    public float playerSpawnPosZ;
+    public int savedLevel;
+    public List<DungeonGenerator.StructureType> savedStructureTypes = new List<DungeonGenerator.StructureType>();
+    public List<int> savedStructureVariations = new List<int>();
+    public List<float> savedStructsPosX = new List<float>();
+    public List<float> savedStructsPosY = new List<float>();
+    public List<float> savedStructsPosZ = new List<float>();
+    public List<float> savedStructsRotX = new List<float>();
+    public List<float> savedStructsRotY = new List<float>();
+    public List<float> savedStructsRotZ = new List<float>();
+    public int savedStructureAmount;
+
+    public void SaveDungeon(ref List<GameObject> structures)
+    {
+        savedStructureTypes.Clear();
+        savedStructureVariations.Clear();
+        savedStructsPosX.Clear();
+        savedStructsPosY.Clear();
+        savedStructsPosZ.Clear();
+        savedStructsRotX.Clear();
+        savedStructsRotY.Clear();
+        savedStructsRotZ.Clear();
+        savedStructureAmount = structures.Count;
+        for (int i = 0; i < savedStructureAmount; i++)
+        {
+            savedStructureTypes.Add(structures[i].GetComponent<StructureBehavior>().currentStructureType);
+            savedStructureVariations.Add(structures[i].GetComponent<StructureBehavior>().currentVariation);
+
+            savedStructsPosX.Add(structures[i].transform.position.x);
+            savedStructsPosY.Add(structures[i].transform.position.y);
+            savedStructsPosZ.Add(structures[i].transform.position.z);
+
+            savedStructsRotX.Add(structures[i].transform.eulerAngles.x);
+            savedStructsRotY.Add(structures[i].transform.eulerAngles.y);
+            savedStructsRotZ.Add(structures[i].transform.eulerAngles.z);
+        }
+
+        Debug.Log(savedStructureTypes[0] + " " + savedStructureTypes[savedStructureTypes.Count-1]);
+    }
+
+    public void LoadSavedDungeon(ref int currentLevel, ref GameObject[] levels)
+    {
+        levels[currentLevel].GetComponent<DungeonGenerator>().dungeonIsBeingLoaded = true;
+        currentLevel = savedLevel;
+        levels[currentLevel].GetComponent<DungeonGenerator>().ClearDungeon();
+        for (int i = 0; i < savedStructureAmount; i++)
+        {
+            levels[currentLevel].GetComponent<DungeonGenerator>().GenerateSavedRoom(savedStructureTypes[i], savedStructureVariations[i], new Vector3(savedStructsPosX[i], savedStructsPosY[i], savedStructsPosZ[i]), new Vector3(savedStructsRotX[i], savedStructsRotY[i], savedStructsRotZ[i]));
+        }
+        levels[currentLevel].GetComponent<DungeonGenerator>().CompleteGeneration();
+    }
 }
 

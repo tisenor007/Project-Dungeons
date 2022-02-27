@@ -59,6 +59,7 @@ public class LevelManager : MonoBehaviour
     public void ChangeGameStateToNewGame()
     {
         GameManager.manager.ResetScene();
+        foreach (GameObject level in GameManager.manager.levels) { level.GetComponent<DungeonGenerator>().ClearDungeon(); }
         GameManager.manager.playerAndCamera.transform.GetChild(0).GetComponent<PlayerStats>().ResetStats();
         GameManager.manager.ChangeState(GameState.GAMEPLAY);
     }

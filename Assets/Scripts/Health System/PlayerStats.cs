@@ -6,12 +6,12 @@ using UnityEngine.UI;
 public class PlayerStats : GameCharacter 
 {
     public GameObject shield;
+    [HideInInspector]public Vector3 respawnPos = Vector3.zero;
     [SerializeField] private GameObject maleHitArea;
     [SerializeField] private GameObject femaleHitArea;
     [SerializeField] private Slider healthBar;
     [SerializeField] private Text healthText;
     [Space]
-    [SerializeField] private Vector3 respawnPos = new Vector3(-56.0f, 5.11f, -63.0f);
     private GameObject hitArea;
     private bool healing;
 
@@ -60,7 +60,8 @@ public class PlayerStats : GameCharacter
     {
         base.ResetStats();
         // transform.GetChild(0).gameObject.SetActive(true); Removed to prevent issues with character selection, since this is handled there to create the ability for multiple genders
-        transform.localPosition = respawnPos;
+        respawnPos = new Vector3(0, 2, 0);
+        this.transform.position = respawnPos;
         transform.parent.localEulerAngles = Vector3.zero;
         StopAttacking();
         StopBlocking();

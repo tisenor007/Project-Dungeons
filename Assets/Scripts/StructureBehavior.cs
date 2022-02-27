@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class StructureBehavior : MonoBehaviour
 {
-    [HideInInspector]public DungeonGenerator.StructureType thisStructureType;
+    [HideInInspector]public DungeonGenerator.StructureType currentStructureType;
+    [HideInInspector] public int currentVariation;
+    [SerializeField] private Light[] lights;
     private DungeonGenerator dungeonGenerator;
     private Vector3 front;
     private Vector3 back;
@@ -19,8 +21,14 @@ public class StructureBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (dungeonGenerator == null) { dungeonGenerator = GameObject.Find("DungeonGenerator").GetComponent<DungeonGenerator>(); }
-        OpenDoors(thisStructureType);
+        if (this.transform.gameObject.activeSelf == true) 
+        {
+            dungeonGenerator = GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>();
+            OpenDoors(currentStructureType);
+        }
+
+        if (currentStructureType == DungeonGenerator.StructureType.StartStructure) { Debug.Log("StartIsHere"); }
+        if (currentStructureType == DungeonGenerator.StructureType.EndStructure) { Debug.Log("EndIsHere"); }
     }
 
     private void OpenDoors(DungeonGenerator.StructureType structureType)
@@ -30,20 +38,14 @@ public class StructureBehavior : MonoBehaviour
         back = new Vector3(transform.position.x - dungeonGenerator.structureSpacing, transform.position.y, transform.position.z);
         right = new Vector3(transform.position.x, transform.position.y, transform.position.z + dungeonGenerator.structureSpacing);
         left = new Vector3(transform.position.x, transform.position.y, transform.position.z - dungeonGenerator.structureSpacing);
-        if (structureType == DungeonGenerator.StructureType.Hallway) 
-        {
-            if (CanStructureConnect(front) && transform.eulerAngles.y == 0) {OpenDoor(front);}
-            if (CanStructureConnect(back) && transform.eulerAngles.y == 0) { OpenDoor(back); }
-            if (CanStructureConnect(right) && transform.eulerAngles.y == 90) { OpenDoor(back); }
-            if (CanStructureConnect(left) && transform.eulerAngles.y == 90) { OpenDoor(front); }
-        }
-        else if (structureType == DungeonGenerator.StructureType.Room)
-        {
-            if (CanStructureConnect(front)) { OpenDoor(front); }
-            if (CanStructureConnect(back)) { OpenDoor(back); }
-            if (CanStructureConnect(right)) { OpenDoor(right); }
-            if (CanStructureConnect(left)) { OpenDoor(left); }
-        }
+        
+        if (CanStructureConnect(front) && transform.eulerAngles.y == 0) { OpenDoor(front); }
+        if (CanStructureConnect(back) && transform.eulerAngles.y == 0) { OpenDoor(back); }
+        //else ifs are for strange hallway door-close bug
+        if (CanStructureConnect(right) && transform.eulerAngles.y == 0) { OpenDoor(right); }
+        else if(CanStructureConnect(right) && transform.eulerAngles.y == 90) { OpenDoor(back); }
+        if (CanStructureConnect(left) && transform.eulerAngles.y == 0) { OpenDoor(left); }
+        else if (CanStructureConnect(left) && transform.eulerAngles.y == 90) { OpenDoor(front); }
     }
 
     private void OpenDoor(Vector3 direction)
@@ -60,27 +62,36 @@ public class StructureBehavior : MonoBehaviour
         {
             if (dungeonGenerator.structures[i].transform.position == chosenSpot)
             {
-                //clean this in the future
-                if (dungeonGenerator.structures[i].GetComponent<StructureBehavior>().thisStructureType == DungeonGenerator.StructureType.Hallway)
-                {
-                    if(chosenSpot == front || chosenSpot == back)
-                    {
-                        if (dungeonGenerator.structures[i].transform.eulerAngles.y == 90) { return false; }
-                        return true;
-                    }
-                    else if (chosenSpot == left || chosenSpot == right)
-                    {
-                        if (dungeonGenerator.structures[i].transform.eulerAngles.y == 0) { return false; }
-                        return true;
-                    }
-                    return true;
-                }
-                else if (dungeonGenerator.structures[i].GetComponent<StructureBehavior>().thisStructureType == DungeonGenerator.StructureType.Room)
-                {
-                    return true;
-                }
+                return IsStructureConnectable(chosenSpot, i);
             }
         }
         return false;
+    }
+
+    private bool IsStructureConnectable(Vector3 chosenSpot, int structureToBeChecked)
+    {
+        if (dungeonGenerator.structures[structureToBeChecked].GetComponent<StructureBehavior>().currentStructureType == DungeonGenerator.StructureType.Hallway)
+        {
+            if (chosenSpot == front || chosenSpot == back)
+            {
+                if (dungeonGenerator.structures[structureToBeChecked].transform.eulerAngles.y == 90) { return false; }
+                return true;
+            }
+            else if (chosenSpot == left || chosenSpot == right)
+            {
+                if (dungeonGenerator.structures[structureToBeChecked].transform.eulerAngles.y == 0) { return false; }
+                return true;
+            }
+        }
+        return true;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Player") { foreach (Light light in lights) { light.enabled = true; } }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Player") { foreach (Light light in lights) { light.enabled = false; } }
     }
 }
