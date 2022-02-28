@@ -59,10 +59,12 @@ public class LevelManager : MonoBehaviour
     public void ChangeGameStateToNewGame()
     {
         GameManager.manager.ResetScene();
+
         foreach (GameObject level in GameManager.manager.levels) 
         {
             if (level.GetComponent<DungeonGenerator>().dungeonGenerated) { level.GetComponent<DungeonGenerator>().ClearDungeon(); }
         }
+
         GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonIsGenerating = true;
         GameManager.manager.playerAndCamera.transform.GetChild(0).GetComponent<PlayerStats>().ResetStats();
         GameManager.manager.ChangeState(GameState.GAMEPLAY);
@@ -101,6 +103,11 @@ public class LevelManager : MonoBehaviour
     public void ChangeGameStateToSaveOption()
     {
         GameManager.manager.ChangeState(GameState.SAVEOPTION);
+    }
+
+    public void ChangeGameStateToLoadingScreen()
+    {
+        GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
     }
 
     //feedback
