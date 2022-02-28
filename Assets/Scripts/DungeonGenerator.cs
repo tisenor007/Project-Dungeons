@@ -17,7 +17,6 @@ public class DungeonGenerator : MonoBehaviour
     public int hallwayChance = 10;
     [HideInInspector] public bool dungeonGenerated = false;
     [HideInInspector] public bool dungeonIsGenerating = false;
-    [HideInInspector] public bool dungeonIsBeingLoaded = false;
     [HideInInspector] public List<GameObject> structures = new List<GameObject>();
     [SerializeField] private GameObject startStructure;
     [SerializeField] private GameObject endStructure;
@@ -99,19 +98,19 @@ public class DungeonGenerator : MonoBehaviour
         nextStructureType = (StructureType)ChooseNumbByChance((int)StructureType.Room, (int)StructureType.Hallway, roomChance, hallwayChance);
         if (nextStructureType == StructureType.Room)
         {
-            if (!VariantIsRandomized(ref roomVariations)) { return; }
+            if (!VariantIsRandomized(roomVariations)) { return; }
             if (!DirectionIsRandomized()) { return; }
             InstantiateStructure(roomVariations[nextStructureVariation], nextStructureLoc, nextStructureRot, nextStructureType, nextStructureVariation);
         }
         else if (nextStructureType == StructureType.Hallway)
         {
-            if (!VariantIsRandomized(ref roomVariations)) { return; }
+            if (!VariantIsRandomized(roomVariations)) { return; }
             if (!DirectionIsRandomized()) { return; }
             InstantiateStructure(hallwayVariations[nextStructureVariation], nextStructureLoc, nextStructureRot, nextStructureType, nextStructureVariation);
         }
     }
 
-    private bool VariantIsRandomized(ref GameObject[] structureVariations)
+    private bool VariantIsRandomized(GameObject[] structureVariations)
     {
         if (structures.Count <= 0) { return false; }
         if (structureVariations.Length <= 0) { return false; }

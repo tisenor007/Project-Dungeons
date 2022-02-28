@@ -91,7 +91,11 @@ public class GameManager : MonoBehaviour
                         SceneManager.LoadScene(0, LoadSceneMode.Single);
                         SaveScreenState();
                     }
-                    if (levels[currentLevel].activeSelf == true) { levels[currentLevel].SetActive(false); }
+                    //if (levels[currentLevel].GetComponent<DungeonGenerator>().dungeonGenerated == false)
+                    //{
+                    //    levels[currentLevel].GetComponent<DungeonGenerator>().dungeonIsGenerating = true;
+                    //}
+                    levels[currentLevel].SetActive(false);
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     uiManager.LoadTitleMenu();
                     characterSelection.HideModels();
@@ -110,11 +114,6 @@ public class GameManager : MonoBehaviour
                     uiManager.LoadGameplay();
                     characterSelection.HideModels();
                     if (levels[currentLevel].activeSelf == false) { levels[currentLevel].SetActive(true); }
-                    if (levels[currentLevel].GetComponent<DungeonGenerator>().dungeonGenerated == false && levels[currentLevel].GetComponent<DungeonGenerator>().dungeonIsBeingLoaded == false) 
-                    { 
-                        levels[currentLevel].GetComponent<DungeonGenerator>().dungeonIsGenerating = true;
-                    }
-
                     playerAndCamera.SetActive(true);
                     return;
                 }
@@ -254,7 +253,7 @@ public class GameManager : MonoBehaviour
         savedInfo.playerSpawnPosY = playerAndCamera.transform.GetChild(0).gameObject.transform.position.y;
         savedInfo.playerSpawnPosZ = playerAndCamera.transform.GetChild(0).gameObject.transform.position.z;
         savedInfo.savedLevel = currentLevel;
-        savedInfo.SaveDungeon(ref levels[currentLevel].GetComponent<DungeonGenerator>().structures);
+        savedInfo.SaveDungeon(levels[currentLevel].GetComponent<DungeonGenerator>().structures);
 
         saveText.CrossFadeAlpha(1, .1f, true);
         StartCoroutine(WaitToFadeText("save"));
@@ -277,7 +276,7 @@ public class GameManager : MonoBehaviour
             playerStats.ResetStats();
             //
             SceneManager.LoadScene(loadedInfo.scene);
-            loadedInfo.LoadSavedDungeon(ref currentLevel, ref levels);
+            loadedInfo.LoadSavedDungeon(currentLevel, levels);
             levelManager.activeScreen = loadedInfo.activeScreen;
             gameState = loadedInfo.gameState;
             playerStats.health = loadedInfo.health;
@@ -361,7 +360,7 @@ class SaveInfo
     public List<float> savedStructsRotZ = new List<float>();
     public int savedStructureAmount;
 
-    public void SaveDungeon(ref List<GameObject> structures)
+    public void SaveDungeon(List<GameObject> structures)
     {
         savedStructureTypes.Clear();
         savedStructureVariations.Clear();
@@ -389,9 +388,8 @@ class SaveInfo
         Debug.Log(savedStructureTypes[0] + " " + savedStructureTypes[savedStructureTypes.Count-1]);
     }
 
-    public void LoadSavedDungeon(ref int currentLevel, ref GameObject[] levels)
+    public void LoadSavedDungeon(int currentLevel, GameObject[] levels)
     {
-        levels[currentLevel].GetComponent<DungeonGenerator>().dungeonIsBeingLoaded = true;
         currentLevel = savedLevel;
         levels[currentLevel].GetComponent<DungeonGenerator>().ClearDungeon();
         for (int i = 0; i < savedStructureAmount; i++)
