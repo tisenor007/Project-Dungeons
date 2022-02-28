@@ -11,6 +11,7 @@ public class Enemy : GameCharacter
     public enum State
     {
         Idle,
+        Spotted,
         Chasing,
         Attacking
     }
@@ -62,6 +63,10 @@ public class Enemy : GameCharacter
                 Idle();
                 break;
 
+            case State.Spotted:
+                Spotted();
+                break;
+
             case State.Chasing:
                 Chasing();
                 break;
@@ -87,6 +92,11 @@ public class Enemy : GameCharacter
         }
 
         Debug.Log("enemy ai running");
+    }
+
+    public virtual void Spotted()
+    {
+
     }
 
     public virtual void Chasing()

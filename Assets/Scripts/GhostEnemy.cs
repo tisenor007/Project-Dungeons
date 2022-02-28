@@ -20,11 +20,13 @@ public class GhostEnemy : Enemy
         //ghostBody = transform.GetChild(0).position;
 
         this.viewDistance = 10;
-        this.health = 100;
-        this.hitDuration = 3.0f;
+        this.health = 75;
+        this.maxHealth = 100;
+        this.hitDuration = 1.0f;
         this.damage = 5;
-        this.speed = 5.0f;
-        this.rotationSpeed = 0.1f;
+        this.speed = 6.0f;
+        this.rotationSpeed = 10f;
+        this.attackDistance = 4;
 
         bobUp = transform.position.y + 3;
         bobDown = transform.position.y + 1;
@@ -33,18 +35,23 @@ public class GhostEnemy : Enemy
         InitEnemy();
     }
 
-    void Radius() // -90? -0 > 0 > 90 > 180 > -180 > -90 ||
+    void Radius() // || -90? -0 > 0 > 90 > 180 > -180 > -90 ||
     {
         transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime, Space.Self);
 
-        if (transform.localEulerAngles.y > 45 && transform.localEulerAngles.y < 135  || (transform.localEulerAngles.y > 135 && transform.localEulerAngles.y < -135))
+        if (transform.localEulerAngles.y > 0 && transform.localEulerAngles.y < 45)
         {
+            //Debug.Log("45");
             rotationSpeed = 10f;
-            Debug.Log("BETWEEN 45 AND 135");
+        }
+        else if (transform.localEulerAngles.y > 180 && transform.localEulerAngles.y < 225)
+        {
+            //Debug.Log("180");
+            rotationSpeed = 10f;
         }
         else
         {
-            rotationSpeed = 20f;
+            rotationSpeed = 100f;
         }
 
     }
@@ -80,25 +87,25 @@ public class GhostEnemy : Enemy
     {
         Bobbing();
         playerLocation = playerStats.gameObject.transform.position;
-
+        enemyNavMeshAgent.speed = speed;
         transform.Translate(Vector3.forward * Time.deltaTime * speed);
-        
         Radius();
 
 
 
         if (distanceFromPlayer <= viewDistance)
         {
-            //SwitchState(State.Chasing);
+            SwitchState(State.Chasing);
         }
     }
     public override void Chasing()
     {
-        enemyNavMeshAgent.speed = 10;
-        enemyNavMeshAgent.SetDestination(playerLocation);
+        /*enemyNavMeshAgent.speed = 10;
+        enemyNavMeshAgent.SetDestination(playerLocation);*/
 
         if (distanceFromPlayer <= attackDistance)
         {
+            enemyNavMeshAgent.speed = speed;
             hitTimer = hitDuration;
             SwitchState(State.Attacking);
         }
