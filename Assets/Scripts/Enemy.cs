@@ -11,7 +11,6 @@ public class Enemy : GameCharacter
     public enum State
     {
         Idle,
-        Spotted,
         Chasing,
         Attacking
     }
@@ -61,10 +60,6 @@ public class Enemy : GameCharacter
         {
             case State.Idle:
                 Idle();
-                break;
-
-            case State.Spotted:
-                Spotted();
                 break;
 
             case State.Chasing:

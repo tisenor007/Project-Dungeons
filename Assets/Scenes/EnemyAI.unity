@@ -667,7 +667,7 @@ GameObject:
   - component: {fileID: 814924537}
   m_Layer: 0
   m_Name: Skeleton
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -702,7 +702,8 @@ MonoBehaviour:
   healthColour: {fileID: 505670737}
   healthBar: {fileID: 714633275}
   cam: {fileID: 421588788}
-  rotationDistance: 0
+  walkDistance: 0
+  currentRotationDistance: 0
   walkToLocation: {x: 0, y: 0, z: 0}
 --- !u!195 &814924532
 NavMeshAgent:
@@ -714,7 +715,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 4
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -795,14 +796,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 814924530}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -14.9, y: 2, z: 40.3}
+  m_LocalRotation: {x: -0, y: 0.084201045, z: -0, w: -0.9964488}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 0.75, y: 3, z: 0.75}
   m_Children:
   - {fileID: 869848719}
   m_Father: {fileID: 0}
   m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 350.34, z: 0}
 --- !u!54 &814924537
 Rigidbody:
   m_ObjectHideFlags: 0

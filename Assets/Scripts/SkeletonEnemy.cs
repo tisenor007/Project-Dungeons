@@ -9,12 +9,15 @@ public class SkeletonEnemy : Enemy
     public float currentRotationDistance;
     private float rotationSpeed;
 
+    private const float caughtTimerConst = 3.0f;
+    private float caughtTimer;
+
     [SerializeField]
     private Vector3 walkToLocation = Vector3.zero;
 
     void Start()
     {
-        this.viewDistance = 5;
+        this.viewDistance = 10;
         this.health = 100;
         this.maxHealth = 100;
         this.hitDuration = 3.0f;
@@ -69,6 +72,42 @@ public class SkeletonEnemy : Enemy
             walkToLocation = transform.position;
             Debug.Log("AT LOCATION");
             Rotate();
+        }
+
+        if (distanceFromPlayer <= viewDistance)
+        {
+            caughtTimer = caughtTimerConst;
+            SwitchState(State.Chasing);
+        }
+    }
+
+    public override void Chasing()
+    {
+        enemyNavMeshAgent.SetDestination(transform.position);
+        transform.LookAt(playerLocation);
+
+        caughtTimer -= Time.deltaTime;
+        Debug.Log(caughtTimer);
+
+        if (caughtTimer <= 0)
+        {
+            enemyNavMeshAgent.speed = speed * 2;
+            enemyNavMeshAgent.SetDestination(playerLocation);
+        }
+
+        if (distanceFromPlayer <= attackDistance)
+        {
+            enemyNavMeshAgent.speed = speed;
+            walkToLocation = transform.position;
+            SwitchState(State.Attacking);
+        }
+
+        if (distanceFromPlayer > viewDistance)
+        {
+            enemyNavMeshAgent.speed = speed;
+            walkToLocation = transform.position;
+            caughtTimer = caughtTimerConst;
+            SwitchState(State.Idle);
         }
     }
 
