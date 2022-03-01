@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public Animator animator;
+    public GameObject gameCamera;
+    public LayerMask body;
+    public LayerMask interactable;
+    public int runSpeed = 5;
+    public int sprintSpeed = 10;
     public enum MovementDirection
     {
         Forward,
@@ -20,14 +26,6 @@ public class PlayerController : MonoBehaviour
         Jumping,
         Falling
     }
-
-    public Animator animator;
-    public GameObject gameCamera;
-    public LayerMask body;
-    public LayerMask interactable;
-    public int runSpeed = 5;
-    public int sprintSpeed = 10;
-
     private enum BlendState
     {
         Idle_Running_Sprinting,
