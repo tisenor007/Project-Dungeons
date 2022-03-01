@@ -9,7 +9,7 @@ public class GhostEnemy : Enemy
 
     public float bobUp;
     public float bobDown;
-    public float bobSpeed = 2;
+    public float bobSpeed = 0.5f;
 
     public bool movingDown = false;
 
@@ -26,27 +26,26 @@ public class GhostEnemy : Enemy
         this.damage = 5;
         this.speed = 6.0f;
         this.rotationSpeed = 10f;
-        this.attackDistance = 4;
-
-        bobUp = transform.position.y + 3;
-        bobDown = transform.position.y + 1;
+        this.attackDistance = 2;
+        bobUp = transform.position.y + 4;
+        bobDown = transform.position.y + 2;
         enemyNavMeshAgent.speed = speed;
 
         InitEnemy();
     }
 
-    void Radius() // || -90? -0 > 0 > 90 > 180 > -180 > -90 ||
+    void Radius() // || -90 > -0 > 0 > 90 > 180 > -180 > -90 ||
     {
         transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime, Space.Self);
 
         if (transform.localEulerAngles.y > 0 && transform.localEulerAngles.y < 45)
         {
-            //Debug.Log("45");
+            Debug.Log("45");
             rotationSpeed = 10f;
         }
         else if (transform.localEulerAngles.y > 180 && transform.localEulerAngles.y < 225)
         {
-            //Debug.Log("180");
+            Debug.Log("180");
             rotationSpeed = 10f;
         }
         else
@@ -60,7 +59,7 @@ public class GhostEnemy : Enemy
     {
         if (movingDown == false)
         {
-            ghostBody.transform.Translate(Vector3.up * Time.deltaTime, Space.World);
+            ghostBody.transform.Translate(Vector3.up * Time.deltaTime * bobSpeed, Space.World);
 
 
             if (ghostBody.transform.position.y > bobUp)
@@ -71,7 +70,7 @@ public class GhostEnemy : Enemy
         }
         else
         {
-            ghostBody.transform.Translate(Vector3.down * Time.deltaTime, Space.World);
+            ghostBody.transform.Translate(Vector3.down * Time.deltaTime * bobSpeed, Space.World);
 
             if (ghostBody.transform.position.y < bobDown)
             {
@@ -90,8 +89,10 @@ public class GhostEnemy : Enemy
         enemyNavMeshAgent.speed = speed;
         transform.Translate(Vector3.forward * Time.deltaTime * speed);
         Radius();
+        //Debug.Log("LOCAL = " + transform.localEulerAngles.y);
+        //Debug.Log("EULER = " + transform.eulerAngles.y);
 
-
+        
 
         if (distanceFromPlayer <= viewDistance)
         {
@@ -100,8 +101,9 @@ public class GhostEnemy : Enemy
     }
     public override void Chasing()
     {
-        /*enemyNavMeshAgent.speed = 10;
-        enemyNavMeshAgent.SetDestination(playerLocation);*/
+        enemyNavMeshAgent.speed = 10;
+
+        enemyNavMeshAgent.SetDestination(playerLocation);
 
         if (distanceFromPlayer <= attackDistance)
         {
@@ -112,6 +114,7 @@ public class GhostEnemy : Enemy
 
         if (distanceFromPlayer >= viewDistance)
         {
+            enemyNavMeshAgent.ResetPath();
             enemyNavMeshAgent.speed = speed;
             SwitchState(State.Idle);
         }

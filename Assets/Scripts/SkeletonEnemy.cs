@@ -50,7 +50,7 @@ public class SkeletonEnemy : Enemy
             rotationSpeed = 100.0f;
             Debug.Log("ROTATION COMPLETE");
             walkDistance = Random.Range(4, 9);
-            //walkToLocation.x = transform.position.x + walkDistance;
+
             walkToLocation = transform.position + (transform.forward * walkDistance);
             previousRotationDistance = currentRotationDistance;
             currentRotationDistance += Random.Range(45, 135);
@@ -83,6 +83,7 @@ public class SkeletonEnemy : Enemy
 
     public override void Chasing()
     {
+        viewDistance = viewDistance * 2;
         enemyNavMeshAgent.SetDestination(transform.position);
         transform.LookAt(playerLocation);
 
@@ -113,9 +114,8 @@ public class SkeletonEnemy : Enemy
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("WALK HIT");
+        Debug.Log("WALL HIT");
         enemyNavMeshAgent.Warp(transform.position - transform.forward * 1.5f);
-        //transform.rotation = Quaternion.Euler(0, -transform.localRotation.y, 0);
 
         currentRotationDistance = previousRotationDistance += Random.Range(135, 180);
         rotationSpeed = 200.0f;
