@@ -19,9 +19,9 @@ public class Enemy : GameCharacter
     public NavMeshAgent enemyNavMeshAgent;
     public PlayerStats playerStats;
 
-    public int viewDistance;
-    public int hearingDistance;
-    public int attackDistance;
+    public float viewDistance;
+    public float hearingDistance;
+    public float attackDistance;
     public float speed;
 
     public float distanceFromPlayer;
