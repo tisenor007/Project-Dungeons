@@ -83,7 +83,7 @@ public class SkeletonEnemy : Enemy
 
     public override void Chasing()
     {
-        viewDistance = viewDistance * 2;
+        //viewDistance = viewDistance * 2;
         enemyNavMeshAgent.SetDestination(transform.position);
         transform.LookAt(playerLocation);
 
