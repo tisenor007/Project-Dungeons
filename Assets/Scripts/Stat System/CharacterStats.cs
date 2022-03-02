@@ -28,6 +28,12 @@ public abstract class CharacterStats : MonoBehaviour
     {
         health = maxHealth; // bypass feedback by setting value without healw
         isAlive = true;
+        ResetWeapon();
+    }
+
+    public void ResetWeapon()
+    {
+        currentWeapon = defaultWeapon;
     }
 
     public virtual void TakeDamage(int damage, Transform character)

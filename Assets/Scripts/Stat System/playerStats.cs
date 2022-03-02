@@ -8,11 +8,10 @@ public class PlayerStats : CharacterStats
     //initialization
     [SerializeField] private GameObject maleHitArea;
     [SerializeField] private GameObject femaleHitArea;
-    [SerializeField] private float unarmedAttackSpeed = 1.34f;
 
     //equipment
-    [SerializeField] private GameObject weaponObject;
-    public GameObject weaponHitArea;
+    private GameObject weaponObject;
+    public Collider weaponHitArea;
     public GameObject shield;
 
     //HUD
@@ -20,12 +19,6 @@ public class PlayerStats : CharacterStats
     [SerializeField] private Text healthText;
     [Space]
     [SerializeField] private Vector3 respawnPos = new Vector3(-56.0f, 5.11f, -63.0f);
-
-
-    private void Start()
-    {
-        attackSpeed = unarmedAttackSpeed;
-    }
 
     private void Update()
     {
@@ -82,23 +75,31 @@ public class PlayerStats : CharacterStats
     {
         if (isMale)
         {
-            weaponHitArea = maleHitArea;
+            weaponHitArea = maleHitArea.GetComponent<Collider>();
         }
         else
         {
-            weaponHitArea = femaleHitArea;
+            weaponHitArea = femaleHitArea.GetComponent<Collider>();
         }
+
+        weaponObject = weaponHitArea.transform.parent.parent.gameObject; // parent.parent is to get: hitarea > handpos > weapon root
     }
 
     public void EquipWeapon(GameObject newWeaponObject)
     {
-        weaponObject = Instantiate(newWeaponObject, weaponHitArea.transform.parent);
+        //get player hands
+        Transform playerHands = weaponObject.transform.parent;
+        
+        DiscardWeapon();
+        //Destroy(weaponObject);
+
+        weaponObject = Instantiate(newWeaponObject, playerHands);
 
         HitArea hitArea = weaponObject.transform.GetChild(0).GetComponentInChildren<HitArea>();
 
         hitArea.PlayerStats = this;
         hitArea.PlayerController = gameObject.GetComponent<PlayerController>();
-        weaponHitArea = hitArea.gameObject;
+        weaponHitArea = hitArea.gameObject.GetComponent<Collider>();
     }
 
     public void DiscardWeapon() // should be replaced by unequip if inventory is established
