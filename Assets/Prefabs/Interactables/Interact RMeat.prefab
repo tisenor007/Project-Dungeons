@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rotates: 1
   itemType: {fileID: 11400000, guid: ce15a791467e45a4e94725bf502f4a52, type: 2}
+  stationType: {fileID: 0}
 --- !u!108 &1087364117351341904
 Light:
   m_ObjectHideFlags: 0
@@ -123,6 +124,75 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1001 &2996302447728344693
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1087364117778210323}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: e9afddde84e7f1347b25f0d6028c0836, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e9afddde84e7f1347b25f0d6028c0836, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 15.969255
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e9afddde84e7f1347b25f0d6028c0836, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 15.969252
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e9afddde84e7f1347b25f0d6028c0836, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 15.9692545
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e9afddde84e7f1347b25f0d6028c0836, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.62
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e9afddde84e7f1347b25f0d6028c0836, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e9afddde84e7f1347b25f0d6028c0836, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e9afddde84e7f1347b25f0d6028c0836, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7478634
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e9afddde84e7f1347b25f0d6028c0836, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.5260839
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e9afddde84e7f1347b25f0d6028c0836, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.15532991
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e9afddde84e7f1347b25f0d6028c0836, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.37390995
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e9afddde84e7f1347b25f0d6028c0836, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -64.56
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e9afddde84e7f1347b25f0d6028c0836, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 22.024
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e9afddde84e7f1347b25f0d6028c0836, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -67.143
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: e9afddde84e7f1347b25f0d6028c0836, type: 3}
+      propertyPath: m_Name
+      value: BBQChicken
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e9afddde84e7f1347b25f0d6028c0836, type: 3}
 --- !u!1001 &4539060023544435341
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -130,6 +200,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1087364117351341905}
     m_Modifications:
+    - target: {fileID: 3596947758015564929, guid: 468b428ab92d1e641ab3513532fa06f6, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3596947758015564930, guid: 468b428ab92d1e641ab3513532fa06f6, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
     - target: {fileID: 3596947758015564957, guid: 468b428ab92d1e641ab3513532fa06f6, type: 3}
       propertyPath: m_Name
       value: Raw Meat
@@ -137,6 +215,10 @@ PrefabInstance:
     - target: {fileID: 3596947758015564957, guid: 468b428ab92d1e641ab3513532fa06f6, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3596947758015564957, guid: 468b428ab92d1e641ab3513532fa06f6, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3596947758015564958, guid: 468b428ab92d1e641ab3513532fa06f6, type: 3}
       propertyPath: m_RootOrder
