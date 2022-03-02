@@ -11,6 +11,9 @@ public class GhostEnemy : Enemy
     public float bobDown;
     public float bobSpeed = 0.5f;
 
+    public float slowSpin = 10.0f;
+    public float fastSpin = 100.0f;
+
     public bool movingDown = false;
 
     public Transform ghostBody;
@@ -40,12 +43,12 @@ public class GhostEnemy : Enemy
         if (transform.localEulerAngles.y > 0 && transform.localEulerAngles.y < 45)
         {
             //Debug.Log("45");
-            rotationSpeed = 10f;
+            rotationSpeed = slowSpin;
         }
         else if (transform.localEulerAngles.y > 180 && transform.localEulerAngles.y < 225)
         {
             //Debug.Log("180");
-            rotationSpeed = 10f;
+            rotationSpeed = fastSpin;
         }
         else
         {
@@ -88,11 +91,6 @@ public class GhostEnemy : Enemy
         enemyNavMeshAgent.speed = speed;
         transform.Translate(Vector3.forward * Time.deltaTime * speed);
         Radius();
-        //Debug.Log("LOCAL = " + transform.localEulerAngles.y);
-        //Debug.Log("EULER = " + transform.eulerAngles.y);
-
-        Debug.Log("HEALTH: " + Health);
-        Debug.Log("MAX HEALTH: " + maxHealth);
 
         if (distanceFromPlayer <= viewDistance)
         {

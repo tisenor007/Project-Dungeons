@@ -8,41 +8,35 @@ using System;
 
 public class Enemy : GameCharacter
 {
-    public enum State
+    protected enum State
     {
         Idle,
         Chasing,
         Attacking
     }
 
-    public State enemyState;
-    public NavMeshAgent enemyNavMeshAgent;
-    public PlayerStats playerStats;
+    protected State enemyState;
+    protected NavMeshAgent enemyNavMeshAgent;
+    protected PlayerStats playerStats;
 
-    public float viewDistance;
-    public float hearingDistance;
-    public float attackDistance;
-    public float speed;
+    protected float viewDistance;
+    protected float hearingDistance;
+    protected float attackDistance;
+    protected float speed;
 
-    public float distanceFromPlayer;
-    public float hitTimer;
-    public float hitDuration;
-    public float stunnedHitDuration;
+    protected float distanceFromPlayer;
+    protected float hitTimer;
+    protected float hitDuration;
+    protected float stunnedHitDuration;
 
-
-    public Vector3 playerLocation;
-    private Vector3 enemyLocation;
-    public Ray enemySight;
-    public RaycastHit hitInfo;
+    protected Vector3 playerLocation;
+    protected Vector3 enemyLocation;
+    protected Ray enemySight;
+    protected RaycastHit hitInfo;
 
     [SerializeField] private Image healthColour;
     [SerializeField] private Slider healthBar;
     [SerializeField] private Transform cam;
-
-    void Start()
-    {
-        
-    }
 
     public void Update()
     {
@@ -54,7 +48,7 @@ public class Enemy : GameCharacter
         playerLocation = playerStats.gameObject.transform.position;
         distanceFromPlayer = Vector3.Distance(playerLocation, enemyLocation);
 
-        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * viewDistance, Color.white);
+        //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * viewDistance, Color.white);
 
         switch (enemyState)
         {
@@ -86,12 +80,7 @@ public class Enemy : GameCharacter
             }
         }
 
-        Debug.Log("enemy ai running");
-    }
-
-    public virtual void Spotted()
-    {
-
+        //Debug.Log("enemy ai running");
     }
 
     public virtual void Chasing()
@@ -136,7 +125,7 @@ public class Enemy : GameCharacter
         }
     }
 
-    public void SwitchState(State newState)
+    protected void SwitchState(State newState)
     {
         enemyState = newState;
     }
@@ -162,15 +151,17 @@ public class Enemy : GameCharacter
     public void InitEnemy()
     {
         SwitchState(State.Idle);
-        enemyNavMeshAgent = GetComponent<NavMeshAgent>();
+
         healthColour = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
         healthBar = transform.GetChild(0).GetChild(0).GetComponent<Slider>();
-        healthBar.maxValue = maxHealth;
         healthColour.color = new Color32(74, 227, 14, 255);
+
         cam = GameObject.Find("Main Camera").GetComponent<Transform>();
         playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
+        enemyNavMeshAgent = GetComponent<NavMeshAgent>();
 
         maxHealth = Health;
+        healthBar.maxValue = maxHealth;
         stunnedHitDuration = hitDuration * 1.5f;
     }
 
