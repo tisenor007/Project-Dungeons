@@ -20,20 +20,17 @@ public abstract class Weapon : Equipment
         // set player stats
         // damage
         playerStats.Damage = damage;
-        Debug.LogWarning($"Setting {playerStats.gameObject.name} damage to {damage}.");
 
         // attack speed
         playerStats.AttackSpeed = attackSpeed;
-        Debug.LogWarning($"Setting {playerStats.gameObject.name} attack speed to {attackSpeed}");
         
         // item type
         playerStats.CurrentWeapon = this;
-        Debug.LogWarning($"Setting Item Type");
+        
+        Debug.LogWarning($"Set {playerStats.gameObject.name}, damage = {damage}, speed = {attackSpeed}, type = {playerStats.CurrentWeapon}.");
 
         //equip 
         playerStats.EquipWeapon(equipment);
-
-
     }
 
 }
