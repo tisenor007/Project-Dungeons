@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class Weapon : Equipment
 {
     public int damage;
-    public int attackSpeed;
+    public float attackSpeed;
 
     public override void Equip(GameObject equipment, GameObject interactor)
     {
@@ -31,6 +31,9 @@ public abstract class Weapon : Equipment
 
         //equip 
         playerStats.EquipWeapon(equipment);
+
+        // display equip feedback
+        GameManager.manager.levelManager.CreatePopUp($"Equipped {this.nameOfItem}:{damage} ATK", interactor.transform.position, Color.white);
     }
 
 }
