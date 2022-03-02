@@ -138,7 +138,7 @@ Light:
   m_Type: 0
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 4
+  m_Intensity: 6
   m_Range: 29.948145
   m_SpotAngle: 117.4776
   m_InnerSpotAngle: 21.80208
@@ -426,7 +426,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4b9519d799719c40adf363b8131e1ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisStructureType: 0
+  currentStructureType: 0
+  currentVariation: 0
   lights:
   - {fileID: 726696184837552757}
 --- !u!65 &5398867773731312610
