@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
+[RequireComponent(typeof(Light))]
+[RequireComponent(typeof(BoxCollider))]
 public class Interactable : MonoBehaviour
 {
+    // this interactable class works like a 
+
     public bool floatingObject = false;
 
     private float feedback__Intensity = 3;
