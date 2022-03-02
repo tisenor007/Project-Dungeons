@@ -25,8 +25,8 @@ public class PlayerController : MonoBehaviour
     public GameObject gameCamera;
     public LayerMask body;
     public LayerMask interactable;
-    public int runSpeed = 5;
-    public int sprintSpeed = 10;
+    public int runSpeed = 7;
+    public int sprintSpeed = 5;
 
     private enum BlendState
     {
@@ -42,9 +42,9 @@ public class PlayerController : MonoBehaviour
     private MovementMode movementMode;
     private Rigidbody rb;
     private float moveIntensity = 0.0f;
-    private float velocityAcceleration = 8.0f;
-    private float velocityDeceleration = 20.0f;
-    private float playerRotationSpeed = 650;
+    private float velocityAcceleration = 40.0f;
+    private float velocityDeceleration = 40.0f;
+    private float playerRotationSpeed = 1000;
     private float jumpHeight = 4f;
     private KeyCode forwardInput = KeyCode.W;
     private KeyCode backwardInput = KeyCode.S;
@@ -313,14 +313,14 @@ public class PlayerController : MonoBehaviour
 
     public void Attack() 
     {
-        if (playerStats.shield.activeSelf == false && playerStats.weaponHitArea.activeSelf == false) 
-        { playerStats.weaponHitArea.SetActive(true); } 
+        if (playerStats.shield.activeSelf == false && playerStats.weaponHitArea.enabled == false) 
+        { playerStats.weaponHitArea.enabled = true; } 
     }
 
     public void StopAttacking() 
     {
-        if (playerStats.weaponHitArea.activeSelf == true) 
-        { playerStats.weaponHitArea.SetActive(false); } 
+        if (playerStats.weaponHitArea.enabled == true) 
+        { playerStats.weaponHitArea.enabled = false; } 
     }
 
     public bool IsAttacking()

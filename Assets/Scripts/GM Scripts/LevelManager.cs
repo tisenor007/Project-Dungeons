@@ -9,6 +9,7 @@ public class LevelManager : MonoBehaviour
     [HideInInspector]
     public int activeScreen;
 
+    [SerializeField] private GameObject popUpPrefab;
     private static float creditsBottomPos = 2800;
     private static float creditsTopPos = -1425;
     private static float creditsBeginPos = -500;
@@ -92,10 +93,10 @@ public class LevelManager : MonoBehaviour
     }
 
     //feedback
-    public void CreatePopUp(string message, Vector3 popUpPos, GameObject prefab, Color color)
+    public void CreatePopUp(string message, Vector3 popUpPos, Color color)
     {
         InfoPopUp popUp;
-        popUp = Instantiate(prefab, new Vector3(popUpPos.x, popUpPos.y + 5, popUpPos.z), Quaternion.identity).GetComponent<InfoPopUp>();
+        popUp = Instantiate(popUpPrefab, new Vector3(popUpPos.x, popUpPos.y + 5, popUpPos.z), Quaternion.identity).GetComponent<InfoPopUp>();
         popUp.SetUp(message, color);
     }
 

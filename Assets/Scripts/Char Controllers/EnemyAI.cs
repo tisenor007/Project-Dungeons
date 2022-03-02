@@ -157,7 +157,7 @@ public class EnemyAI : CharacterStats
     public override void TakeDamage(int damage, Transform character)
     {
         base.TakeDamage(damage, character);
-        DamageFeedback(character, "-" + damage, new Color32(255, 69, 0, 255));
+        DamageFeedback(character, "-" + damage, Color.yellow);
         if (health <= 0)
         {
             Death();

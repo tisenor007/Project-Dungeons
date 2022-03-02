@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviour
     [Space]
     [SerializeField] private TextMeshProUGUI saveText;
     [SerializeField] private TextMeshProUGUI loadText;
-    [SerializeField] private GameObject popUpPrefab;
     private GameState savedScreenState;
     // title acts as default state
     private bool gameplay;
@@ -171,11 +170,6 @@ public class GameManager : MonoBehaviour
                     return;
                 }
         }
-    }
-
-    public void CreatePopUp(string message, Vector3 popUpPos, Color color)
-    {
-        levelManager.CreatePopUp(message, popUpPos, popUpPrefab, color);
     }
 
     public void ChangeState(GameState targetState)
