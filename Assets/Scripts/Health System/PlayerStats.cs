@@ -28,7 +28,7 @@ public class PlayerStats : GameCharacter
 
     public float GetHealthDividedMaxHealth()
     {
-        return (health / maxHealth);
+        return (Health / maxHealth);
     }
 
     public override void ResetStats()
@@ -45,7 +45,7 @@ public class PlayerStats : GameCharacter
     {
         base.TakeDamage(damage, character);
         DamageFeedback(character, "-" + damage, Color.red);
-        if (health <= 0)
+        if (Health <= 0)
         {
             GameManager.manager.levelManager.ChangeGameStateToLose();
             Death();

@@ -13,15 +13,14 @@ public class GhostEnemy : Enemy
 
     public bool movingDown = false;
 
-    public GameObject ghostBody;
+    public Transform ghostBody;
     void Start()
     {
         enemyNavMeshAgent = this.GetComponent<NavMeshAgent>();
-        //ghostBody = transform.GetChild(0).position;
+        ghostBody = transform.GetChild(1);
 
         this.viewDistance = 10;
-        this.health = 75;
-        this.maxHealth = 100;
+        this.Health = 50;
         this.hitDuration = 1.0f;
         this.damage = 5;
         this.speed = 6.0f;
@@ -40,12 +39,12 @@ public class GhostEnemy : Enemy
 
         if (transform.localEulerAngles.y > 0 && transform.localEulerAngles.y < 45)
         {
-            Debug.Log("45");
+            //Debug.Log("45");
             rotationSpeed = 10f;
         }
         else if (transform.localEulerAngles.y > 180 && transform.localEulerAngles.y < 225)
         {
-            Debug.Log("180");
+            //Debug.Log("180");
             rotationSpeed = 10f;
         }
         else
@@ -92,7 +91,8 @@ public class GhostEnemy : Enemy
         //Debug.Log("LOCAL = " + transform.localEulerAngles.y);
         //Debug.Log("EULER = " + transform.eulerAngles.y);
 
-        
+        Debug.Log("HEALTH: " + Health);
+        Debug.Log("MAX HEALTH: " + maxHealth);
 
         if (distanceFromPlayer <= viewDistance)
         {

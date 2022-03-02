@@ -11,7 +11,7 @@ public class PlayerHitArea : MonoBehaviour
         if (other.tag == "Enemy")
         {
             other.GetComponent<Enemy>().TakeDamage(player.damage, other.GetComponent<Transform>());
-            Debug.Log("ENEMY HEALTH: " + other.GetComponent<Enemy>().health);
+            Debug.Log("ENEMY HEALTH: " + other.GetComponent<Enemy>().Health);
         }
     }
 }

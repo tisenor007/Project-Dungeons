@@ -144,7 +144,7 @@ public class Enemy : GameCharacter
     public void UpdateHealth()
     {
         healthBar.value = Health;
-        //miniHealthBar.GetComponent<Slider>().value = health;
+        healthBar.maxValue = maxHealth;
 
         if (Health < maxHealth * 0.8 && Health > maxHealth * 0.6)
             healthColour.color = new Color32(167, 227, 16, 255);
@@ -165,18 +165,20 @@ public class Enemy : GameCharacter
         enemyNavMeshAgent = GetComponent<NavMeshAgent>();
         healthColour = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
         healthBar = transform.GetChild(0).GetChild(0).GetComponent<Slider>();
-
         healthBar.maxValue = maxHealth;
         healthColour.color = new Color32(74, 227, 14, 255);
         cam = GameObject.Find("Main Camera").GetComponent<Transform>();
         playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
+
+        maxHealth = Health;
+        stunnedHitDuration = hitDuration * 1.5f;
     }
 
     public override void TakeDamage(int damage, Transform character)
     {
         base.TakeDamage(damage, character);
         DamageFeedback(character, "-" + damage, new Color32(255, 69, 0, 255));
-        if (health <= 0)
+        if (Health <= 0)
         {
             Death();
         }
