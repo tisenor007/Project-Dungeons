@@ -15,11 +15,11 @@ C:/Users/macdu/OneDrive/Desktop/GitHubProjectDungeonsDONOTDELETE/Project-Dungeon
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-60037
+60100
 Successfully changed project path to: C:/Users/macdu/OneDrive/Desktop/GitHubProjectDungeonsDONOTDELETE/Project-Dungeons
 C:/Users/macdu/OneDrive/Desktop/GitHubProjectDungeonsDONOTDELETE/Project-Dungeons
 Using Asset Import Pipeline V2.
-Refreshing native plugins compatible for Editor in 21.20 ms, found 2 plugins.
+Refreshing native plugins compatible for Editor in 21.56 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2020.3.14f1 (d0d1bb862f9d)
 [Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2020.3.14f1/Editor/Data/Resources/UnitySubsystems
@@ -35,37 +35,37 @@ Initialize mono
 Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2020.3.14f1/Editor/Data/Managed'
 Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2020.3.14f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
 Mono config path = 'C:/Program Files/Unity/Hub/Editor/2020.3.14f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56552
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56148
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.3.14f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.001435 seconds.
+Registered in 0.001451 seconds.
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 21.07 ms, found 2 plugins.
+Refreshing native plugins compatible for Editor in 21.22 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  0.775 seconds
+- Completed reload, in  0.773 seconds
 Domain Reload Profiling:
-	ReloadAssembly (775ms)
+	ReloadAssembly (773ms)
 		BeginReloadAssembly (40ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (0ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
 			CreateAndSetChildDomain (1ms)
-		EndReloadAssembly (307ms)
+		EndReloadAssembly (306ms)
 			LoadAssemblies (38ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (111ms)
+			SetupTypeCache (115ms)
 			ReleaseScriptCaches (0ms)
-			RebuildScriptCaches (24ms)
-			SetupLoadedEditorAssemblies (120ms)
+			RebuildScriptCaches (23ms)
+			SetupLoadedEditorAssemblies (114ms)
 				LogAssemblyErrors (0ms)
 				InitializePlatformSupportModulesInManaged (3ms)
 				SetLoadedEditorAssemblies (0ms)
 				RefreshPlugins (21ms)
 				BeforeProcessingInitializeOnLoad (5ms)
-				ProcessInitializeOnLoadAttributes (69ms)
+				ProcessInitializeOnLoadAttributes (63ms)
 				ProcessInitializeOnLoadMethodAttributes (22ms)
 				AfterProcessingInitializeOnLoad (0ms)
 				EditorAssembliesLoaded (0ms)
@@ -73,7 +73,7 @@ Domain Reload Profiling:
 			AwakeInstancesAfterBackupRestoration (0ms)
 Platform modules already initialized, skipping
 Registering precompiled user dll's ...
-Registered in 0.002818 seconds.
+Registered in 0.003009 seconds.
 Begin MonoManager ReloadAssembly
 Native extension for WindowsStandalone target not found
 Refreshing native plugins compatible for Editor in 0.23 ms, found 2 plugins.
@@ -81,43 +81,43 @@ Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
 - Completed reload, in  0.747 seconds
 Domain Reload Profiling:
-	ReloadAssembly (747ms)
-		BeginReloadAssembly (112ms)
+	ReloadAssembly (748ms)
+		BeginReloadAssembly (110ms)
 			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (3ms)
+			DisableScriptedObjects (4ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (13ms)
-		EndReloadAssembly (587ms)
-			LoadAssemblies (63ms)
+			CreateAndSetChildDomain (12ms)
+		EndReloadAssembly (590ms)
+			LoadAssemblies (66ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (198ms)
+			SetupTypeCache (197ms)
 			ReleaseScriptCaches (0ms)
 			RebuildScriptCaches (31ms)
-			SetupLoadedEditorAssemblies (223ms)
+			SetupLoadedEditorAssemblies (224ms)
 				LogAssemblyErrors (0ms)
 				InitializePlatformSupportModulesInManaged (4ms)
 				SetLoadedEditorAssemblies (0ms)
 				RefreshPlugins (0ms)
-				BeforeProcessingInitializeOnLoad (41ms)
-				ProcessInitializeOnLoadAttributes (169ms)
+				BeforeProcessingInitializeOnLoad (40ms)
+				ProcessInitializeOnLoadAttributes (171ms)
 				ProcessInitializeOnLoadMethodAttributes (3ms)
 				AfterProcessingInitializeOnLoad (5ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (6ms)
+			AwakeInstancesAfterBackupRestoration (5ms)
 Platform modules already initialized, skipping
 ========================================================================
 Worker process is ready to serve import requests
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.03 seconds
-Refreshing native plugins compatible for Editor in 0.39 ms, found 2 plugins.
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.02 seconds
+Refreshing native plugins compatible for Editor in 0.27 ms, found 2 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 1417 Unused Serialized files (Serialized files now loaded: 0)
 System memory in use before: 67.9 MB.
 System memory in use after: 68.0 MB.
 
 Unloading 18 unused Assets to reduce memory usage. Loaded Objects now: 1852.
-Total: 1.920100 ms (FindLiveObjects: 0.137400 ms CreateObjectMapping: 0.084500 ms MarkObjects: 1.618600 ms  DeleteObjects: 0.078900 ms)
+Total: 1.613600 ms (FindLiveObjects: 0.093600 ms CreateObjectMapping: 0.030300 ms MarkObjects: 1.448100 ms  DeleteObjects: 0.040900 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
@@ -131,97 +131,33 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
 Received Import Request.
-  path: Assets/Art/Models/Room Models/BBQGrill.fbx
-  artifactKey: Guid(e17e2d74fa9b28f45bb9cfcc9a3c6926) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Models/Room Models/BBQGrill.fbx using Guid(e17e2d74fa9b28f45bb9cfcc9a3c6926) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e28306a4a13b351e101c0ab98332b7d3') in 0.137685 seconds 
-  Import took 0.139345 seconds .
+  path: Assets/Art/Models/Room Models/BonfireStones.fbx
+  artifactKey: Guid(53832d24be9bf6148a68f1967cec8156) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Models/Room Models/BonfireStones.fbx using Guid(53832d24be9bf6148a68f1967cec8156) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '311375d5ccf1ac7cbb98fabc14a0062d') in 0.126323 seconds 
+  Import took 0.128010 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000196 seconds.
-  path: Assets/Art/Models/Room Models/BonfireBBQ.fbx
-  artifactKey: Guid(ef4102da734ea374aab45a04b5d8a87e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Models/Room Models/BonfireBBQ.fbx using Guid(ef4102da734ea374aab45a04b5d8a87e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '28fdf411a0b8ba13cf6050fd5d0be2eb') in 0.019843 seconds 
-  Import took 0.021470 seconds .
+  Time since last request: 0.000212 seconds.
+  path: Assets/Art/Models/Room Models/CaveInDoor.fbx
+  artifactKey: Guid(f90063a49663f6749aab21e2da9a9eba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Models/Room Models/CaveInDoor.fbx using Guid(f90063a49663f6749aab21e2da9a9eba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e58aa74225b6b03baa15744667938f42') in 0.020301 seconds 
+  Import took 0.021921 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000159 seconds.
-  path: Assets/Art/Models/Room Models/BBQChicken.fbx
-  artifactKey: Guid(e9afddde84e7f1347b25f0d6028c0836) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Models/Room Models/BBQChicken.fbx using Guid(e9afddde84e7f1347b25f0d6028c0836) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bdd9b5c4f46f6cb35ddebd088c8fc898') in 0.016668 seconds 
-  Import took 0.018283 seconds .
+  Time since last request: 3.783828 seconds.
+  path: Assets/Art/Models/Room Models/BonfireStones.fbx
+  artifactKey: Guid(53832d24be9bf6148a68f1967cec8156) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Models/Room Models/BonfireStones.fbx using Guid(53832d24be9bf6148a68f1967cec8156) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '72cfdc8d1fc9b77182efde990e395a66') in 0.015203 seconds 
+  Import took 0.017314 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000158 seconds.
-  path: Assets/Art/Models/Room Models/BonfireLog.fbx
-  artifactKey: Guid(43c3db70a975fd54d8adf469ca667e62) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Models/Room Models/BonfireLog.fbx using Guid(43c3db70a975fd54d8adf469ca667e62) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '17cd57d1e11e4ac22edf0248d83c8419') in 0.011994 seconds 
-  Import took 0.013586 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000155 seconds.
-  path: Assets/Art/Models/Room Models/BonfireLogs.fbx
-  artifactKey: Guid(e863cf0fb0fbcc5418f46690af9573ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Models/Room Models/BonfireLogs.fbx using Guid(e863cf0fb0fbcc5418f46690af9573ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a43af3e33b4da1db2c33f9360879a237') in 0.011899 seconds 
-  Import took 0.013480 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000151 seconds.
-  path: Assets/Art/Models/Room Models/Bonfire.fbx
-  artifactKey: Guid(a1b66c67a2768f7498efb540e822d5ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Models/Room Models/Bonfire.fbx using Guid(a1b66c67a2768f7498efb540e822d5ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6d60bca80cd8c47856a742d44a89f5e9') in 0.015356 seconds 
-  Import took 0.016946 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 6.550574 seconds.
-  path: Assets/Art/Models/Room Models/BBQChicken.fbx
-  artifactKey: Guid(e9afddde84e7f1347b25f0d6028c0836) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Models/Room Models/BBQChicken.fbx using Guid(e9afddde84e7f1347b25f0d6028c0836) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a068660145fe5c24133fb854eef0ba2c') in 0.019844 seconds 
-  Import took 0.021659 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 3.523316 seconds.
-  path: Assets/Art/Models/Room Models/BBQGrill.fbx
-  artifactKey: Guid(e17e2d74fa9b28f45bb9cfcc9a3c6926) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Models/Room Models/BBQGrill.fbx using Guid(e17e2d74fa9b28f45bb9cfcc9a3c6926) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '916912ae8f67b2c7e466a1e9b7c1c368') in 0.012360 seconds 
-  Import took 0.014154 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 2.803269 seconds.
-  path: Assets/Art/Models/Room Models/Bonfire.fbx
-  artifactKey: Guid(a1b66c67a2768f7498efb540e822d5ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Models/Room Models/Bonfire.fbx using Guid(a1b66c67a2768f7498efb540e822d5ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0902daf0ce4db0dccff2f0ed49dab481') in 0.016858 seconds 
-  Import took 0.018940 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 2.893898 seconds.
-  path: Assets/Art/Models/Room Models/BonfireBBQ.fbx
-  artifactKey: Guid(ef4102da734ea374aab45a04b5d8a87e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Models/Room Models/BonfireBBQ.fbx using Guid(ef4102da734ea374aab45a04b5d8a87e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f633034c713432941090d2b7088e029e') in 0.019387 seconds 
-  Import took 0.021122 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 2.672619 seconds.
-  path: Assets/Art/Models/Room Models/BonfireLog.fbx
-  artifactKey: Guid(43c3db70a975fd54d8adf469ca667e62) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Models/Room Models/BonfireLog.fbx using Guid(43c3db70a975fd54d8adf469ca667e62) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0b81be0955de560dba13b1416e95ac4b') in 0.014571 seconds 
-  Import took 0.016282 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 2.608950 seconds.
-  path: Assets/Art/Models/Room Models/BonfireLogs.fbx
-  artifactKey: Guid(e863cf0fb0fbcc5418f46690af9573ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Models/Room Models/BonfireLogs.fbx using Guid(e863cf0fb0fbcc5418f46690af9573ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '43844bcb49bcf3031a466955fc3a900f') in 0.013429 seconds 
-  Import took 0.015892 seconds .
+  Time since last request: 3.948312 seconds.
+  path: Assets/Art/Models/Room Models/CaveInDoor.fbx
+  artifactKey: Guid(f90063a49663f6749aab21e2da9a9eba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Models/Room Models/CaveInDoor.fbx using Guid(f90063a49663f6749aab21e2da9a9eba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1c8dccab507dab988d215d04323e10a9') in 0.018422 seconds 
+  Import took 0.020329 seconds .
 
 AssetImportWorkerClient::OnTransportError - code=2 error=End of file
