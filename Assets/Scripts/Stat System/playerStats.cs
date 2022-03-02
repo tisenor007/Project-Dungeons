@@ -59,6 +59,33 @@ public class PlayerStats : CharacterStats
     }
     #endregion
 
+    #region Equip Modification
+    public void EquipWeapon(GameObject newWeaponObject)
+    {
+        //get player hands
+        Transform playerHands = weaponObject.transform.parent;
+
+        DiscardWeapon();
+        //Destroy(weaponObject);
+
+        weaponObject = Instantiate(newWeaponObject, playerHands);
+
+        HitArea hitArea = weaponObject.transform.GetChild(0).GetComponentInChildren<HitArea>();
+
+        hitArea.PlayerStats = this;
+        hitArea.PlayerController = gameObject.GetComponent<PlayerController>();
+        weaponHitArea = hitArea.gameObject.GetComponent<Collider>();
+    }
+
+    public void DiscardWeapon() // should be replaced by unequip if inventory is established
+    {
+        if (currentWeapon == null) return;
+
+        GameManager.manager.levelManager.CreateInteractable(weaponObject,
+            transform.position, true, Color.red, CurrentWeapon);
+    }
+    #endregion
+
     #region tools
     public void UpdateHud()
     {
@@ -83,31 +110,6 @@ public class PlayerStats : CharacterStats
         }
 
         weaponObject = weaponHitArea.transform.parent.parent.gameObject; // parent.parent is to get: hitarea > handpos > weapon root
-    }
-
-    public void EquipWeapon(GameObject newWeaponObject)
-    {
-        //get player hands
-        Transform playerHands = weaponObject.transform.parent;
-        
-        DiscardWeapon();
-        //Destroy(weaponObject);
-
-        weaponObject = Instantiate(newWeaponObject, playerHands);
-
-        HitArea hitArea = weaponObject.transform.GetChild(0).GetComponentInChildren<HitArea>();
-
-        hitArea.PlayerStats = this;
-        hitArea.PlayerController = gameObject.GetComponent<PlayerController>();
-        weaponHitArea = hitArea.gameObject.GetComponent<Collider>();
-    }
-
-    public void DiscardWeapon() // should be replaced by unequip if inventory is established
-    {
-        if (currentWeapon == null) return;
-
-        GameManager.manager.levelManager.CreateInteractable(weaponObject,
-            transform.position, true, Color.red, CurrentWeapon);
     }
     #endregion
 

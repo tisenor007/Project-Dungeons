@@ -62,11 +62,11 @@ public abstract class CharacterStats : MonoBehaviour
 
     protected virtual void DamageFeedback(Transform character, string message, Color color)
     {
-        GameManager.manager.CreatePopUp(message, character.transform.position, color);
+        GameManager.manager.levelManager.CreatePopUp(message, character.transform.position, color);
     }
 
     protected void HealFeedback(Transform character, string message, Color color)
     {
-        GameManager.manager.CreatePopUp($"+{message}", character.transform.position, color);
+        GameManager.manager.levelManager.CreatePopUp($"+{message}", character.transform.position, color);
     }
 }
