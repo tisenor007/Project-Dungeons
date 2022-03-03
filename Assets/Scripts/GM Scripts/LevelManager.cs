@@ -22,6 +22,7 @@ public class LevelManager : MonoBehaviour
     {
         notePlain = GameManager.manager.uiManager.notePlain;
         noteWriting = notePlain.transform.GetChild(0).GetComponentInChildren<Text>();
+        GameManager.manager.uiManager.playerBleeding.color = new Color(100, 0, 0, 0);
     }
 
     public void Update()
@@ -180,6 +181,18 @@ public class LevelManager : MonoBehaviour
         {
             creditsYPos = creditsYPos += Time.deltaTime * creditsScrollRate;
         }
+    }
+
+    public void FlashPlayerBleedingUI()
+    {
+        GameManager.manager.uiManager.playerBleeding.color = new Color(100, 0, 0, 100);
+        StartCoroutine("WaitAndDisablePlayerBleeding");
+    }
+
+    IEnumerator WaitAndDisablePlayerBleeding()
+    {
+        yield return new WaitForSeconds(.3f);
+        GameManager.manager.uiManager.playerBleeding.color = new Color (100,0,0,0);
     }
     #endregion
 

@@ -44,6 +44,7 @@ public class PlayerStats : CharacterStats
     {
         base.TakeDamage(damage, character);
         DamageFeedback(character, "-" + damage, Color.red);
+        GameManager.manager.levelManager.FlashPlayerBleedingUI();
         if (health <= 0)
         {
             GameManager.manager.levelManager.ChangeGameStateToLose();
