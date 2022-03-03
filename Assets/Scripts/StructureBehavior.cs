@@ -26,9 +26,6 @@ public class StructureBehavior : MonoBehaviour
             dungeonGenerator = GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>();
             OpenDoors(currentStructureType);
         }
-
-        if (currentStructureType == DungeonGenerator.StructureType.StartStructure) { Debug.Log("StartIsHere"); }
-        if (currentStructureType == DungeonGenerator.StructureType.EndStructure) { Debug.Log("EndIsHere"); }
     }
 
     private void OpenDoors(DungeonGenerator.StructureType structureType)

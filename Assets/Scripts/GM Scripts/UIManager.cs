@@ -20,6 +20,7 @@ public class UIManager : MonoBehaviour
 
     [Tooltip("any button that calls load")]
     public Button[] allLoadButtons;
+    public Button[] allNextLevelButtons;
     public Canvas notePlain;
 
     [Header("Options")]

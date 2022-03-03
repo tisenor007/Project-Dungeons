@@ -77,12 +77,13 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(currentLevel);
         Controls();
 
         FadeText();
 
         levelManager.LoadButtonFade(File.Exists(Application.persistentDataPath + "/savedInfo.dat"));
-        Debug.Log(gameState);
+        levelManager.NextLevelButtonFade(currentLevel);
 
         switch (gameState)
         {
@@ -251,13 +252,19 @@ public class GameManager : MonoBehaviour
             Load();
         }*/
 
-        if (gameState != GameState.TITLEMENU)
-        {
-            if (Input.GetKeyDown(KeyCode.Escape))
+        if (gameState == GameState.TITLEMENU) { return; }
+        if (gameState == GameState.CREDITS) { return; }
+        if (gameState == GameState.LOADINGSCREEN) { return; }
+        if (gameState == GameState.LOSE) { return; }
+        if (gameState == GameState.WIN) { return; }
+        if (gameState == GameState.SAVEOPTION) { return; }
+        if (gameState == GameState.OPTIONS) { return; }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
             {
                 levelManager.ChangeGameStateToPause();
             }
-        }
+        
     }
 
     public void Save() // canned file save method
@@ -274,7 +281,6 @@ public class GameManager : MonoBehaviour
         savedInfo.playerSpawnPosX = playerAndCamera.transform.GetChild(0).gameObject.transform.position.x;
         savedInfo.playerSpawnPosY = playerAndCamera.transform.GetChild(0).gameObject.transform.position.y;
         savedInfo.playerSpawnPosZ = playerAndCamera.transform.GetChild(0).gameObject.transform.position.z;
-        savedInfo.savedLevel = currentLevel;
         savedInfo.SaveDungeon(levels[currentLevel].GetComponent<DungeonGenerator>().structures);
 
         saveText.CrossFadeAlpha(1, .1f, true);
@@ -298,7 +304,7 @@ public class GameManager : MonoBehaviour
             playerStats.ResetStats();
             //
             SceneManager.LoadScene(loadedInfo.scene);
-            loadedInfo.LoadSavedDungeon(currentLevel, levels);
+            loadedInfo.LoadSavedDungeon(ref currentLevel, levels);
             levelManager.activeScreen = loadedInfo.activeScreen;
             gameState = loadedInfo.gameState;
             playerStats.health = loadedInfo.health;
@@ -384,6 +390,7 @@ class SaveInfo
 
     public void SaveDungeon(List<GameObject> structures)
     {
+        savedLevel = GameManager.manager.currentLevel;
         savedStructureTypes.Clear();
         savedStructureVariations.Clear();
         savedStructsPosX.Clear();
@@ -407,11 +414,9 @@ class SaveInfo
             savedStructsRotY.Add(structures[i].transform.eulerAngles.y);
             savedStructsRotZ.Add(structures[i].transform.eulerAngles.z);
         }
-
-        Debug.Log(savedStructureTypes[0] + " " + savedStructureTypes[savedStructureTypes.Count-1]);
     }
 
-    public void LoadSavedDungeon(int currentLevel, GameObject[] levels)
+    public void LoadSavedDungeon(ref int currentLevel, GameObject[] levels)
     {
         currentLevel = savedLevel;
 

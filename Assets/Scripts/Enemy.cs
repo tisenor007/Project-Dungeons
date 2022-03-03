@@ -156,8 +156,8 @@ public class Enemy : GameCharacter
         healthBar = transform.GetChild(0).GetChild(0).GetComponent<Slider>();
         healthColour.color = new Color32(74, 227, 14, 255);
 
-        cam = GameObject.Find("Main Camera").GetComponent<Transform>();
-        playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
+        cam = GameManager.manager.playerAndCamera.transform.GetChild(1);
+        playerStats = GameManager.manager.playerStats;
         enemyNavMeshAgent = GetComponent<NavMeshAgent>();
 
         maxHealth = Health;
