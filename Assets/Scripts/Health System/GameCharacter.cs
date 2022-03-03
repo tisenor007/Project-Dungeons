@@ -4,7 +4,7 @@ public class GameCharacter : MonoBehaviour
     public int Health { get => health; set => health = value; }
     public bool IsAlive { get => isAlive; }
     [SerializeField] public int maxHealth;
-    private int health;
+    public int health;
     public int damage;
 
     private bool isAlive = true;
