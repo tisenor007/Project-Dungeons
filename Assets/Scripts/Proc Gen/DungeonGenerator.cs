@@ -34,7 +34,7 @@ public class DungeonGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (dungeonIsGenerating) { GenerateNewDungeon(); }
+        if (dungeonIsGenerating && dungeonGenerated == false) { GenerateNewDungeon(); }
     }
 
     //master method
@@ -59,10 +59,14 @@ public class DungeonGenerator : MonoBehaviour
 
     public void ClearDungeon()
     {
-        foreach (Transform child in this.transform) { GameObject.Destroy(child.gameObject); }
-        structures.Clear();
         dungeonGenerated = false;
         dungeonIsGenerating = false;
+        foreach (GameObject structure in structures) 
+        { 
+            Destroy(structure);
+        }
+        structures.Clear();
+        //structures = new List<GameObject>();
     }
 
     public void CompleteGeneration()

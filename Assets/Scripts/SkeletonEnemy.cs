@@ -77,7 +77,7 @@ public class SkeletonEnemy : Enemy
         {
             if (hitInfo.collider.tag == "Player")
             {
-                Debug.Log("triggered!!!!");
+                //Debug.Log("triggered!!!!");
                 caughtTimer = caughtTimerConst;
                 SwitchState(State.Chasing);
             }
@@ -91,7 +91,7 @@ public class SkeletonEnemy : Enemy
         transform.LookAt(playerLocation);
 
         caughtTimer -= Time.deltaTime;
-        Debug.Log(caughtTimer);
+        //Debug.Log(caughtTimer);
 
         if (caughtTimer <= 0)
         {

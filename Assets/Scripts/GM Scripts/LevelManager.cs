@@ -35,6 +35,18 @@ public class LevelManager : MonoBehaviour
         {
             ScrollCredits();
         }
+
+        foreach (GameObject level in GameManager.manager.levels)
+        {
+            if (level.GetComponent<DungeonGenerator>().dungeonGenerated == false && level.GetComponent<DungeonGenerator>().dungeonIsGenerating == false)
+            {
+                level.SetActive(false);
+            }
+            else if (level.GetComponent<DungeonGenerator>().dungeonGenerated == true || level.GetComponent<DungeonGenerator>().dungeonIsGenerating == true)
+            {
+                level.SetActive(true);
+            }
+        }
     }
 
     #region UIControl
@@ -60,16 +72,15 @@ public class LevelManager : MonoBehaviour
 
     public void ChangeGameStateToNewGame()
     {
-        GameManager.manager.ResetScene();
+        SwitchLevel(0);     
+    }
 
-        foreach (GameObject level in GameManager.manager.levels) 
+    public void ProgressLevel()
+    {
+        if (GameManager.manager.currentLevel != GameManager.manager.levels.Length - 1)
         {
-            if (level.GetComponent<DungeonGenerator>().dungeonGenerated) { level.GetComponent<DungeonGenerator>().ClearDungeon(); }
+            SwitchLevel(GameManager.manager.currentLevel + 1);
         }
-
-        GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonIsGenerating = true;
-        GameManager.manager.playerAndCamera.transform.GetChild(0).GetComponent<PlayerStats>().ResetStats();
-        GameManager.manager.ChangeState(GameState.GAMEPLAY);
     }
 
     public void ChangeGameStateToWin()
@@ -110,6 +121,21 @@ public class LevelManager : MonoBehaviour
     public void ChangeGameStateToLoadingScreen()
     {
         GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
+    }
+
+    public void SwitchLevel(int desiredLevel)
+    {
+        GameManager.manager.ChangeState(GameState.GAMEPLAY);
+        GameManager.manager.ResetScene();
+
+        foreach (GameObject level in GameManager.manager.levels)
+        {
+            if (level.GetComponent<DungeonGenerator>().dungeonGenerated) { level.GetComponent<DungeonGenerator>().ClearDungeon(); }
+        }
+
+        GameManager.manager.currentLevel = desiredLevel;
+        GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonIsGenerating = true;
+        GameManager.manager.playerAndCamera.transform.GetChild(0).GetComponent<PlayerStats>().ResetStats();
     }
 
     //feedback
@@ -172,6 +198,20 @@ public class LevelManager : MonoBehaviour
         {
             foreach (Button button in GameManager.manager.uiManager.allLoadButtons)
                 button.interactable = true;
+        }
+    }
+
+    public void NextLevelButtonFade(int currentLevel)
+    {
+        if (currentLevel >= GameManager.manager.levels.Length-1)
+        {
+            foreach (Button button in GameManager.manager.uiManager.allNextLevelButtons)
+            { button.interactable = false;}
+        }
+        else
+        {
+            foreach(Button button in GameManager.manager.uiManager.allNextLevelButtons)
+            { button.interactable = true; }
         }
     }
 
