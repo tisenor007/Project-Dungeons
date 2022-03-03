@@ -20,10 +20,11 @@ public class UIManager : MonoBehaviour
 
     [Tooltip("any button that calls load")]
     public Button[] allLoadButtons;
+
     public Canvas notePlain;
+    public Image playerBleeding;
 
     [Header("Options")]
-
     [Tooltip("The Background Image in SystemContants")] 
     public Image brightnessImage;
     public Slider brightnessSlider;

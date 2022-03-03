@@ -9,6 +9,7 @@ public class LevelManager : MonoBehaviour
     [HideInInspector]
     public int activeScreen;
 
+    [SerializeField] private GameObject popUpPrefab;
     private static float creditsBottomPos = 2800;
     private static float creditsTopPos = -1425;
     private static float creditsBeginPos = -500;
@@ -21,6 +22,7 @@ public class LevelManager : MonoBehaviour
     {
         notePlain = GameManager.manager.uiManager.notePlain;
         noteWriting = notePlain.transform.GetChild(0).GetComponentInChildren<Text>();
+        GameManager.manager.uiManager.playerBleeding.color = new Color(100, 0, 0, 0);
     }
 
     public void Update()
@@ -111,11 +113,37 @@ public class LevelManager : MonoBehaviour
     }
 
     //feedback
-    public void CreatePopUp(string message, Vector3 popUpPos, GameObject prefab, Color color)
+    public void CreatePopUp(string message, Vector3 popUpPos, Color color)
     {
-        PopUp popUp;
-        popUp = Instantiate(prefab, new Vector3(popUpPos.x, popUpPos.y + 5, popUpPos.z), Quaternion.identity).GetComponent<PopUp>();
+        InfoPopUp popUp;
+        popUp = Instantiate(popUpPrefab, new Vector3(popUpPos.x, popUpPos.y + 5, popUpPos.z), Quaternion.identity).GetComponent<InfoPopUp>();
         popUp.SetUp(message, color);
+    }
+
+    public void CreateInteractable(GameObject objectBecomingInteractable, Vector3 newPosition, bool floating, Color lightColour, Item itemType = null)
+    {
+        GameObject interactableObject = new GameObject($"Interactable {objectBecomingInteractable.name}");
+        Interactable interactableSetup = interactableObject.AddComponent(typeof(Interactable)) as Interactable;
+        LayerMask interactableLayer = LayerMask.NameToLayer("Interactable");
+        Light lightSetup = interactableObject.GetComponent<Light>();
+
+        // light
+        lightSetup.color = lightColour;
+        lightSetup.renderingLayerMask = interactableLayer;
+
+        // basic setup
+        interactableSetup.isFloatingObject = floating;
+        interactableObject.layer = interactableLayer;
+        if (itemType != null) { interactableSetup.ItemType = itemType; }
+
+        // object insertion
+        objectBecomingInteractable.transform.SetPositionAndRotation(Vector3.zero, Quaternion.LookRotation(Vector3.forward, Vector3.up));
+        objectBecomingInteractable.transform.SetParent(interactableObject.transform);
+
+        // FIX PLAYER SCALE x2 reducing size to stop object doubling in size every unequip
+        objectBecomingInteractable.transform.localScale = Vector3.one;
+
+        interactableObject.transform.position = newPosition;
     }
 
     //messages
@@ -175,7 +203,17 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    public void FlashPlayerBleedingUI()
+    {
+        GameManager.manager.uiManager.playerBleeding.color = new Color(100, 0, 0, 100);
+        StartCoroutine("WaitAndDisablePlayerBleeding");
+    }
 
+    IEnumerator WaitAndDisablePlayerBleeding()
+    {
+        yield return new WaitForSeconds(.3f);
+        GameManager.manager.uiManager.playerBleeding.color = new Color (100,0,0,0);
+    }
     #endregion
 
     #region Options
@@ -189,6 +227,5 @@ public class LevelManager : MonoBehaviour
         Debug.Log($"newAlpha: {newAlpha.a}, Image colour: {GameManager.manager.uiManager.brightnessImage.color}");
     }
     #endregion
-    
 }
 

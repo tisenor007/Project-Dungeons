@@ -38,9 +38,10 @@ public class GameManager : MonoBehaviour
     public GameObject[] levels;
     [HideInInspector]public GameState gameState;
     [HideInInspector] public int currentLevel = 0;
+
+    [Space]
     [SerializeField] private TextMeshProUGUI saveText;
     [SerializeField] private TextMeshProUGUI loadText;
-    [SerializeField] private GameObject popUpPrefab;
     private GameState savedScreenState;
     // title acts as default state
     private bool gameplay;
@@ -219,11 +220,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void CreatePopUp(string message, Vector3 popUpPos, Color color)
-    {
-        levelManager.CreatePopUp(message, popUpPos, popUpPrefab, color);
-    }
-
     public void ChangeState(GameState targetState)
     {
         gameState = targetState;
@@ -269,7 +265,7 @@ public class GameManager : MonoBehaviour
         savedInfo.scene = SceneManager.GetActiveScene().buildIndex;
         savedInfo.activeScreen = levelManager.activeScreen;
         savedInfo.gameState = gameState;
-        savedInfo.health = playerStats.health;
+        savedInfo.health = playerStats.Health;
         savedInfo.genderStatus = characterSelection.isMale;
         savedInfo.playerSpawnPosX = playerAndCamera.transform.GetChild(0).gameObject.transform.position.x;
         savedInfo.playerSpawnPosY = playerAndCamera.transform.GetChild(0).gameObject.transform.position.y;
@@ -301,7 +297,7 @@ public class GameManager : MonoBehaviour
             loadedInfo.LoadSavedDungeon(currentLevel, levels);
             levelManager.activeScreen = loadedInfo.activeScreen;
             gameState = loadedInfo.gameState;
-            playerStats.health = loadedInfo.health;
+            playerStats.Health = loadedInfo.health;
             characterSelection.isMale = loadedInfo.genderStatus;
             playerStats.respawnPos = new Vector3(loadedInfo.playerSpawnPosX, loadedInfo.playerSpawnPosY, loadedInfo.playerSpawnPosZ);
             playerAndCamera.transform.GetChild(0).position = playerStats.respawnPos;
