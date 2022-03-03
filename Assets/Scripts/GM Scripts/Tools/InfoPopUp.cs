@@ -8,7 +8,7 @@ public class InfoPopUp : MonoBehaviour
     public Text displayedTxt;
 
     private Color textColour;
-    private float activeDuration = 2.5f; // after duration popup will start fading
+    private float activeDuration = 0.5f; // after duration popup will start fading
     private float fadeSpeed = 3;
     private float yMoveSpeed = 2;
 
