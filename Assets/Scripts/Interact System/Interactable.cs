@@ -8,7 +8,7 @@ public class Interactable : MonoBehaviour
 {
     // this interactable class works like a 
 
-    public bool floatingObject = false;
+    public bool isFloatingObject = false;
 
     private float feedback__Intensity = 3;
     private Light feedbackLight; //feedback to show object is interactable
@@ -43,7 +43,7 @@ public class Interactable : MonoBehaviour
 
         DisableFeedback();
 
-        if (floatingObject && IsInGround())
+        if (isFloatingObject && IsInGround())
         {
             bounceSavedPos += 5;
         }
@@ -56,7 +56,7 @@ public class Interactable : MonoBehaviour
 
     public void UpdateFeedback()
     {
-        if (floatingObject)
+        if (isFloatingObject)
         {
             this.gameObject.transform.Rotate(Vector3.up * -rotationSpeed * Time.deltaTime, Space.World);
 
