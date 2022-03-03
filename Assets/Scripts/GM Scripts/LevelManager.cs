@@ -112,7 +112,7 @@ public class LevelManager : MonoBehaviour
         lightSetup.renderingLayerMask = interactableLayer;
 
         // basic setup
-        interactableSetup.floatingObject = floating;
+        interactableSetup.isFloatingObject = floating;
         interactableObject.layer = interactableLayer;
         if (itemType != null) { interactableSetup.ItemType = itemType; }
 
