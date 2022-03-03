@@ -13,7 +13,7 @@ public abstract class CharacterStats : MonoBehaviour
     [SerializeField] protected Weapon defaultWeapon;
 
     public int Health { get => health; set => health = value; }
-    public int MaxHealth { get { return health; } }
+    public int MaxHealth { get { return maxHealth; } }
     public bool IsAlive { get => isAlive; }
     public int Damage { get => damage; set => damage = value; }
     public float AttackSpeed { get => attackSpeed; set => attackSpeed = value; }

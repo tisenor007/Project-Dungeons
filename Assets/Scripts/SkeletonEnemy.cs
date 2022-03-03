@@ -19,7 +19,7 @@ public class SkeletonEnemy : Enemy
     {
         this.viewDistance = 10;
         this.Health = 100;
-        this.hitDuration = 3.0f;
+        this.attackSpeed = 3.0f;
         this.damage = 15;
         this.speed = 5.0f;
         this.attackDistance = 4;

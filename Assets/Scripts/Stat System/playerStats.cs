@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerStats : CharacterStats 
+public class PlayerStats : CharacterStats
 {
     //initialization
     [SerializeField] private GameObject maleHitArea;
@@ -20,10 +20,14 @@ public class PlayerStats : CharacterStats
     [Space]
     private GameObject hitArea;
     private bool healing;
+    [Space]
+    [SerializeField] private Vector3 respawnPos = new Vector3(-56.0f, 5.11f, -63.0f);
 
     private float restStationHealDuration = 10;
     private float restStationHealAmount = 5;
     private float restStationHealTimer = 0;
+
+    public Vector3 RespawnPos { get { return respawnPos; } set { respawnPos = value; } }
 
     private void Update()
     {
@@ -45,23 +49,6 @@ public class PlayerStats : CharacterStats
     public void Block() { if (shield.activeSelf == false) { shield.SetActive(true); }}
 
     public void StopBlocking() { if (shield.activeSelf == true) { shield.SetActive(false);}}
-
-    public float GetHealthDividedMaxHealth()
-    {
-        return (Health / maxHealth);
-    }
-
-    public void SetGender(bool isMale)
-    {
-        if (isMale)
-        {
-            hitArea = maleHitArea;
-        } else
-        {
-            hitArea = femaleHitArea;
-        }
-        UpdateHud();
-    }
 
     #region Stat Modification
     public override void ResetStats()

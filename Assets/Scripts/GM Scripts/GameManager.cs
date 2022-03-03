@@ -299,8 +299,8 @@ public class GameManager : MonoBehaviour
             gameState = loadedInfo.gameState;
             playerStats.Health = loadedInfo.health;
             characterSelection.isMale = loadedInfo.genderStatus;
-            playerStats.respawnPos = new Vector3(loadedInfo.playerSpawnPosX, loadedInfo.playerSpawnPosY, loadedInfo.playerSpawnPosZ);
-            playerAndCamera.transform.GetChild(0).position = playerStats.respawnPos;
+            playerStats.RespawnPos = new Vector3(loadedInfo.playerSpawnPosX, loadedInfo.playerSpawnPosY, loadedInfo.playerSpawnPosZ);
+            playerAndCamera.transform.GetChild(0).position = playerStats.RespawnPos;
             characterSelection.SetPlayerModel();
 
             loadText.CrossFadeAlpha(1, .1f, true);
@@ -351,7 +351,7 @@ public class GameManager : MonoBehaviour
         {
             playerController.animator = femalePlayer.GetComponent<Animator>();
         }
-        PlayerStats playerStats = playerController.GetComponent<PlayerStats>();
+
         playerStats.SetGender(isMale);
     }
 }

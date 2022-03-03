@@ -6,11 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-<<<<<<< HEAD:Assets/Scripts/Enemy.cs
-public class Enemy : GameCharacter
-=======
-public class EnemyAI : CharacterStats
->>>>>>> Development-Shrimps:Assets/Scripts/Char Controllers/EnemyAI.cs
+public class Enemy : CharacterStats
 {
     protected enum State
     {
@@ -18,34 +14,6 @@ public class EnemyAI : CharacterStats
         Chasing,
         Attacking
     }
-<<<<<<< HEAD:Assets/Scripts/Enemy.cs
-=======
-    private State enemyState;
-    [SerializeField] private NavMeshAgent enemy;
-    private PlayerStats playerStats;
-    [SerializeField] private int viewDistance = 20;
-    [SerializeField] private int hearingDistance = 20;
-    [SerializeField] private int attackDistance = 3;
-    private float distance;
-    private float chasingTime = 4.0f;
-    [Tooltip("The time added till next attack, when stunned.")][SerializeField] private float stunnedHitDurationAddition = 3.0f;
-    private float hitTime = 3.0f; // Time until next attack
-    private Vector3 playerLocation;
-    private Vector3 enemyLocation;
-    private Ray enemySight;
-    private RaycastHit hitInfo;
-    [SerializeField] private bool hitable;
-    private Image healthColour;
-    private Slider healthBar;
-    private Transform cam;
-
-    void Start()
-    {
-        health = 30;
-        damage = 5;
-        enemy = GetComponent<NavMeshAgent>();
-        SwitchState(State.Idle);
->>>>>>> Development-Shrimps:Assets/Scripts/Char Controllers/EnemyAI.cs
 
     protected State enemyState;
     protected NavMeshAgent enemyNavMeshAgent;
@@ -58,7 +26,6 @@ public class EnemyAI : CharacterStats
 
     protected float distanceFromPlayer;
     protected float hitTimer;
-    protected float hitDuration;
     protected float stunnedHitDuration;
 
     protected Vector3 playerLocation;
@@ -121,11 +88,7 @@ public class EnemyAI : CharacterStats
 
         if (distanceFromPlayer <= attackDistance)
         {
-<<<<<<< HEAD:Assets/Scripts/Enemy.cs
-            hitTimer = hitDuration;
-=======
-            hitTime = attackSpeed;
->>>>>>> Development-Shrimps:Assets/Scripts/Char Controllers/EnemyAI.cs
+            hitTimer = attackSpeed;
             SwitchState(State.Attacking);
         }
 
@@ -146,20 +109,14 @@ public class EnemyAI : CharacterStats
             if (playerStats.shield.activeSelf == true)
             {
                 playerStats.TakeDamage((int)(damage / 4), playerStats.GetComponent<Transform>());
-<<<<<<< HEAD:Assets/Scripts/Enemy.cs
+
                 hitTimer = stunnedHitDuration; // <----- will be replaced by a possible stunned state
-=======
-                hitTime = stunnedHitDurationAddition; // <----- will be replaced by a possible stunned state
->>>>>>> Development-Shrimps:Assets/Scripts/Char Controllers/EnemyAI.cs
             }
             else
             {
                 playerStats.TakeDamage(damage, playerStats.GetComponent<Transform>());
-<<<<<<< HEAD:Assets/Scripts/Enemy.cs
-                hitTimer = hitDuration;
-=======
-                hitTime = attackSpeed;
->>>>>>> Development-Shrimps:Assets/Scripts/Char Controllers/EnemyAI.cs
+
+                hitTimer = attackSpeed;
             }
         }   
 
@@ -206,19 +163,16 @@ public class EnemyAI : CharacterStats
 
         maxHealth = Health;
         healthBar.maxValue = maxHealth;
-        stunnedHitDuration = hitDuration * 1.5f;
+        stunnedHitDuration = attackSpeed * 1.5f;
     }
 
     public override void TakeDamage(int damage, Transform character)
     {
         base.TakeDamage(damage, character);
-<<<<<<< HEAD:Assets/Scripts/Enemy.cs
-        DamageFeedback(character, "-" + damage, new Color32(255, 69, 0, 255));
-        if (Health <= 0)
-=======
+
         DamageFeedback(character, "-" + damage, Color.yellow);
         if (health <= 0)
->>>>>>> Development-Shrimps:Assets/Scripts/Char Controllers/EnemyAI.cs
+
         {
             Death();
         }

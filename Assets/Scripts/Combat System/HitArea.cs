@@ -14,8 +14,8 @@ public class HitArea : MonoBehaviour
     {
         if (other.tag == "Enemy" && playerController.IsAttacking())
         {
-            other.GetComponent<EnemyAI>().TakeDamage(playerStats.Damage, other.GetComponent<Transform>());
-            Debug.Log("ENEMY HEALTH: " + other.GetComponent<EnemyAI>().Health);
+            other.GetComponent<Enemy>().TakeDamage(playerStats.Damage, other.GetComponent<Transform>());
+            Debug.Log("ENEMY HEALTH: " + other.GetComponent<Enemy>().Health);
         }
     }
 }

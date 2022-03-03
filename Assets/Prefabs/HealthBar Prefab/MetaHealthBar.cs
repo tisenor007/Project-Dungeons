@@ -15,7 +15,7 @@ public class MetaHealthBar : MonoBehaviour
         enemy = GetComponentInParent<Enemy>();
         healthColour = transform.GetChild(0).GetChild(0).GetComponent<Image>();
         healthBar = transform.GetChild(0).GetComponent<Slider>();
-        healthBar.maxValue = enemy.maxHealth;
+        healthBar.maxValue = enemy.MaxHealth;
         healthColour.GetComponent<Image>().color = new Color32(74, 227, 14, 255);
         cam = GameObject.Find("Main Camera").GetComponent<Transform>();
     }
@@ -32,16 +32,16 @@ public class MetaHealthBar : MonoBehaviour
         healthBar.value = enemy.Health;
         //miniHealthBar.GetComponent<Slider>().value = health;
 
-        if (enemy.Health < enemy.maxHealth * 0.8 && enemy.Health > enemy.maxHealth * 0.6)
+        if (enemy.Health < enemy.MaxHealth * 0.8 && enemy.Health > enemy.MaxHealth * 0.6)
             healthColour.color = new Color32(167, 227, 16, 255);
 
-        if (enemy.Health < enemy.maxHealth * 0.6 && enemy.Health > enemy.maxHealth * 0.4)
+        if (enemy.Health < enemy.MaxHealth * 0.6 && enemy.Health > enemy.MaxHealth * 0.4)
             healthColour.color = new Color32(227, 176, 9, 255);
 
-        if (enemy.Health < enemy.maxHealth * 0.4 && enemy.Health > enemy.maxHealth * 0.2)
+        if (enemy.Health < enemy.MaxHealth * 0.4 && enemy.Health > enemy.MaxHealth * 0.2)
             healthColour.color = new Color32(240, 86, 48, 255);
 
-        if (enemy.Health < enemy.maxHealth * 0.2)
+        if (enemy.Health < enemy.MaxHealth * 0.2)
             healthColour.color = new Color32(204, 40, 0, 255);
     }
 }

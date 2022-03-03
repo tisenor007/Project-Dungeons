@@ -10,7 +10,7 @@ public class ZombieEnemy : Enemy
     {
         this.viewDistance = 10;
         this.Health = 300;
-        this.hitDuration = 5.0f;
+        this.attackSpeed = 5.0f;
         this.damage = 25;
         this.speed = 3.5f;
         this.attackDistance = 2.5f;

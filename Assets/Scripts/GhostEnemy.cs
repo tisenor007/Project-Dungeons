@@ -24,7 +24,7 @@ public class GhostEnemy : Enemy
 
         this.viewDistance = 10;
         this.Health = 50;
-        this.hitDuration = 1.0f;
+        this.attackSpeed = 1.0f;
         this.damage = 5;
         this.speed = 6.0f;
         this.rotationSpeed = 10f;
@@ -106,7 +106,7 @@ public class GhostEnemy : Enemy
         if (distanceFromPlayer <= attackDistance)
         {
             enemyNavMeshAgent.speed = speed;
-            hitTimer = hitDuration;
+            hitTimer = attackSpeed;
             SwitchState(State.Attacking);
         }
 
