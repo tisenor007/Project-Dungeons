@@ -97,6 +97,11 @@ public class PlayerStats : CharacterStats
 
         weaponObject = Instantiate(newWeaponObject, playerHands);
 
+        weaponObject.transform.localScale = new Vector3
+        (1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.x, 
+        1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.y, 
+        1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.z);
+
         HitArea hitArea = weaponObject.transform.GetChild(0).GetComponentInChildren<HitArea>();
 
         hitArea.PlayerStats = this;
