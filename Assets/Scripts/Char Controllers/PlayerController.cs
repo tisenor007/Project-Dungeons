@@ -199,6 +199,27 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    public GameObject FindClosestInteractableObject()
+    {
+        if (hitColInteraction.Length == 0) { Debug.LogError("no objects in hitColInteraction"); return null; }
+
+        GameObject interactableObject = hitColInteraction[0].gameObject;
+        float shortestDistanceFromPlayer = Vector3.Distance(gameObject.transform.position, hitColInteraction[0].gameObject.transform.position);
+
+        foreach (Collider col in hitColInteraction)
+        { 
+            float calcDistance = Vector3.Distance(gameObject.transform.position, col.gameObject.transform.position);
+
+            if (calcDistance < shortestDistanceFromPlayer)
+            {
+                shortestDistanceFromPlayer = calcDistance;
+                interactableObject = col.gameObject;
+            }
+        }
+
+        return interactableObject;
+    }
+
     private void EnableInteractionFeedbackWithinRange()
     {
         ///[errcontrol] make sure interactable LayerMask is set in PlayerController inspector Interactable
