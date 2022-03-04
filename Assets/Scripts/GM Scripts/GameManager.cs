@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
     private bool fadeSave;
     private bool fadeLoad;
     private float textFadeWaitTime = 1.5f;
+    private GameObject currentPlayerModel;
 
     //Create a new object within the player, one will be male, the other female
     [SerializeField] private PlayerController playerController;
@@ -114,6 +115,7 @@ public class GameManager : MonoBehaviour
                     uiManager.LoadGameplay();
                     characterSelection.HideModels();
                     playerAndCamera.SetActive(true);
+                    UpdatePlayerVitalStatusAppearance(characterSelection.isMale, playerStats.IsAlive);
                     Cursor.visible = false;
                     return;
                 }
@@ -349,6 +351,14 @@ public class GameManager : MonoBehaviour
         }
 
         playerStats.SetGender(isMale);
+    }
+
+    public void UpdatePlayerVitalStatusAppearance(bool isMale, bool isAlive)
+    {
+        if (isMale) { currentPlayerModel = malePlayer; }
+        else if (!isMale) { currentPlayerModel = femalePlayer; }
+        if (isAlive) { currentPlayerModel.SetActive(true); }
+        else if (!isAlive) { currentPlayerModel.SetActive(true); }
     }
 }
 

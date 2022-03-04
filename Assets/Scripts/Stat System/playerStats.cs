@@ -154,7 +154,7 @@ public class PlayerStats : CharacterStats
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.tag == "RestStation") { healing = true; }
         if (other.tag == "DeathBox") { transform.position = respawnPos; }
