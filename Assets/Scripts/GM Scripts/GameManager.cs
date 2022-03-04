@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     public LevelManager levelManager;
     public UIManager uiManager;
     public GameObject playerAndCamera;
-    public ThePlayerStats playerStats;
+    public PlayerStats playerStats;
     public CharacterSelection characterSelection;
     public GameObject[] levels;
     [HideInInspector]public GameState gameState;

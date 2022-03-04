@@ -60,7 +60,7 @@ public class PlayerController : MonoBehaviour
     private float jumpTimer;
     private float rayRange = 0.85f;
     private RaycastHit rayHit;
-    private ThePlayerStats playerStats;
+    private PlayerStats playerStats;
     Collider[] hitColInteraction;
     private bool canMove;
 
@@ -68,7 +68,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        playerStats = transform.GetComponent<ThePlayerStats>();
+        playerStats = transform.GetComponent<PlayerStats>();
         rb = this.GetComponent<Rigidbody>();
         movementMode = MovementMode.Idle;
         canMove = true;
@@ -134,7 +134,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void FixStats(ThePlayerStats newplayerStats)
+    public void FixStats(PlayerStats newplayerStats)
     {
         playerStats = newplayerStats;
     }

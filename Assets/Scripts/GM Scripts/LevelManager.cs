@@ -123,7 +123,7 @@ public class LevelManager : MonoBehaviour
 
         GameManager.manager.currentLevel = desiredLevel;
         GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonIsGenerating = true;
-        GameManager.manager.playerAndCamera.transform.GetChild(0).GetComponent<ThePlayerStats>().ResetStats();
+        GameManager.manager.playerAndCamera.transform.GetChild(0).GetComponent<PlayerStats>().ResetStats();
     }
 
     public void UpdateDungeon()

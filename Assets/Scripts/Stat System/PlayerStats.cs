@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ThePlayerStats : CharacterStats
+public class PlayerStats : CharacterStats
 {
     //initialization
     [SerializeField] private GameObject maleHitArea;
