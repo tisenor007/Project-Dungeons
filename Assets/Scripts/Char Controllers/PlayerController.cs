@@ -281,6 +281,7 @@ public class PlayerController : MonoBehaviour
     {
         if (movementMode == MovementMode.Jumping) { return; }
         if (isGrounded() == false) { return; }
+        if (playerStats.Health <= playerStats.MaxHealth / 4) { movementMode = MovementMode.Running; return; }
 
         movementMode = MovementMode.Sprinting;
     }

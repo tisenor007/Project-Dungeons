@@ -1411,7 +1411,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 7676479151454655131}
         m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
         m_MethodName: ChangeGameStateToGamePlay
         m_Mode: 1
@@ -8698,7 +8698,7 @@ GameObject:
   - component: {fileID: 5817637265395745431}
   - component: {fileID: 3090543674658775043}
   m_Layer: 5
-  m_Name: Play Again Button
+  m_Name: Next Level Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8771,7 +8771,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 7676479151454655131}
         m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
-        m_MethodName: ChangeGameStateToNewGame
+        m_MethodName: ProgressLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9010,7 +9010,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Play Again
+  m_Text: Next Level
 --- !u!1 &5866448676993855880
 GameObject:
   m_ObjectHideFlags: 0
@@ -9336,7 +9336,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 7676479151454655131}
         m_TargetAssemblyTypeName: LevelManager, Assembly-CSharp
         m_MethodName: Save
         m_Mode: 1
@@ -12528,6 +12528,8 @@ MonoBehaviour:
   allLoadButtons:
   - {fileID: 3793851322181412098}
   - {fileID: 5043136942921739789}
+  allNextLevelButtons:
+  - {fileID: 3090543674658775043}
   notePlain: {fileID: 7727303814917417001}
   playerBleeding: {fileID: 3686034052705932472}
   brightnessImage: {fileID: 672174135704190534}

@@ -35,18 +35,6 @@ public class LevelManager : MonoBehaviour
         {
             ScrollCredits();
         }
-
-        foreach (GameObject level in GameManager.manager.levels)
-        {
-            if (level.GetComponent<DungeonGenerator>().dungeonGenerated == false && level.GetComponent<DungeonGenerator>().dungeonIsGenerating == false)
-            {
-                level.SetActive(false);
-            }
-            else if (level.GetComponent<DungeonGenerator>().dungeonGenerated == true || level.GetComponent<DungeonGenerator>().dungeonIsGenerating == true)
-            {
-                level.SetActive(true);
-            }
-        }
     }
 
     #region UIControl
@@ -136,6 +124,25 @@ public class LevelManager : MonoBehaviour
         GameManager.manager.currentLevel = desiredLevel;
         GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonIsGenerating = true;
         GameManager.manager.playerAndCamera.transform.GetChild(0).GetComponent<PlayerStats>().ResetStats();
+    }
+
+    public void UpdateDungeon()
+    {
+        foreach (GameObject level in GameManager.manager.levels)
+        {
+            if (level.GetComponent<DungeonGenerator>().dungeonGenerated == false && level.GetComponent<DungeonGenerator>().dungeonIsGenerating == false)
+            {
+                level.SetActive(false);
+            }
+            else if (level.GetComponent<DungeonGenerator>().dungeonGenerated == true || level.GetComponent<DungeonGenerator>().dungeonIsGenerating == true)
+            {
+                if (GameManager.manager.gameState == GameState.TITLEMENU) { level.SetActive(false); }
+                else if (GameManager.manager.gameState == GameState.CHARACTERSELECTION) { level.SetActive(false); }
+                else if (GameManager.manager.gameState == GameState.CREDITS) { level.SetActive(false); }
+                else if (GameManager.manager.gameState == GameState.OPTIONS) { level.SetActive(false); }
+                else { level.SetActive(true); }
+            }
+        }
     }
 
     //feedback

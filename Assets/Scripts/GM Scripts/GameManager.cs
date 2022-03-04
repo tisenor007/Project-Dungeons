@@ -85,6 +85,7 @@ public class GameManager : MonoBehaviour
 
         levelManager.LoadButtonFade(File.Exists(Application.persistentDataPath + "/savedInfo.dat"));
         levelManager.NextLevelButtonFade(currentLevel);
+        levelManager.UpdateDungeon();
 
         switch (gameState)
         {
@@ -95,7 +96,6 @@ public class GameManager : MonoBehaviour
                         SceneManager.LoadScene(0, LoadSceneMode.Single);
                         SaveScreenState();
                     }
-                    if (levels[currentLevel].activeSelf == true) { levels[currentLevel].SetActive(false); }
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     uiManager.LoadTitleMenu();
                     characterSelection.HideModels();
@@ -114,7 +114,6 @@ public class GameManager : MonoBehaviour
                     if (Time.timeScale == 0) { Time.timeScale = 1; }
                     uiManager.LoadGameplay();
                     characterSelection.HideModels();
-                    if (levels[currentLevel].activeSelf == false) { levels[currentLevel].SetActive(true); }
                     playerAndCamera.SetActive(true);
                     Cursor.visible = false;
                     return;
@@ -123,7 +122,6 @@ public class GameManager : MonoBehaviour
                 {
                     uiManager.LoadWinScreen();
                     characterSelection.HideModels();
-                    if (levels[currentLevel].activeSelf == false) { levels[currentLevel].SetActive(true); }
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     Cursor.visible = true;
                     return;
@@ -132,7 +130,6 @@ public class GameManager : MonoBehaviour
                 {
                     uiManager.LoadLoseScreen();
                     characterSelection.HideModels();
-                    if (levels[currentLevel].activeSelf == false) { levels[currentLevel].SetActive(true); }
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     Cursor.visible = true;
                     return;
@@ -145,7 +142,6 @@ public class GameManager : MonoBehaviour
                         SaveScreenState();
                     }
                     playerAndCamera.SetActive(true);
-                    if (levels[currentLevel].activeSelf == false) { levels[currentLevel].SetActive(true); }
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     Cursor.visible = true;
 
@@ -155,7 +151,6 @@ public class GameManager : MonoBehaviour
                 }
             case GameState.OPTIONS:
                 {
-                    if (levels[currentLevel].activeSelf == true) { levels[currentLevel].SetActive(false); }
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     uiManager.LoadOptions();
                     characterSelection.HideModels();
@@ -169,7 +164,6 @@ public class GameManager : MonoBehaviour
                         SceneManager.LoadScene(2, LoadSceneMode.Single);
                         SaveScreenState();
                     }
-                    if (levels[currentLevel].activeSelf == true) { levels[currentLevel].SetActive(false); }
                     if (Time.timeScale == 0) { Time.timeScale = 1; }
                     uiManager.LoadCredits();
                     characterSelection.HideModels();
@@ -184,7 +178,6 @@ public class GameManager : MonoBehaviour
                         SceneManager.LoadScene(3, LoadSceneMode.Single);
                         SaveScreenState();
                     }
-                    if (levels[currentLevel].activeSelf == true) { levels[currentLevel].SetActive(false); }
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     uiManager.LoadCharacterSelection();
                     characterSelection.ShowModels();
@@ -194,7 +187,6 @@ public class GameManager : MonoBehaviour
                 }
             case GameState.SAVEOPTION:
                 {
-                    if (levels[currentLevel].activeSelf == false) { levels[currentLevel].SetActive(true); }
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     uiManager.LoadSaveOption();
                     characterSelection.HideModels();
@@ -212,8 +204,7 @@ public class GameManager : MonoBehaviour
                     uiManager.LoadLoadingScreen();
                     characterSelection.HideModels();
                     if (levels[currentLevel].activeSelf == true && levels[currentLevel].GetComponent<DungeonGenerator>().dungeonGenerated == true) 
-                    { 
-                        levels[currentLevel].SetActive(false);
+                    {
                         levelManager.ChangeGameStateToTitleMenu();
                     }
                     return;

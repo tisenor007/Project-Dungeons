@@ -22,6 +22,7 @@ public class UIManager : MonoBehaviour
     public Button[] allLoadButtons;
     public Button[] allNextLevelButtons;
     public Canvas notePlain;
+    public Image playerBleeding;
 
     [Header("Options")]
 
