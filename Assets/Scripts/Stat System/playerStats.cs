@@ -152,7 +152,6 @@ public class PlayerStats : CharacterStats
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "RestStation") { healing = true; }
-        if (other.tag == "WIN") { GameManager.manager.levelManager.ChangeGameStateToWin(); }
         if (other.tag == "DeathBox") { transform.position = respawnPos; }
     }
 

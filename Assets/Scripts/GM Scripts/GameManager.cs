@@ -78,7 +78,6 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(currentLevel);
         Controls();
 
         FadeText();
