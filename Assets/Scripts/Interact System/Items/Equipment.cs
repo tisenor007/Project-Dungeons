@@ -31,9 +31,9 @@ public abstract class Equipment : Item
         equipmentObject = equipmentGameObject;
     }
 
-    public PlayerStats FindPlayerStats(GameObject interactor)
+    public ThePlayerStats FindPlayerStats(GameObject interactor)
     {
-        PlayerStats playerStats = interactor.GetComponent<PlayerStats>();
+        ThePlayerStats playerStats = interactor.GetComponent<ThePlayerStats>();
 
         return playerStats;
     }

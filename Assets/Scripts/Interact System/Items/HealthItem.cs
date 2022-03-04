@@ -14,6 +14,6 @@ public class HealthItem : Item
         base.OnPickup(interactable, interactee);
 
         interactable.GetComponent<Interactable>().RemoveGameObjectWFeedback();
-        interactee.GetComponent<PlayerStats>().Heal(healValue);
+        interactee.GetComponent<ThePlayerStats>().Heal(healValue);
     }
 }

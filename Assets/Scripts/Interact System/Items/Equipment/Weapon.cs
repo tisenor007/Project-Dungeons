@@ -12,7 +12,7 @@ public abstract class Weapon : Equipment
     {
         base.Equip(equipment, interactor);
 
-        PlayerStats playerStats = FindPlayerStats(interactor);
+        ThePlayerStats playerStats = FindPlayerStats(interactor);
 
         // discard old weapon
         // playerStats.DiscardWeapon();

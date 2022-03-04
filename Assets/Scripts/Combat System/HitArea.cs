@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class HitArea : MonoBehaviour
 {
-    [SerializeField] private PlayerStats playerStats;
+    [SerializeField] private ThePlayerStats playerStats;
     [SerializeField] private PlayerController playerController;
 
-    public PlayerStats PlayerStats { set { playerStats = value; } }
+    public ThePlayerStats PlayerStats { set { playerStats = value; } }
     public PlayerController PlayerController { set { playerController = value; } }
 
     private void OnTriggerEnter(Collider other)

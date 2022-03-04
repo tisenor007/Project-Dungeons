@@ -17,7 +17,7 @@ public class Enemy : CharacterStats
 
     protected State enemyState;
     protected NavMeshAgent enemyNavMeshAgent;
-    protected PlayerStats playerStats;
+    protected ThePlayerStats playerStats;
 
     protected float viewDistance;
     protected float hearingDistance;
