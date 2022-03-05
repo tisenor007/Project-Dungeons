@@ -263,6 +263,8 @@ public class GameManager : MonoBehaviour
         savedInfo.activeScreen = levelManager.activeScreen;
         savedInfo.gameState = gameState;
         savedInfo.health = playerStats.Health;
+        savedInfo.currentWeapon = playerStats.CurrentWeapon;
+        savedInfo.weaponObject = playerStats.WeaponObject;
         savedInfo.genderStatus = characterSelection.isMale;
         savedInfo.playerSpawnPosX = playerAndCamera.transform.GetChild(0).gameObject.transform.position.x;
         savedInfo.playerSpawnPosY = playerAndCamera.transform.GetChild(0).gameObject.transform.position.y;
@@ -294,6 +296,8 @@ public class GameManager : MonoBehaviour
             levelManager.activeScreen = loadedInfo.activeScreen;
             gameState = loadedInfo.gameState;
             playerStats.Health = loadedInfo.health;
+            playerStats.CurrentWeapon = loadedInfo.currentWeapon;
+            playerStats.EquipWeapon(loadedInfo.weaponObject);
             characterSelection.isMale = loadedInfo.genderStatus;
             playerStats.RespawnPos = new Vector3(loadedInfo.playerSpawnPosX, loadedInfo.playerSpawnPosY, loadedInfo.playerSpawnPosZ);
             playerAndCamera.transform.GetChild(0).position = playerStats.RespawnPos;
@@ -359,6 +363,8 @@ class SaveInfo
     public GameState gameState;
     public int scene;
     public int health;
+    public Weapon currentWeapon;
+    public GameObject weaponObject;
     public bool genderStatus;
     public float playerSpawnPosX;
     public float playerSpawnPosY;

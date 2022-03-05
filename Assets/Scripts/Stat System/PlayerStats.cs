@@ -28,6 +28,7 @@ public class PlayerStats : CharacterStats
     private float restStationHealTimer = 0;
 
     public Vector3 RespawnPos { get { return respawnPos; } set { respawnPos = value; } }
+    public GameObject WeaponObject { get { return weaponObject; } }
 
     private void Update()
     {
@@ -93,7 +94,6 @@ public class PlayerStats : CharacterStats
         Transform playerHands = weaponObject.transform.parent;
 
         DiscardWeapon();
-        //Destroy(weaponObject);
 
         weaponObject = Instantiate(newWeaponObject, playerHands);
 
