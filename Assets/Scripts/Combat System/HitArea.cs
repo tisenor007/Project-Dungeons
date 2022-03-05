@@ -12,8 +12,9 @@ public class HitArea : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Enemy" && playerController.IsAttacking())
+        if (other.tag == "Enemy" && playerController != null && playerStats != null)
         {
+            if (!playerController.IsAttacking()) { return; }
             other.GetComponent<Enemy>().TakeDamage(playerStats.Damage, other.GetComponent<Transform>());
             Debug.Log("ENEMY HEALTH: " + other.GetComponent<Enemy>().Health);
         }

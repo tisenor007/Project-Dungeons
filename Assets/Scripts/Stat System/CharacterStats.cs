@@ -57,7 +57,6 @@ public abstract class CharacterStats : MonoBehaviour
     {
         health = 0;
         isAlive = false;
-        //gameObject.SetActive(false);
     }
 
     protected virtual void DamageFeedback(Transform character, string message, Color color)

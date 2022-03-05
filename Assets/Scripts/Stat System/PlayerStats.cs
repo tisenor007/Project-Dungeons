@@ -23,7 +23,7 @@ public class PlayerStats : CharacterStats
     [Space]
     [SerializeField] private Vector3 respawnPos = new Vector3(-56.0f, 5.11f, -63.0f);
 
-    private float restStationHealDuration = 10;
+    private float restStationHealDuration = 3;
     private float restStationHealAmount = 5;
     private float restStationHealTimer = 0;
 
@@ -97,6 +97,11 @@ public class PlayerStats : CharacterStats
 
         weaponObject = Instantiate(newWeaponObject, playerHands);
 
+        weaponObject.transform.localScale = new Vector3
+        (1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.x, 
+        1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.y, 
+        1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.z);
+
         HitArea hitArea = weaponObject.transform.GetChild(0).GetComponentInChildren<HitArea>();
 
         hitArea.PlayerStats = this;
@@ -149,7 +154,7 @@ public class PlayerStats : CharacterStats
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.tag == "RestStation") { healing = true; }
         if (other.tag == "DeathBox") { transform.position = respawnPos; }
