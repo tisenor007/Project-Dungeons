@@ -23,7 +23,7 @@ public class PlayerStats : CharacterStats
     [Space]
     [SerializeField] private Vector3 respawnPos = new Vector3(-56.0f, 5.11f, -63.0f);
 
-    private float restStationHealDuration = 10;
+    private float restStationHealDuration = 3;
     private float restStationHealAmount = 5;
     private float restStationHealTimer = 0;
 
