@@ -1,0 +1,65 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Boss : Enemy
+{
+    [SerializeField] private GameObject treasureChest;
+    private float stamina = 10;
+    private float recoverTime = 6;
+    private float staminaTimer;
+    private float recoverTimer;
+    // Start is called before the first frame update
+    void Start()
+    {
+        this.viewDistance = 15;
+        this.Health = 400;
+        this.attackSpeed = 4f;
+        this.damage = 30;
+        this.speed = 5.0f;
+        this.attackDistance = 5;
+
+        InitEnemy();
+    }
+
+    public override void Idle()
+    {
+        staminaTimer = Time.time + stamina;
+        if (Time.time >= recoverTimer)
+        {
+            SwitchState(State.Chasing);
+        }
+    }
+
+    public override void Chasing()
+    {
+        recoverTimer = Time.time + recoverTime;
+        enemyNavMeshAgent.SetDestination(playerLocation);
+
+        if (distanceFromPlayer <= attackDistance)
+        {
+            hitTimer = attackSpeed;
+            SwitchState(State.Attacking);
+        }
+
+        if (distanceFromPlayer >= viewDistance)
+        {
+            SwitchState(State.Chasing);
+        }
+
+        if (Time.time >= staminaTimer)
+        {
+            staminaTimer = Time.time + stamina;
+            SwitchState(State.Idle);
+        }
+    }
+
+
+    public override void TakeDamage(int damage, Transform character)
+    {
+        base.TakeDamage(damage, character);
+        if (treasureChest == null) { return; }
+        if (isAlive) { treasureChest.SetActive(false); }
+        else if (!IsAlive) { treasureChest.SetActive(true); }
+    }
+}

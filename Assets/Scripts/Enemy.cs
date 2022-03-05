@@ -12,7 +12,7 @@ public class Enemy : CharacterStats
     {
         Idle,
         Chasing,
-        Attacking
+        Attacking,
     }
 
     protected State enemyState;
@@ -45,6 +45,7 @@ public class Enemy : CharacterStats
         enemySight = new Ray(transform.position, transform.TransformDirection(Vector3.forward));
         enemyLocation = this.enemyNavMeshAgent.transform.position;
         playerLocation = playerStats.gameObject.transform.position;
+        enemyNavMeshAgent.speed = speed;
         distanceFromPlayer = Vector3.Distance(playerLocation, enemyLocation);
 
         //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * viewDistance, Color.white);
@@ -61,6 +62,7 @@ public class Enemy : CharacterStats
 
             case State.Attacking:
                 Attacking();
+
                 break;
         }
 
@@ -183,6 +185,8 @@ public class Enemy : CharacterStats
         base.Death();
 
         // ENTER CODE FOR DEATH ANIMATIONS, ETC
+        this.GetComponent<Collider>().enabled = false;
+        this.GetComponentInChildren<Collider>().enabled = false;
         this.gameObject.SetActive(false);
     }
 }

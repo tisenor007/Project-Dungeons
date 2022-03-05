@@ -160,7 +160,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKey(sprintInput)) { Sprint(); }
 
         //jumping
-        if (Input.GetKey(jumpInput)) { Jump(); }
+        //if (Input.GetKey(jumpInput)) { Jump(); }
 
         //checking to be idle
         else if (IsMoving() == false) { moveDirection = Vector3.zero; movementMode = MovementMode.Idle; }
