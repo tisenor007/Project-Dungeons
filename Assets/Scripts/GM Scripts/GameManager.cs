@@ -90,6 +90,7 @@ public class GameManager : MonoBehaviour
         {
             case GameState.TITLEMENU:
                 {
+                    SoundManager.PlaySound(SoundManager.Sound.MenuMusic);
                     if (SceneManager.GetActiveScene() != SceneManager.GetSceneByBuildIndex(0))
                     {
                         SceneManager.LoadScene(0, LoadSceneMode.Single);
@@ -118,7 +119,9 @@ public class GameManager : MonoBehaviour
                     playerAndCamera.SetActive(true);
                     Cursor.visible = false;
 
-                    //SoundManager.PlaySound(SoundManager.Sound.CaveAmbience);
+                    SoundManager.PlaySound(SoundManager.Sound.CaveAmbience);
+                    SoundManager.PlaySound(SoundManager.Sound.GameplayMusic);
+                    SoundManager.PlaySound(SoundManager.Sound.WaterDripping);
                     //Debug.LogError("SOUND PLAYED");
                     return;
                 }

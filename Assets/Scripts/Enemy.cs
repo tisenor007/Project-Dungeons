@@ -65,10 +65,12 @@ public class Enemy : GameCharacter
                 break;
 
             case State.Chasing:
+                PlayAudio(this);
                 Chasing();
                 break;
 
             case State.Attacking:
+                
                 Attacking();
                 break;
         }
@@ -118,11 +120,13 @@ public class Enemy : GameCharacter
             if (playerStats.shield.activeSelf == true)
             {
                 playerStats.TakeDamage((int)(damage / 4), playerStats.GetComponent<Transform>());
+                SoundManager.PlaySound(SoundManager.Sound.MetalClang, playerLocation);
                 hitTimer = stunnedHitDuration; // <----- will be replaced by a possible stunned state
             }
             else
             {
                 playerStats.TakeDamage(damage, playerStats.GetComponent<Transform>());
+                PlayAudio(this);
                 hitTimer = hitDuration;
             }
         }   
@@ -185,8 +189,9 @@ public class Enemy : GameCharacter
 
     protected override void Death()
     {
+        SoundManager.PlaySound(this.deathSound, enemyLocation);
         base.Death();
-        SoundManager.PlaySound(this.deathSound);
+        
         // ENTER CODE FOR DEATH ANIMATIONS, ETC
         this.gameObject.SetActive(false);
     }

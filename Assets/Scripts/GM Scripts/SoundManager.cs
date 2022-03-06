@@ -12,20 +12,25 @@ public class SoundManager : MonoBehaviour
 
     private static Dictionary<Sound, float> soundTimeDictionary;
     private static Dictionary<Sound, float> soundLengthDictionary;
+    private static Dictionary<Sound, float> soundVolumeDictionary;
     private static SoundAssets.SoundAudioClip currentSoundAudioClip;
     private static float currentArrayAudioClipLength;
+
+    private static bool menuMusicLooping = true;
+
     public enum Sound
     {
         CannonShot,
         CaveAmbience,
         Clang,
         CreepyCaveNoise,
+        GameplayMusic,
         GhostAttack, 
         GhostChasing,
         GhostDeath,
         GhostIdle,
+        MenuMusic,
         MetalClang,
-        PirateCrew,
         Punches,
         SkeletonAttack,
         SkeletonChasing,
@@ -43,33 +48,38 @@ public class SoundManager : MonoBehaviour
     {
         soundTimeDictionary = new Dictionary<Sound, float>();
         soundLengthDictionary = new Dictionary<Sound, float>();
-        SetDirectory(Sound.CaveAmbience, 0, 0);
-        SetDirectory(Sound.GhostAttack, 0, 0);
-        SetDirectory(Sound.GhostChasing, 0, 0);
-        SetDirectory(Sound.GhostDeath, 0, 0);
-        SetDirectory(Sound.GhostIdle, 0, 0);
-        SetDirectory(Sound.PirateCrew, 0, 0);
-        SetDirectory(Sound.Punches, 0, 0);
-        SetDirectory(Sound.SkeletonAttack, 0, 0);
-        SetDirectory(Sound.SkeletonChasing, 0, 0);
-        SetDirectory(Sound.SkeletonDeath, 0, 0);
-        SetDirectory(Sound.SkeletonSteps, 0, 0);
-        SetDirectory(Sound.ZombieAttack, 0, 0);
-        SetDirectory(Sound.ZombieChasing, 0, 0);
-        SetDirectory(Sound.ZombieDeath, 0, 0);
-        SetDirectory(Sound.ZombieIdle, 0, 0);
+        soundVolumeDictionary = new Dictionary<Sound, float>();
+        SetDirectory(Sound.CaveAmbience, 0, 0, 0.5f);
+        SetDirectory(Sound.GameplayMusic, 0, 0, 1);
+        SetDirectory(Sound.GhostAttack, 0, 0, 0.5f);
+        SetDirectory(Sound.GhostChasing, 0, 0, 0.5f);
+        SetDirectory(Sound.GhostDeath, 0, 0, 0.5f);
+        SetDirectory(Sound.GhostIdle, 0, 0, 0.5f);
+        SetDirectory(Sound.MenuMusic, 0, 0, 1);
+        SetDirectory(Sound.MetalClang, 0, 0, 1);
+        SetDirectory(Sound.Punches, 0, 0, 1);
+        SetDirectory(Sound.SkeletonAttack, 0, 0, 0.5f);
+        SetDirectory(Sound.SkeletonChasing, 0, 0, 0.5f);
+        SetDirectory(Sound.SkeletonDeath, 0, 0, 0.5f);
+        SetDirectory(Sound.SkeletonSteps, 0, 0, 0.5f);
+        SetDirectory(Sound.WaterDripping, 0, 0, 1);
+        SetDirectory(Sound.ZombieAttack, 0, 0, 0.5f);
+        SetDirectory(Sound.ZombieChasing, 0, 0, 0.5f);
+        SetDirectory(Sound.ZombieDeath, 0, 0, 0.5f);
+        SetDirectory(Sound.ZombieIdle, 0, 0, 0.5f);
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
     }
 
-    private static void SetDirectory(Sound sound, float length, float delay)
+    private static void SetDirectory(Sound sound, float length, float delay, float volume)
     {
         soundTimeDictionary[sound] = delay;
         soundLengthDictionary[sound] = length;
+        soundVolumeDictionary[sound] = volume;
     }
     public static void PlaySound(Sound sound, Vector3 position)
     {
-        GetAudioClip(sound);
+        //GetAudioClip(sound);
 
         if (CanPlaySound(sound))
         {
@@ -77,11 +87,13 @@ public class SoundManager : MonoBehaviour
             soundGameObject.transform.position = position;
             AudioSource audioSource = soundGameObject.AddComponent<AudioSource>();
             audioSource.spatialBlend = 1.0f;
+            audioSource.rolloffMode = AudioRolloffMode.Linear;
+            audioSource.volume = soundVolumeDictionary[sound];
             audioSource.clip = GetAudioClip(sound);
             audioSource.Play();
 
-            Debug.LogError("CLIP LENGTH: " + audioSource.clip.length);
-            //Object.Destroy(soundGameObject, audioSource.clip.length);
+            Debug.LogError("CLIP PLAYED: " + audioSource.clip.name);
+            Object.Destroy(soundGameObject, audioSource.clip.length);
         } 
     }
 
@@ -96,9 +108,18 @@ public class SoundManager : MonoBehaviour
             {
                 oneShotGameObject = new GameObject("One Shot Sound");
                 oneShotAudioSource = oneShotGameObject.AddComponent<AudioSource>();
-
+                oneShotAudioSource.volume = soundVolumeDictionary[sound];
+                oneShotAudioSource.PlayOneShot(GetAudioClip(sound));
             }
-            oneShotAudioSource.PlayOneShot(GetAudioClip(sound));
+            else
+            {
+                if (oneShotAudioSource != null)
+                {
+                    oneShotAudioSource = oneShotGameObject.AddComponent<AudioSource>();
+                    oneShotAudioSource.volume = soundVolumeDictionary[sound];
+                    oneShotAudioSource.PlayOneShot(GetAudioClip(sound));
+                }
+            }
         }
     }
 
@@ -117,6 +138,22 @@ public class SoundManager : MonoBehaviour
                     if (lastTimePlayed + delayTimerMax < Time.time)
                     {
                         soundLengthDictionary[sound] = currentArrayAudioClipLength + Random.Range(10.0f, 20.0f);
+                        soundTimeDictionary[sound] = Time.time;
+                        return true;
+                    }
+                    else { return false; }
+                }
+                else { return true; }
+
+            case Sound.GameplayMusic:
+                if (soundTimeDictionary.ContainsKey(sound))
+                {
+                    if (gameManager.gameState != GameState.GAMEPLAY) { return false; }
+                    float lastTimePlayed = soundTimeDictionary[sound];
+                    float delayTimerMax = soundLengthDictionary[sound];
+                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    {
+                        soundLengthDictionary[sound] = currentArrayAudioClipLength;
                         soundTimeDictionary[sound] = Time.time;
                         return true;
                     }
@@ -188,6 +225,35 @@ public class SoundManager : MonoBehaviour
                 }
                 else { return true; }
 
+            case Sound.MenuMusic:
+                if (soundTimeDictionary.ContainsKey(sound))
+                {
+                    if (gameManager.gameState != GameState.TITLEMENU) { return false; }
+                    if (menuMusicLooping)
+                    {
+                        menuMusicLooping = false;
+                        return true;
+                    }
+                    else { return false; }
+                }
+                else { return true; }
+
+            case Sound.MetalClang:
+                if (soundTimeDictionary.ContainsKey(sound))
+                {
+                    float lastTimePlayed = soundTimeDictionary[sound];
+                    float delayTimerMax = soundLengthDictionary[sound];
+                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    {
+                        soundLengthDictionary[sound] = 0;
+                        soundTimeDictionary[sound] = Time.time;
+                        return true;
+                    }
+                    else { return false; }
+                }
+                else { return true; }
+
+
             case Sound.SkeletonAttack:
                 if (soundTimeDictionary.ContainsKey(sound))
                 {
@@ -245,6 +311,22 @@ public class SoundManager : MonoBehaviour
                     if (lastTimePlayed + delayTimerMax < Time.time)
                     {
                         soundLengthDictionary[sound] = currentArrayAudioClipLength / 3; // 3 times faster
+                        soundTimeDictionary[sound] = Time.time;
+                        return true;
+                    }
+                    else { return false; }
+                }
+                else { return true; }
+
+            case Sound.WaterDripping:
+                if (soundTimeDictionary.ContainsKey(sound))
+                {
+                    if (gameManager.gameState != GameState.GAMEPLAY) { return false; }
+                    float lastTimePlayed = soundTimeDictionary[sound];
+                    float delayTimerMax = soundLengthDictionary[sound];
+                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    {
+                        soundLengthDictionary[sound] = currentArrayAudioClipLength + Random.Range(15.0f, 25.0f);
                         soundTimeDictionary[sound] = Time.time;
                         return true;
                     }
