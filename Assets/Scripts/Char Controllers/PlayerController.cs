@@ -187,7 +187,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (Collider col in hitColInteraction)
         {
-            Interactable interactable = col.gameObject.GetComponentInParent<Interactable>();
+            Interactable interactable = FindClosestInteractableObject().GetComponentInParent<Interactable>();
             //Debug.LogWarning($"trying Interaction with {interactable.gameObject.name}");
 
             if (interactable.InteractableEnabled == true)

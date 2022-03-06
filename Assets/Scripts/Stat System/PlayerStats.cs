@@ -30,6 +30,11 @@ public class PlayerStats : CharacterStats
     public Vector3 RespawnPos { get { return respawnPos; } set { respawnPos = value; } }
     public GameObject WeaponObject { get { return weaponObject; } }
 
+    private void Start()
+    {
+        currentWeapon.StartSetStats(this);
+    }
+
     private void Update()
     {
         healthBar.value = Health;
