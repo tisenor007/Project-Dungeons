@@ -298,7 +298,7 @@ public class GameManager : MonoBehaviour
             gameState = loadedInfo.gameState;
             playerStats.Health = loadedInfo.health;
             JsonUtility.FromJsonOverwrite(loadedInfo.JsonWeapon, playerStats.CurrentWeapon);
-            playerStats.EquipWeapon(playerStats.CurrentWeapon.weaponObject);
+            playerStats.EquipWeapon(playerStats.CurrentWeapon.weaponObject, false);
             characterSelection.isMale = loadedInfo.genderStatus;
             playerStats.RespawnPos = new Vector3(loadedInfo.playerSpawnPosX, loadedInfo.playerSpawnPosY, loadedInfo.playerSpawnPosZ);
             playerAndCamera.transform.GetChild(0).position = playerStats.RespawnPos;

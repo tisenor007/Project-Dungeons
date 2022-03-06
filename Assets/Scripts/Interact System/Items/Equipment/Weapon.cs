@@ -38,7 +38,7 @@ public abstract class Weapon : Equipment
         playerStats.AttackSpeed = attackSpeed;
         
         //equip 
-        playerStats.EquipWeapon(equipment);
+        playerStats.EquipWeapon(equipment, true);
 
         // item type
         playerStats.CurrentWeapon = this;
