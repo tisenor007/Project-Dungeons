@@ -74,6 +74,8 @@ public class GameManager : MonoBehaviour
 
         //levelManager.ChangeGameStateToLoadingScreen();
         gameState = GameState.LOADINGSCREEN;
+
+        
     }
 
     void Update()
@@ -90,6 +92,7 @@ public class GameManager : MonoBehaviour
         {
             case GameState.TITLEMENU:
                 {
+                    SoundManager.PlaySound(SoundManager.Sound.MenuMusic);
                     if (SceneManager.GetActiveScene() != SceneManager.GetSceneByBuildIndex(0))
                     {
                         SceneManager.LoadScene(0, LoadSceneMode.Single);
@@ -117,6 +120,11 @@ public class GameManager : MonoBehaviour
                     UpdatePlayerVitalStatusAppearance(characterSelection.isMale, playerStats.IsAlive);
                     playerStats.UpdateWeaponHitArea(characterSelection.isMale);
                     Cursor.visible = false;
+
+                    SoundManager.PlaySound(SoundManager.Sound.CaveAmbience);
+                    SoundManager.PlaySound(SoundManager.Sound.GameplayMusic);
+                    SoundManager.PlaySound(SoundManager.Sound.WaterDripping);
+                    //Debug.LogError("SOUND PLAYED");
                     return;
                 }
             case GameState.WIN:

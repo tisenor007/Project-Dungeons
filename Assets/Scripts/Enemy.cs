@@ -6,13 +6,14 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-public class Enemy : CharacterStats
+public class Enemy : GameCharacter
 {
+    [SerializeField]
     protected enum State
     {
         Idle,
         Chasing,
-        Attacking,
+        Attacking
     }
 
     protected State enemyState;
@@ -23,9 +24,11 @@ public class Enemy : CharacterStats
     protected float hearingDistance;
     protected float attackDistance;
     protected float speed;
+    protected string audioGroup;
 
     protected float distanceFromPlayer;
     protected float hitTimer;
+    protected float hitDuration;
     protected float stunnedHitDuration;
 
     protected Vector3 playerLocation;
@@ -37,6 +40,11 @@ public class Enemy : CharacterStats
     [SerializeField] private Slider healthBar;
     [SerializeField] private Transform cam;
 
+    protected SoundManager.Sound attackSound;
+    protected SoundManager.Sound chasingSound;
+    protected SoundManager.Sound deathSound;
+    protected SoundManager.Sound idleSound;
+
     public void Update()
     {
         UpdateHealth();
@@ -45,7 +53,6 @@ public class Enemy : CharacterStats
         enemySight = new Ray(transform.position, transform.TransformDirection(Vector3.forward));
         enemyLocation = this.enemyNavMeshAgent.transform.position;
         playerLocation = playerStats.gameObject.transform.position;
-        enemyNavMeshAgent.speed = speed;
         distanceFromPlayer = Vector3.Distance(playerLocation, enemyLocation);
 
         //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * viewDistance, Color.white);
@@ -53,16 +60,18 @@ public class Enemy : CharacterStats
         switch (enemyState)
         {
             case State.Idle:
+                PlayAudio(this);
                 Idle();
                 break;
 
             case State.Chasing:
+                PlayAudio(this);
                 Chasing();
                 break;
 
             case State.Attacking:
+                
                 Attacking();
-
                 break;
         }
 
@@ -90,7 +99,7 @@ public class Enemy : CharacterStats
 
         if (distanceFromPlayer <= attackDistance)
         {
-            hitTimer = attackSpeed;
+            hitTimer = hitDuration;
             SwitchState(State.Attacking);
         }
 
@@ -111,14 +120,14 @@ public class Enemy : CharacterStats
             if (playerStats.shield.activeSelf == true)
             {
                 playerStats.TakeDamage((int)(damage / 4), playerStats.GetComponent<Transform>());
-
+                SoundManager.PlaySound(SoundManager.Sound.MetalClang, playerLocation);
                 hitTimer = stunnedHitDuration; // <----- will be replaced by a possible stunned state
             }
             else
             {
                 playerStats.TakeDamage(damage, playerStats.GetComponent<Transform>());
-
-                hitTimer = attackSpeed;
+                PlayAudio(this);
+                hitTimer = hitDuration;
             }
         }   
 
@@ -159,22 +168,20 @@ public class Enemy : CharacterStats
         healthBar = transform.GetChild(0).GetChild(0).GetComponent<Slider>();
         healthColour.color = new Color32(74, 227, 14, 255);
 
-        cam = GameManager.manager.playerAndCamera.transform.GetChild(1);
-        playerStats = GameManager.manager.playerStats;
+        cam = GameObject.Find("Main Camera").GetComponent<Transform>();
+        playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
         enemyNavMeshAgent = GetComponent<NavMeshAgent>();
 
         maxHealth = Health;
         healthBar.maxValue = maxHealth;
-        stunnedHitDuration = attackSpeed * 1.5f;
+        stunnedHitDuration = hitDuration * 1.5f;
     }
 
     public override void TakeDamage(int damage, Transform character)
     {
         base.TakeDamage(damage, character);
-
-        DamageFeedback(character, "-" + damage, Color.yellow);
-        if (health <= 0)
-
+        DamageFeedback(character, "-" + damage, new Color32(255, 69, 0, 255));
+        if (Health <= 0)
         {
             Death();
         }
@@ -182,11 +189,20 @@ public class Enemy : CharacterStats
 
     protected override void Death()
     {
+        SoundManager.PlaySound(this.deathSound, enemyLocation);
         base.Death();
-
+        
         // ENTER CODE FOR DEATH ANIMATIONS, ETC
-        this.GetComponent<Collider>().enabled = false;
-        this.GetComponentInChildren<Collider>().enabled = false;
         this.gameObject.SetActive(false);
+    }
+
+    public void PlayAudio(Enemy enemy)
+    {
+        if (enemyState == State.Idle)
+            SoundManager.PlaySound(enemy.idleSound, enemy.transform.position);
+        if (enemyState == State.Chasing)
+            SoundManager.PlaySound(enemy.chasingSound, enemy.transform.position);
+        if (enemyState == State.Attacking)
+            SoundManager.PlaySound(enemy.attackSound, enemy.transform.position);
     }
 }

@@ -23,6 +23,12 @@ public class SkeletonEnemy : Enemy
         this.damage = 15;
         this.speed = 5.0f;
         this.attackDistance = 4;
+        this.audioGroup = "Skeleton";
+
+        this.attackSound = SoundManager.Sound.SkeletonAttack;
+        this.chasingSound = SoundManager.Sound.SkeletonChasing;
+        this.deathSound = SoundManager.Sound.SkeletonDeath;
+        this.idleSound = SoundManager.Sound.SkeletonSteps;
 
         this.rotationSpeed = 100.0f;
         walkDistance = Random.Range(1, 3);
@@ -63,7 +69,9 @@ public class SkeletonEnemy : Enemy
 
     public override void Idle()
     {
-       //Debug.Log("WALKING");
+        //PlayAudio(this);
+
+        //Debug.Log("WALKING");
         enemyNavMeshAgent.SetDestination(walkToLocation);
 
         if (Vector3.Distance(transform.position, walkToLocation) <= 0.5f)

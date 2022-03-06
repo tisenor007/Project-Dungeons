@@ -14,7 +14,12 @@ public class ZombieEnemy : Enemy
         this.damage = 25;
         this.speed = 3.5f;
         this.attackDistance = 2.5f;
+        this.audioGroup = "Zombie";
 
+        this.attackSound = SoundManager.Sound.ZombieAttack;
+        this.chasingSound = SoundManager.Sound.ZombieChasing;
+        this.deathSound = SoundManager.Sound.ZombieDeath;
+        this.idleSound = SoundManager.Sound.ZombieIdle;
 
         turnAroundAngle = transform.localEulerAngles.y;
 
@@ -23,6 +28,8 @@ public class ZombieEnemy : Enemy
 
     public override void Idle()
     {
+        //PlayAudio(this);
+
         if (transform.localEulerAngles.y < turnAroundAngle || transform.localEulerAngles.y > turnAroundAngle + 5)
         {
             transform.Rotate(Vector3.up * (speed * 2) * Time.deltaTime, Space.Self);
