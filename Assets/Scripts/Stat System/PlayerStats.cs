@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 public class PlayerStats : CharacterStats
 {
-    //initialization
-    [SerializeField] private GameObject maleHitArea;
-    [SerializeField] private GameObject femaleHitArea;
-
-    //equipment
-    private GameObject weaponObject;
+    //equiment
     public Collider weaponHitArea;
     public GameObject shield;
+    private GameObject weaponObject;
+
+    //initialization
+    [SerializeField] private GameObject maleHand;
+    [SerializeField] private GameObject femaleHand;
 
     //HUD
     [SerializeField] private Slider healthBar;
@@ -26,6 +26,7 @@ public class PlayerStats : CharacterStats
     private float restStationHealDuration = 3;
     private float restStationHealAmount = 5;
     private float restStationHealTimer = 0;
+    private GameObject activePlayerHand;
 
     public Vector3 RespawnPos { get { return respawnPos; } set { respawnPos = value; } }
     public GameObject WeaponObject { get { return weaponObject; } }
@@ -43,7 +44,12 @@ public class PlayerStats : CharacterStats
         if (healing) { HealAtRestStation(); }
     }
 
-    public void Attack() { if (shield.activeSelf == false && hitArea.activeSelf == false) { hitArea.SetActive(true); } }
+    public void Attack() 
+    { 
+        if (shield.activeSelf == true) { return; }
+        if (hitArea.activeSelf == true) { return; }
+        hitArea.SetActive(true); 
+    }
 
     public void StopAttacking() 
     {
@@ -52,9 +58,17 @@ public class PlayerStats : CharacterStats
         hitArea.SetActive(false);
     }
 
-    public void Block() { if (shield.activeSelf == false) { shield.SetActive(true); }}
+    public void Block() 
+    { 
+        if (shield.activeSelf == true) { return; }
+        shield.SetActive(true);
+    }
 
-    public void StopBlocking() { if (shield.activeSelf == true) { shield.SetActive(false);}}
+    public void StopBlocking() 
+    { 
+        if (shield.activeSelf == false) { return; }
+        shield.SetActive(false);
+    }
 
     #region Stat Modification
     public override void ResetStats()
@@ -93,7 +107,7 @@ public class PlayerStats : CharacterStats
     #endregion
 
     #region Equip Modification
-    public void EquipWeapon(GameObject newWeaponObject, bool discardWeapon)
+    public void EquipWeapon(GameObject newWeaponObj, bool discardWeapon)
     {
         //get player hands
         Transform playerHands = weaponObject.transform.parent;
@@ -107,7 +121,7 @@ public class PlayerStats : CharacterStats
             RemoveWeapon();
         }
 
-        weaponObject = Instantiate(newWeaponObject, playerHands);
+        weaponObject = Instantiate(newWeaponObj, playerHands);
 
         weaponObject.transform.localScale = new Vector3
         (1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.x, 
@@ -119,6 +133,8 @@ public class PlayerStats : CharacterStats
         hitArea.PlayerStats = this;
         hitArea.PlayerController = gameObject.GetComponent<PlayerController>();
         weaponHitArea = hitArea.gameObject.GetComponent<Collider>();
+
+        weaponObject.transform.parent = activePlayerHand.transform;
     }
 
     private void RemoveWeapon()
@@ -149,20 +165,25 @@ public class PlayerStats : CharacterStats
         return (health / maxHealth);
     }
 
-    public void SetGender(bool isMale)
-    {
-        if (maleHitArea.activeSelf)
+    public void UpdateWeaponHitArea(bool isMale)
+    {  
+        if (isMale)
         {
-            if (isMale)
-            {
-                weaponHitArea = maleHitArea.GetComponent<Collider>();
-            }
-            else
-            {
-                weaponHitArea = femaleHitArea.GetComponent<Collider>();
-            }
+            activePlayerHand = maleHand;
+            maleHand.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Collider>().enabled = true;
+            femaleHand.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Collider>().enabled = false;
+        }
+        else if (!isMale)
+        {
+            activePlayerHand = femaleHand;
+            maleHand.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Collider>().enabled = false;
+            femaleHand.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Collider>().enabled = true;
         }
 
+        if (activePlayerHand == null) { return; }
+        weaponHitArea = activePlayerHand.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Collider>();
+
+        if (weaponHitArea == null) { return; }
         weaponObject = weaponHitArea.transform.parent.parent.gameObject; // parent.parent is to get: hitarea > handpos > weapon root
     }
     #endregion

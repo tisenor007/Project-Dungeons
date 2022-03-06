@@ -36,24 +36,23 @@ public class GameManager : MonoBehaviour
     public PlayerStats playerStats;
     public CharacterSelection characterSelection;
     public GameObject[] levels;
-    [HideInInspector]public GameState gameState;
+    public Weapon playerSavedWeapon;
+    [HideInInspector] public GameState gameState;
     [HideInInspector] public int currentLevel = 0;
-
-    [Space]
-    [SerializeField] private TextMeshProUGUI saveText;
-    [SerializeField] private TextMeshProUGUI loadText;
+    [HideInInspector] public GameObject currentPlayerModel;
+    [HideInInspector] public PlayerController playerController;
     private GameState savedScreenState;
     // title acts as default state
     private bool gameplay;
     private bool paused;
-
     private bool fadeSave;
     private bool fadeLoad;
     private float textFadeWaitTime = 1.5f;
-    private GameObject currentPlayerModel;
 
+    [Space]
+    [SerializeField] private TextMeshProUGUI saveText;
+    [SerializeField] private TextMeshProUGUI loadText;
     //Create a new object within the player, one will be male, the other female
-    [SerializeField] private PlayerController playerController;
     [SerializeField] private GameObject malePlayer;
     [SerializeField] private GameObject femalePlayer;
 
@@ -116,6 +115,7 @@ public class GameManager : MonoBehaviour
                     characterSelection.HideModels();
                     playerAndCamera.SetActive(true);
                     UpdatePlayerVitalStatusAppearance(characterSelection.isMale, playerStats.IsAlive);
+                    playerStats.UpdateWeaponHitArea(characterSelection.isMale);
                     Cursor.visible = false;
                     return;
                 }
@@ -249,9 +249,9 @@ public class GameManager : MonoBehaviour
         if (gameState == GameState.OPTIONS) { return; }
 
         if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                levelManager.ChangeGameStateToPause();
-            }
+        {
+            levelManager.ChangeGameStateToPause();
+        }
         
     }
 
@@ -297,13 +297,12 @@ public class GameManager : MonoBehaviour
             levelManager.activeScreen = loadedInfo.activeScreen;
             gameState = loadedInfo.gameState;
             playerStats.Health = loadedInfo.health;
-            JsonUtility.FromJsonOverwrite(loadedInfo.JsonWeapon, playerStats.CurrentWeapon);
-            playerStats.EquipWeapon(playerStats.CurrentWeapon.weaponObject, false);
             characterSelection.isMale = loadedInfo.genderStatus;
             playerStats.RespawnPos = new Vector3(loadedInfo.playerSpawnPosX, loadedInfo.playerSpawnPosY, loadedInfo.playerSpawnPosZ);
             playerAndCamera.transform.GetChild(0).position = playerStats.RespawnPos;
             characterSelection.SetPlayerModel();
-
+            JsonUtility.FromJsonOverwrite(loadedInfo.JsonWeapon, playerSavedWeapon);
+            playerSavedWeapon.Equip(playerSavedWeapon.weaponObject, playerAndCamera.transform.GetChild(0).gameObject, false);
             loadText.CrossFadeAlpha(1, .1f, true);
             StartCoroutine(WaitToFadeText("load"));
         }
@@ -347,13 +346,15 @@ public class GameManager : MonoBehaviour
 
         if (isMale)
         {
+            currentPlayerModel = malePlayer;
             playerController.animator = malePlayer.GetComponent<Animator>();
         } else
         {
+            currentPlayerModel = femalePlayer;
             playerController.animator = femalePlayer.GetComponent<Animator>();
         }
 
-        playerStats.SetGender(isMale);
+        playerStats.UpdateWeaponHitArea(characterSelection.isMale);
     }
 
     public void UpdatePlayerVitalStatusAppearance(bool isMale, bool isAlive)

@@ -10,13 +10,24 @@ public class HitArea : MonoBehaviour
     public PlayerStats PlayerStats { set { playerStats = value; } }
     public PlayerController PlayerController { set { playerController = value; } }
 
+    private void Update()
+    {
+        this.GetComponent<Collider>().enabled = CanDealDamage();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Enemy" && playerController != null && playerStats != null)
+        if (other.tag == "Enemy" && CanDealDamage())
         {
-            if (!playerController.IsAttacking()) { return; }
             other.GetComponent<Enemy>().TakeDamage(playerStats.Damage, other.GetComponent<Transform>());
-            Debug.Log("ENEMY HEALTH: " + other.GetComponent<Enemy>().Health);
         }
+    }
+
+    private bool CanDealDamage()
+    {
+        if (playerController == null) { return false; }
+        if (playerStats == null) { return false; }
+
+        return playerController.IsAttacking();
     }
 }

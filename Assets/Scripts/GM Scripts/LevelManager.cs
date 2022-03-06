@@ -60,7 +60,8 @@ public class LevelManager : MonoBehaviour
 
     public void ChangeGameStateToNewGame()
     {
-        SwitchLevel(0);     
+        SwitchLevel(0);
+        GameManager.manager.playerStats.DefaultWeapon.Equip(GameManager.manager.playerStats.DefaultWeapon.weaponObject, GameManager.manager.playerAndCamera.transform.GetChild(0).gameObject, false);
     }
 
     public void ProgressLevel()

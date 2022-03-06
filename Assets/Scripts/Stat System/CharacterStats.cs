@@ -18,6 +18,7 @@ public abstract class CharacterStats : MonoBehaviour
     public int Damage { get => damage; set => damage = value; }
     public float AttackSpeed { get => attackSpeed; set => attackSpeed = value; }
     public Weapon CurrentWeapon { get => currentWeapon; set => currentWeapon = value; }
+    public Weapon DefaultWeapon { get => defaultWeapon; set => defaultWeapon = value; }
 
     private void Start()
     {

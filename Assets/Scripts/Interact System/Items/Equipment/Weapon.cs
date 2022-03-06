@@ -21,9 +21,9 @@ public abstract class Weapon : Equipment
         playerStats.CurrentWeapon = this;
     }
 
-    public override void Equip(GameObject equipment, GameObject interactor)
+    public override void Equip(GameObject equipment, GameObject interactor, bool inGameEquip)
     {
-        base.Equip(equipment, interactor);
+        base.Equip(equipment, interactor, inGameEquip);
 
         PlayerStats playerStats = FindPlayerStats(interactor);
 
@@ -38,12 +38,13 @@ public abstract class Weapon : Equipment
         playerStats.AttackSpeed = attackSpeed;
         
         //equip 
-        playerStats.EquipWeapon(equipment, true);
+        playerStats.EquipWeapon(equipment, inGameEquip);
 
         // item type
         playerStats.CurrentWeapon = this;
 
-        // display equip feedback
+        //display equip feedback
+        if (inGameEquip == false) { return; }
         GameManager.manager.levelManager.CreatePopUp($"Equipped {this.nameOfItem}:{damage} ATK", interactor.transform.position, Color.white);
         Debug.LogWarning($"Set {playerStats.gameObject.name}, damage = {damage}, speed = {attackSpeed}, type = {playerStats.CurrentWeapon}.");
     }

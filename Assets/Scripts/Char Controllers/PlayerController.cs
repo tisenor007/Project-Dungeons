@@ -150,7 +150,7 @@ public class PlayerController : MonoBehaviour
 
         //attacking
         if (Input.GetMouseButton(0)){ ActivateAttack(); }
-        if(IsAttacking() == false) { attackBlend -= Time.deltaTime * attackBlendDeceleration; StopAttacking(); }
+        if(!IsAttacking()) { attackBlend -= Time.deltaTime * attackBlendDeceleration; StopAttacking(); }
 
         //blocking
         if (Input.GetMouseButton(1)) { ActivateBlock(); }
@@ -339,14 +339,14 @@ public class PlayerController : MonoBehaviour
 
     public void StopAttacking() 
     {
-        if (playerStats.weaponHitArea.enabled == true) 
-        { playerStats.weaponHitArea.enabled = false; } 
+        if (playerStats.weaponHitArea == null) { return; }
+        if (playerStats.weaponHitArea.enabled == true) { playerStats.weaponHitArea.enabled = false; } 
     }
 
     public bool IsAttacking()
     {
         if (Time.time <= attackTimer) { return true; }
-        if (attackBlend <= 0) { return true; }
+        //if (attackBlend > 0) { return true; }
 
         return false;
     }

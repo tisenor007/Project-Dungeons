@@ -17,11 +17,11 @@ public abstract class Equipment : Item
         interactable.GetComponent<Interactable>().RemoveGameObjectWFeedback();
         GameObject equipment = interactable.transform.GetChild(0).gameObject; // breaking off the interactable shell/GameObject
 
-        Equip(equipment, interactor);
+        Equip(equipment, interactor, true);
 
     }
 
-    public virtual void Equip(GameObject equipment, GameObject interactor)
+    public virtual void Equip(GameObject equipment, GameObject interactor, bool inGamePickup)
     {
         FindEquipmentObject(equipment);
         Debug.Log($"Equiping {nameOfItem}");
