@@ -84,6 +84,7 @@ public class PlayerStats : CharacterStats
 
         playerController.StopAttacking();
         playerController.StopBlocking();
+        healing = false;
     }
 
     public override void TakeDamage(int damage, Transform character)
