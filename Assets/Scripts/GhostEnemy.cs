@@ -32,6 +32,12 @@ public class GhostEnemy : Enemy
         bobUp = transform.position.y + 4;
         bobDown = transform.position.y + 2;
         enemyNavMeshAgent.speed = speed;
+        this.audioGroup = "Ghost";
+
+        this.attackSound = SoundManager.Sound.GhostAttack;
+        this.chasingSound = SoundManager.Sound.GhostChasing;
+        this.deathSound = SoundManager.Sound.GhostDeath;
+        this.idleSound = SoundManager.Sound.GhostIdle;
 
         InitEnemy();
     }
@@ -86,6 +92,8 @@ public class GhostEnemy : Enemy
 
     public override void Idle()
     {
+        //PlayAudio(this);
+        //SoundManager.PlaySound(SoundManager.Sound.GhostIdle);
         Bobbing();
         playerLocation = playerStats.gameObject.transform.position;
         enemyNavMeshAgent.speed = speed;
@@ -102,7 +110,7 @@ public class GhostEnemy : Enemy
         enemyNavMeshAgent.speed = 10;
 
         enemyNavMeshAgent.SetDestination(playerLocation);
-
+        //SoundManager.PlaySound(SoundManager.Sound.GhostChasing);
         if (distanceFromPlayer <= attackDistance)
         {
             enemyNavMeshAgent.speed = speed;

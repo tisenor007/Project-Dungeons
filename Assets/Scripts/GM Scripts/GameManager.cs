@@ -73,6 +73,8 @@ public class GameManager : MonoBehaviour
 
         //levelManager.ChangeGameStateToLoadingScreen();
         gameState = GameState.LOADINGSCREEN;
+
+        
     }
 
     void Update()
@@ -115,6 +117,9 @@ public class GameManager : MonoBehaviour
                     if (levels[currentLevel].activeSelf == false) { levels[currentLevel].SetActive(true); }
                     playerAndCamera.SetActive(true);
                     Cursor.visible = false;
+
+                    //SoundManager.PlaySound(SoundManager.Sound.CaveAmbience);
+                    //Debug.LogError("SOUND PLAYED");
                     return;
                 }
             case GameState.WIN:

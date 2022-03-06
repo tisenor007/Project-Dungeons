@@ -8,6 +8,7 @@ using System;
 
 public class Enemy : GameCharacter
 {
+    [SerializeField]
     protected enum State
     {
         Idle,
@@ -23,6 +24,7 @@ public class Enemy : GameCharacter
     protected float hearingDistance;
     protected float attackDistance;
     protected float speed;
+    protected string audioGroup;
 
     protected float distanceFromPlayer;
     protected float hitTimer;
@@ -37,6 +39,11 @@ public class Enemy : GameCharacter
     [SerializeField] private Image healthColour;
     [SerializeField] private Slider healthBar;
     [SerializeField] private Transform cam;
+
+    protected SoundManager.Sound attackSound;
+    protected SoundManager.Sound chasingSound;
+    protected SoundManager.Sound deathSound;
+    protected SoundManager.Sound idleSound;
 
     public void Update()
     {
@@ -53,6 +60,7 @@ public class Enemy : GameCharacter
         switch (enemyState)
         {
             case State.Idle:
+                PlayAudio(this);
                 Idle();
                 break;
 
@@ -178,8 +186,18 @@ public class Enemy : GameCharacter
     protected override void Death()
     {
         base.Death();
-
+        SoundManager.PlaySound(this.deathSound);
         // ENTER CODE FOR DEATH ANIMATIONS, ETC
         this.gameObject.SetActive(false);
+    }
+
+    public void PlayAudio(Enemy enemy)
+    {
+        if (enemyState == State.Idle)
+            SoundManager.PlaySound(enemy.idleSound, enemy.transform.position);
+        if (enemyState == State.Chasing)
+            SoundManager.PlaySound(enemy.chasingSound, enemy.transform.position);
+        if (enemyState == State.Attacking)
+            SoundManager.PlaySound(enemy.attackSound, enemy.transform.position);
     }
 }

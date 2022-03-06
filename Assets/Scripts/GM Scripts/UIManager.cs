@@ -30,6 +30,7 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
+        SoundManager.InitializeDictionary();
         LoadTitleMenu();
     }
 

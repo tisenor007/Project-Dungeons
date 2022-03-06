@@ -182,6 +182,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7676479150056116648, guid: 5bffb16854ed9f64c934b60164de3dbf, type: 3}
+      propertyPath: levels.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7676479150056116649, guid: 5bffb16854ed9f64c934b60164de3dbf, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -245,19 +249,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  health: 0
   damage: 0
-  enemyState: 0
-  enemyNavMeshAgent: {fileID: 0}
-  playerStats: {fileID: 0}
-  viewDistance: 0
-  hearingDistance: 0
-  attackDistance: 0
-  speed: 0
-  distanceFromPlayer: 0
-  hitTimer: 0
-  hitDuration: 0
-  stunnedHitDuration: 0
-  playerLocation: {x: 0, y: 0, z: 0}
   healthColour: {fileID: 0}
   healthBar: {fileID: 0}
   cam: {fileID: 0}
@@ -265,6 +258,8 @@ MonoBehaviour:
   bobUp: 0
   bobDown: 0
   bobSpeed: 0
+  slowSpin: 10
+  fastSpin: 100
   movingDown: 0
   ghostBody: {fileID: 0}
 --- !u!1 &414725896
