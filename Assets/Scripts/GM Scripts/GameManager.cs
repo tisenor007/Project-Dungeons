@@ -265,6 +265,7 @@ public class GameManager : MonoBehaviour
         savedInfo.activeScreen = levelManager.activeScreen;
         savedInfo.gameState = gameState;
         savedInfo.health = playerStats.Health;
+        savedInfo.JsonWeapon = JsonUtility.ToJson(playerStats.CurrentWeapon);
         savedInfo.genderStatus = characterSelection.isMale;
         savedInfo.playerSpawnPosX = playerAndCamera.transform.GetChild(0).gameObject.transform.position.x;
         savedInfo.playerSpawnPosY = playerAndCamera.transform.GetChild(0).gameObject.transform.position.y;
@@ -296,6 +297,8 @@ public class GameManager : MonoBehaviour
             levelManager.activeScreen = loadedInfo.activeScreen;
             gameState = loadedInfo.gameState;
             playerStats.Health = loadedInfo.health;
+            JsonUtility.FromJsonOverwrite(loadedInfo.JsonWeapon, playerStats.CurrentWeapon);
+            playerStats.EquipWeapon(playerStats.CurrentWeapon.weaponObject, false);
             characterSelection.isMale = loadedInfo.genderStatus;
             playerStats.RespawnPos = new Vector3(loadedInfo.playerSpawnPosX, loadedInfo.playerSpawnPosY, loadedInfo.playerSpawnPosZ);
             playerAndCamera.transform.GetChild(0).position = playerStats.RespawnPos;
@@ -369,6 +372,7 @@ class SaveInfo
     public GameState gameState;
     public int scene;
     public int health;
+    public string JsonWeapon;
     public bool genderStatus;
     public float playerSpawnPosX;
     public float playerSpawnPosY;

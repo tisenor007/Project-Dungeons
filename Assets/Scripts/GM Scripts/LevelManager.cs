@@ -177,7 +177,7 @@ public class LevelManager : MonoBehaviour
         objectBecomingInteractable.transform.localScale = Vector3.one;
 
         interactableObject.transform.position = newPosition;
-    }
+    } 
 
     //messages
     public void DisplayPlainNote(string message)

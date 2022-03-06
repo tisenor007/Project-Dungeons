@@ -28,6 +28,12 @@ public class PlayerStats : CharacterStats
     private float restStationHealTimer = 0;
 
     public Vector3 RespawnPos { get { return respawnPos; } set { respawnPos = value; } }
+    public GameObject WeaponObject { get { return weaponObject; } }
+
+    private void Start()
+    {
+        currentWeapon.StartSetStats(this);
+    }
 
     private void Update()
     {
@@ -87,13 +93,19 @@ public class PlayerStats : CharacterStats
     #endregion
 
     #region Equip Modification
-    public void EquipWeapon(GameObject newWeaponObject)
+    public void EquipWeapon(GameObject newWeaponObject, bool discardWeapon)
     {
         //get player hands
         Transform playerHands = weaponObject.transform.parent;
 
-        DiscardWeapon();
-        //Destroy(weaponObject);
+        if (discardWeapon)
+        {
+            DiscardWeapon();
+        }
+        else 
+        {
+            RemoveWeapon();
+        }
 
         weaponObject = Instantiate(newWeaponObject, playerHands);
 
@@ -107,6 +119,13 @@ public class PlayerStats : CharacterStats
         hitArea.PlayerStats = this;
         hitArea.PlayerController = gameObject.GetComponent<PlayerController>();
         weaponHitArea = hitArea.gameObject.GetComponent<Collider>();
+    }
+
+    private void RemoveWeapon()
+    {
+        if (currentWeapon == null) return;
+
+        Destroy(weaponObject);
     }
 
     public void DiscardWeapon() // should be replaced by unequip if inventory is established
@@ -132,13 +151,16 @@ public class PlayerStats : CharacterStats
 
     public void SetGender(bool isMale)
     {
-        if (isMale)
+        if (maleHitArea.activeSelf)
         {
-            weaponHitArea = maleHitArea.GetComponent<Collider>();
-        }
-        else
-        {
-            weaponHitArea = femaleHitArea.GetComponent<Collider>();
+            if (isMale)
+            {
+                weaponHitArea = maleHitArea.GetComponent<Collider>();
+            }
+            else
+            {
+                weaponHitArea = femaleHitArea.GetComponent<Collider>();
+            }
         }
 
         weaponObject = weaponHitArea.transform.parent.parent.gameObject; // parent.parent is to get: hitarea > handpos > weapon root

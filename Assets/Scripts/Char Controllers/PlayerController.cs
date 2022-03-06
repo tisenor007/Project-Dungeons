@@ -187,7 +187,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (Collider col in hitColInteraction)
         {
-            Interactable interactable = col.gameObject.GetComponentInParent<Interactable>();
+            Interactable interactable = FindClosestInteractableObject().GetComponentInParent<Interactable>();
             //Debug.LogWarning($"trying Interaction with {interactable.gameObject.name}");
 
             if (interactable.InteractableEnabled == true)
@@ -197,6 +197,27 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+    }
+
+    public GameObject FindClosestInteractableObject()
+    {
+        if (hitColInteraction.Length == 0) { Debug.LogError("no objects in hitColInteraction"); return null; }
+
+        GameObject interactableObject = hitColInteraction[0].gameObject;
+        float shortestDistanceFromPlayer = Vector3.Distance(gameObject.transform.position, hitColInteraction[0].gameObject.transform.position);
+
+        foreach (Collider col in hitColInteraction)
+        { 
+            float calcDistance = Vector3.Distance(gameObject.transform.position, col.gameObject.transform.position);
+
+            if (calcDistance < shortestDistanceFromPlayer)
+            {
+                shortestDistanceFromPlayer = calcDistance;
+                interactableObject = col.gameObject;
+            }
+        }
+
+        return interactableObject;
     }
 
     private void EnableInteractionFeedbackWithinRange()

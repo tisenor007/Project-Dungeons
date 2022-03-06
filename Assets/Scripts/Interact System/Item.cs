@@ -4,6 +4,7 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(Interactable))] // all subclasses should also require interactable
+[SerializeField]
 public abstract class Item : ScriptableObject
 {
     public string nameOfItem;
