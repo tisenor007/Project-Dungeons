@@ -10,6 +10,7 @@ public class Boss : Enemy
     private float staminaTimer;
     private float recoverTimer;
     // Start is called before the first frame update
+  
     void Start()
     {
         this.viewDistance = 15;
@@ -18,6 +19,11 @@ public class Boss : Enemy
         this.damage = 30;
         this.speed = 5.0f;
         this.attackDistance = 5;
+
+        this.attackSound = SoundManager.Sound.ZombieAttack;
+        this.chasingSound = SoundManager.Sound.ZombieChasing;
+        this.deathSound = SoundManager.Sound.ZombieDeath;
+        this.idleSound = SoundManager.Sound.ZombieIdle;
 
         InitEnemy();
     }

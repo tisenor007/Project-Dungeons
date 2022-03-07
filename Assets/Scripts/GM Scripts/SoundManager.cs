@@ -92,14 +92,14 @@ public class SoundManager : MonoBehaviour
             audioSource.clip = GetAudioClip(sound);
             audioSource.Play();
 
-            Debug.LogError("CLIP PLAYED: " + audioSource.clip.name);
+            //Debug.Log("CLIP PLAYED: " + audioSource.clip.name);
             Object.Destroy(soundGameObject, audioSource.clip.length);
         } 
     }
 
     public static void PlaySound(Sound sound)
     {
-        //Debug.LogError("SOUND DELAY TIMER: " + soundTimerDictionary[sound]);
+        //Debug.Log("SOUND DELAY TIMER: " + soundTimerDictionary[sound]);
         //
 
         if (CanPlaySound(sound))
@@ -410,7 +410,7 @@ public class SoundManager : MonoBehaviour
             {
                 currentSoundAudioClip = soundAudioClip;
                 int i = Mathf.FloorToInt(Random.Range(0, soundAudioClip.audioClipArray.Length));
-                //Debug.LogError("currentArrayAudioClip: " + i);
+                //Debug.Log("currentArrayAudioClip: " + i);
                 currentArrayAudioClipLength = soundAudioClip.audioClipArray[i].length;
 
                 return soundAudioClip.audioClipArray[i];

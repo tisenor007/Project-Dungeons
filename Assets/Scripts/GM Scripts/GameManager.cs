@@ -87,6 +87,7 @@ public class GameManager : MonoBehaviour
         levelManager.LoadButtonFade(File.Exists(Application.persistentDataPath + "/savedInfo.dat"));
         levelManager.NextLevelButtonFade(currentLevel);
         levelManager.UpdateDungeon();
+        AudioListener.volume = 0.25f;
 
         switch (gameState)
         {
@@ -205,6 +206,7 @@ public class GameManager : MonoBehaviour
             case GameState.LOADINGSCREEN:
                 {
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
+                    playerAndCamera.SetActive(true);
                     Cursor.visible = false;
                     if (levels[currentLevel].GetComponent<DungeonGenerator>().dungeonGenerated == false)
                     {
@@ -335,6 +337,7 @@ public class GameManager : MonoBehaviour
 
     public void ResetScene()
     {
+        playerStats.EquipDefaultWeapon(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
 

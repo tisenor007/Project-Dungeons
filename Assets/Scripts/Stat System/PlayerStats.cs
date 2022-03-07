@@ -24,7 +24,7 @@ public class PlayerStats : CharacterStats
     [SerializeField] private Vector3 respawnPos = new Vector3(-56.0f, 5.11f, -63.0f);
 
     private float restStationHealDuration = 3;
-    private float restStationHealAmount = 5;
+    private float restStationHealAmount = 10;
     private float restStationHealTimer = 0;
     private GameObject activePlayerHand;
 
@@ -124,10 +124,20 @@ public class PlayerStats : CharacterStats
 
         weaponObject = Instantiate(newWeaponObj, playerHands);
 
-        weaponObject.transform.localScale = new Vector3
-        (1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.x, 
-        1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.y, 
-        1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.z);
+        if (!GameManager.manager.characterSelection.isMale) 
+        {
+            weaponObject.transform.localScale = new Vector3
+            (15 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.x,
+            15 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.y,
+            15 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.z);
+        }
+        else if (GameManager.manager.characterSelection.isMale)
+        {
+            weaponObject.transform.localScale = new Vector3
+            (1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.x,
+            1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.y,
+            1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.z);
+        }
 
         HitArea hitArea = weaponObject.transform.GetChild(0).GetComponentInChildren<HitArea>();
 
@@ -186,6 +196,11 @@ public class PlayerStats : CharacterStats
 
         if (weaponHitArea == null) { return; }
         weaponObject = weaponHitArea.transform.parent.parent.gameObject; // parent.parent is to get: hitarea > handpos > weapon root
+    }
+
+    public void EquipDefaultWeapon(bool inGamePickup)
+    {
+        DefaultWeapon.Equip(DefaultWeapon.weaponObject, GameManager.manager.playerAndCamera.transform.GetChild(0).gameObject, inGamePickup);
     }
     #endregion
 

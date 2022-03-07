@@ -39,6 +39,8 @@ public abstract class CharacterStats : MonoBehaviour
 
     public virtual void TakeDamage(int damage, Transform character)
     {
+        if (character.tag == "Enemy") { SoundManager.PlaySound(SoundManager.Sound.Punches, transform.position); }
+
         health -= damage;
         //if(health <= 0)
         //{

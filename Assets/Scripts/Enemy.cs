@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-public class Enemy : GameCharacter
+public class Enemy : CharacterStats
 {
     [SerializeField]
     protected enum State
@@ -28,7 +28,6 @@ public class Enemy : GameCharacter
 
     protected float distanceFromPlayer;
     protected float hitTimer;
-    protected float hitDuration;
     protected float stunnedHitDuration;
 
     protected Vector3 playerLocation;
@@ -99,7 +98,7 @@ public class Enemy : GameCharacter
 
         if (distanceFromPlayer <= attackDistance)
         {
-            hitTimer = hitDuration;
+            hitTimer = attackSpeed;
             SwitchState(State.Attacking);
         }
 
@@ -120,14 +119,14 @@ public class Enemy : GameCharacter
             if (playerStats.shield.activeSelf == true)
             {
                 playerStats.TakeDamage((int)(damage / 4), playerStats.GetComponent<Transform>());
-                SoundManager.PlaySound(SoundManager.Sound.MetalClang, playerLocation);
                 hitTimer = stunnedHitDuration; // <----- will be replaced by a possible stunned state
+                SoundManager.PlaySound(SoundManager.Sound.MetalClang, playerLocation);
             }
             else
             {
                 playerStats.TakeDamage(damage, playerStats.GetComponent<Transform>());
+                hitTimer = attackSpeed;
                 PlayAudio(this);
-                hitTimer = hitDuration;
             }
         }   
 
@@ -168,13 +167,13 @@ public class Enemy : GameCharacter
         healthBar = transform.GetChild(0).GetChild(0).GetComponent<Slider>();
         healthColour.color = new Color32(74, 227, 14, 255);
 
-        cam = GameObject.Find("Main Camera").GetComponent<Transform>();
-        playerStats = GameObject.Find("Player").GetComponent<PlayerStats>();
+        cam = GameManager.manager.playerAndCamera.transform.GetChild(1);
+        playerStats = GameManager.manager.playerStats;
         enemyNavMeshAgent = GetComponent<NavMeshAgent>();
 
         maxHealth = Health;
         healthBar.maxValue = maxHealth;
-        stunnedHitDuration = hitDuration * 1.5f;
+        stunnedHitDuration = attackSpeed * 1.5f;
     }
 
     public override void TakeDamage(int damage, Transform character)
@@ -189,7 +188,7 @@ public class Enemy : GameCharacter
 
     protected override void Death()
     {
-        SoundManager.PlaySound(this.deathSound, enemyLocation);
+        SoundManager.PlaySound(this.deathSound, enemyLocation); 
         base.Death();
         
         // ENTER CODE FOR DEATH ANIMATIONS, ETC
