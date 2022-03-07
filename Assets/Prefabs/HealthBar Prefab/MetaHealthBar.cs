@@ -5,17 +5,17 @@ using UnityEngine.UI;
 
 public class MetaHealthBar : MonoBehaviour
 {
-    public EnemyAI enemy;
+    public Enemy enemy;
     public Image healthColour;
     public Slider healthBar;
     public Transform cam;
 
     void Start()
     {
-        enemy = GetComponentInParent<EnemyAI>();
-        healthColour = transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Image>();
-        healthBar = transform.GetChild(0).GetChild(0).GetComponent<Slider>();
-        healthBar.maxValue = enemy.maxHealth;
+        enemy = GetComponentInParent<Enemy>();
+        healthColour = transform.GetChild(0).GetChild(0).GetComponent<Image>();
+        healthBar = transform.GetChild(0).GetComponent<Slider>();
+        healthBar.maxValue = enemy.MaxHealth;
         healthColour.GetComponent<Image>().color = new Color32(74, 227, 14, 255);
         cam = GameObject.Find("Main Camera").GetComponent<Transform>();
     }
@@ -29,19 +29,19 @@ public class MetaHealthBar : MonoBehaviour
 
     void UpdateHealth()
     {
-        healthBar.value = enemy.health;
+        healthBar.value = enemy.Health;
         //miniHealthBar.GetComponent<Slider>().value = health;
 
-        if (enemy.health < enemy.maxHealth * 0.8 && enemy.health > enemy.maxHealth * 0.6)
+        if (enemy.Health < enemy.MaxHealth * 0.8 && enemy.Health > enemy.MaxHealth * 0.6)
             healthColour.color = new Color32(167, 227, 16, 255);
 
-        if (enemy.health < enemy.maxHealth * 0.6 && enemy.health > enemy.maxHealth * 0.4)
+        if (enemy.Health < enemy.MaxHealth * 0.6 && enemy.Health > enemy.MaxHealth * 0.4)
             healthColour.color = new Color32(227, 176, 9, 255);
 
-        if (enemy.health < enemy.maxHealth * 0.4 && enemy.health > enemy.maxHealth * 0.2)
+        if (enemy.Health < enemy.MaxHealth * 0.4 && enemy.Health > enemy.MaxHealth * 0.2)
             healthColour.color = new Color32(240, 86, 48, 255);
 
-        if (enemy.health < enemy.maxHealth * 0.2)
+        if (enemy.Health < enemy.MaxHealth * 0.2)
             healthColour.color = new Color32(204, 40, 0, 255);
     }
 }
