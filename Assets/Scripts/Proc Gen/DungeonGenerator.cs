@@ -38,6 +38,7 @@ public class DungeonGenerator : MonoBehaviour
     private int branchDecision;
     private Vector3 directionBuildPos;
     private Vector3 leavePos;
+    private GameObject lastGeneratedStructure;
 
     // Update is called once per frame
     void Update()
@@ -148,7 +149,7 @@ public class DungeonGenerator : MonoBehaviour
             nextStructureType = (StructureType)ChooseNumbByChance((int)StructureType.Room, (int)StructureType.Hallway, roomChance, hallwayChance);
             GenerateNewStructure(nextStructureType, structures[randomMidStruct].transform.position);
         }
-        if (includeTraps== false) { return; }
+        if (includeTraps == false) { return; }
         GenerateNewStructure(StructureType.TrapStructure, structures[structures.Count-1].transform.position);
     }
 
@@ -175,6 +176,8 @@ public class DungeonGenerator : MonoBehaviour
 
         currentStructureVariation = nextStructVariation;
         structure.GetComponent<StructureBehavior>().currentVariation = nextStructVariation;
+
+        lastGeneratedStructure = structures[structures.Count - 1];
     }
 
 
@@ -186,9 +189,8 @@ public class DungeonGenerator : MonoBehaviour
 
         if (structures.Count <= 0) { nextStructureLoc = Vector3.zero; nextStructureRot = Vector3.zero; return false; }
         //restricts directions based off where it is coming from and where it is going.....
-        //IDEA: Last Generated GameObject that keeps track of this and prevents hallway errors
-        if (currentStructureType == StructureType.Hallway && structures[structures.Count - 1].transform.eulerAngles.y == 0) { nextStructureDirection = Random.Range(0, 2); }
-        else if (currentStructureType == StructureType.Hallway && structures[structures.Count - 1].transform.eulerAngles.y == 90) { nextStructureDirection = Random.Range(2, 3); }
+        if (currentStructureType == StructureType.Hallway && lastGeneratedStructure.transform.eulerAngles.y == 0) { nextStructureDirection = Random.Range(0, 2); }
+        else if (currentStructureType == StructureType.Hallway && lastGeneratedStructure.transform.eulerAngles.y == 90) { nextStructureDirection = Random.Range(2, 3); }
         else if (currentStructureType == StructureType.Room) { nextStructureDirection = Random.Range(0, 3); }
 
         if (nextStructureDirection <= 0)

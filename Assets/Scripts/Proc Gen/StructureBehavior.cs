@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StructureBehavior : MonoBehaviour
 {
-    [HideInInspector] public DungeonGenerator.StructureType currentStructureType;
+    public DungeonGenerator.StructureType currentStructureType;
     [HideInInspector] public int currentVariation;
     [SerializeField] private Light[] lights;
     [SerializeField] private GameObject doors;
