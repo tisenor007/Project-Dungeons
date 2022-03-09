@@ -16,4 +16,9 @@ public class NoteItem : Item
         interactor.GetComponent<PlayerController>().CanMove = false;
         GameManager.manager.levelManager.DisplayPlainNote(message);
     }
+
+    public void PlayStory()
+    { 
+        // run a Level Manager method from Story Manager right here
+    }
 }
