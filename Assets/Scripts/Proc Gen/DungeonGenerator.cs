@@ -10,7 +10,8 @@ public class DungeonGenerator : MonoBehaviour
         Hallway,
         Length,
         StartStructure,
-        EndStructure
+        EndStructure, 
+        TrapStructure
     }
     public float structureSpacing = 10;
     public int roomChance = 80;
@@ -18,10 +19,14 @@ public class DungeonGenerator : MonoBehaviour
     public bool dungeonIsGenerating = false;
     [HideInInspector] public bool dungeonGenerated = false;
     [HideInInspector] public List<GameObject> structures = new List<GameObject>();
+    [SerializeField] private int branchChance;
+    [SerializeField] private int maxBranchLengthRange;
     [SerializeField] private GameObject startStructure;
     [SerializeField] private GameObject endStructure;
     [SerializeField] private GameObject[] roomVariations;
     [SerializeField] private GameObject[] hallwayVariations;
+    [SerializeField] private bool includeTraps;
+    [SerializeField] private GameObject[] trapVariations;
     [SerializeField] private int maxStructures = 10;
     private StructureType nextStructureType;
     private StructureType currentStructureType = StructureType.Room;
@@ -30,7 +35,10 @@ public class DungeonGenerator : MonoBehaviour
     private int nextStructureDirection;
     private int nextStructureVariation;
     private int currentStructureVariation;
-   
+    private int branchDecision;
+    private Vector3 directionBuildPos;
+    private Vector3 leavePos;
+
     // Update is called once per frame
     void Update()
     {
@@ -40,20 +48,23 @@ public class DungeonGenerator : MonoBehaviour
     //master method
     public void GenerateNewDungeon()
     {
-        InstantiateStructure(startStructure, Vector3.zero, Vector3.zero, StructureType.StartStructure, 0);
-        //adds rooms to dungeon until max number is met
-        if (structures.Count < maxStructures)
+        branchDecision = ChooseNumbByChance(0, 1, branchChance, 100 - branchDecision);
+        if (structures.Count <=0) 
         {
-            GenerateNewStructure();
+            GenerateNewStructure(StructureType.StartStructure, Vector3.zero);
+        }
+        //adds rooms to dungeon until max number is met
+        else if (structures.Count < maxStructures && structures.Count > 0)
+        {
+            nextStructureType = (StructureType)ChooseNumbByChance((int)StructureType.Room, (int)StructureType.Hallway, roomChance, hallwayChance);
+            if (branchDecision == 0) { CreateDungeonBranch(); }
+            else if (branchDecision != 0) { GenerateNewStructure(nextStructureType, leavePos); leavePos = structures[structures.Count - 1].transform.position; }
         }
         //makes them all children after generation
         else if (structures.Count >= maxStructures) 
         {
-            if (DirectionIsRandomized() && !StructureIsHere(nextStructureLoc)) 
-            {
-                InstantiateStructure(endStructure, nextStructureLoc, nextStructureRot, StructureType.EndStructure, 0);
-                CompleteGeneration();
-            }
+            GenerateNewStructure(StructureType.EndStructure, structures[structures.Count-1].transform.position);
+            CompleteGeneration();
         }
     }
 
@@ -97,21 +108,48 @@ public class DungeonGenerator : MonoBehaviour
     }
 
     //tries to add room to dungeon
-    private void GenerateNewStructure()
+    private void GenerateNewStructure(StructureType structureType, Vector3 basePos)
     {
-        nextStructureType = (StructureType)ChooseNumbByChance((int)StructureType.Room, (int)StructureType.Hallway, roomChance, hallwayChance);
-        if (nextStructureType == StructureType.Room)
+        if (structureType == StructureType.StartStructure)
+        {
+            InstantiateStructure(startStructure, Vector3.zero, Vector3.zero, StructureType.StartStructure, 0);
+        }
+        else if (structureType == StructureType.Room)
         {
             if (!VariantIsRandomized(roomVariations)) { return; }
-            if (!DirectionIsRandomized()) { return; }
+            if (!DirectionIsRandomized(basePos)) { return; }
             InstantiateStructure(roomVariations[nextStructureVariation], nextStructureLoc, nextStructureRot, nextStructureType, nextStructureVariation);
         }
-        else if (nextStructureType == StructureType.Hallway)
+        else if (structureType == StructureType.Hallway)
         {
-            if (!VariantIsRandomized(roomVariations)) { return; }
-            if (!DirectionIsRandomized()) { return; }
+            if (!VariantIsRandomized(hallwayVariations)) { return; }
+            if (!DirectionIsRandomized(basePos)) { return; }
             InstantiateStructure(hallwayVariations[nextStructureVariation], nextStructureLoc, nextStructureRot, nextStructureType, nextStructureVariation);
         }
+        else if (structureType == StructureType.EndStructure)
+        {
+            if (!DirectionIsRandomized(basePos)) { return; }
+            InstantiateStructure(endStructure, nextStructureLoc, nextStructureRot, StructureType.EndStructure, 0);
+        }
+        else if (structureType == StructureType.TrapStructure)
+        {
+            if (!VariantIsRandomized(trapVariations)) { return; }
+            if (!DirectionIsRandomized(basePos)) { return; }
+            InstantiateStructure(trapVariations[nextStructureVariation], nextStructureLoc, nextStructureRot, StructureType.EndStructure, 0);
+        }
+    }
+
+    private void CreateDungeonBranch()
+    {
+        int randomMidStruct = Random.Range(0, structures.Count -1);
+
+        for (int i = 0; i <= maxBranchLengthRange; i++)
+        {
+            nextStructureType = (StructureType)ChooseNumbByChance((int)StructureType.Room, (int)StructureType.Hallway, roomChance, hallwayChance);
+            GenerateNewStructure(nextStructureType, structures[randomMidStruct].transform.position);
+        }
+        if (includeTraps== false) { return; }
+        GenerateNewStructure(StructureType.TrapStructure, structures[structures.Count-1].transform.position);
     }
 
     private bool VariantIsRandomized(GameObject[] structureVariations)
@@ -141,10 +179,14 @@ public class DungeonGenerator : MonoBehaviour
 
 
     //makes random direction that next room / structure can go
-    private bool DirectionIsRandomized()
+    private bool DirectionIsRandomized(Vector3 basePos)
     {
+        if (StructureIsHere(basePos)) { directionBuildPos = basePos; }
+        else if (!StructureIsHere(basePos)) { directionBuildPos = structures[structures.Count - 1].transform.position; }
+
         if (structures.Count <= 0) { nextStructureLoc = Vector3.zero; nextStructureRot = Vector3.zero; return false; }
         //restricts directions based off where it is coming from and where it is going.....
+        //IDEA: Last Generated GameObject that keeps track of this and prevents hallway errors
         if (currentStructureType == StructureType.Hallway && structures[structures.Count - 1].transform.eulerAngles.y == 0) { nextStructureDirection = Random.Range(0, 2); }
         else if (currentStructureType == StructureType.Hallway && structures[structures.Count - 1].transform.eulerAngles.y == 90) { nextStructureDirection = Random.Range(2, 3); }
         else if (currentStructureType == StructureType.Room) { nextStructureDirection = Random.Range(0, 3); }
@@ -152,27 +194,27 @@ public class DungeonGenerator : MonoBehaviour
         if (nextStructureDirection <= 0)
         {
             nextStructureRot = new Vector3(0, 0, 0);
-            nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x + structureSpacing, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z);
+            nextStructureLoc = new Vector3(directionBuildPos.x + structureSpacing, directionBuildPos.y, directionBuildPos.z);
             return true;
         }
         else if (nextStructureDirection == 1)
         {
             nextStructureRot = new Vector3(0, 0, 0);
-            nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x - structureSpacing, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z);
+            nextStructureLoc = new Vector3(directionBuildPos.x - structureSpacing, directionBuildPos.y, directionBuildPos.z);
             return true;
         }
         else if (nextStructureDirection == 2)
         {
             if (nextStructureType == StructureType.Hallway) { nextStructureRot = new Vector3(0, 90, 0); }
             else if (nextStructureType != StructureType.Hallway) { nextStructureRot = new Vector3(0, 0, 0); }
-            nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z + structureSpacing);
+            nextStructureLoc = new Vector3(directionBuildPos.x, directionBuildPos.y, directionBuildPos.z + structureSpacing);
             return true;
         }
         else if (nextStructureDirection >= 3)
         {
             if (nextStructureType == StructureType.Hallway) { nextStructureRot = new Vector3(0, 90, 0); }
             else if (nextStructureType != StructureType.Hallway) { nextStructureRot = new Vector3(0, 0, 0); }
-            nextStructureLoc = new Vector3(structures[structures.Count - 1].transform.position.x, structures[structures.Count - 1].transform.position.y, structures[structures.Count - 1].transform.position.z - structureSpacing);
+            nextStructureLoc = new Vector3(directionBuildPos.x, directionBuildPos.y, directionBuildPos.z - structureSpacing);
             return true;
         }
         return false;
