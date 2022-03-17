@@ -11,23 +11,26 @@ public class StructureBehavior : MonoBehaviour
     [Header("Only pass this in if room is an end room!")]
     [SerializeField] private GameObject bossObj;
     private DungeonGenerator dungeonGenerator;
-    private Vector3 front;
-    private Vector3 back;
-    private Vector3 right;
-    private Vector3 left;
     private bool trapIntruder = false;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        dungeonGenerator = GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        //if (currentStructureType == DungeonGenerator.StructureType.EndStructure)
+        //{
+        //    Debug.Log("End Is Here");
+        //}
+        //if (currentStructureType == DungeonGenerator.StructureType.StartStructure)
+        //{
+        //    Debug.Log("Start Is Here");
+        //}
         if (this.transform.gameObject.activeSelf == true) 
         {
-            dungeonGenerator = GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>();
             if (!trapIntruder) { OpenDoors(currentStructureType); }
         }
     }
@@ -35,26 +38,28 @@ public class StructureBehavior : MonoBehaviour
     private void OpenDoors(DungeonGenerator.StructureType structureType)
     {
         if (dungeonGenerator == null) { return; }
-        front = new Vector3(transform.position.x + dungeonGenerator.structureSpacing, transform.position.y, transform.position.z);
-        back = new Vector3(transform.position.x - dungeonGenerator.structureSpacing, transform.position.y, transform.position.z);
-        right = new Vector3(transform.position.x, transform.position.y, transform.position.z + dungeonGenerator.structureSpacing);
-        left = new Vector3(transform.position.x, transform.position.y, transform.position.z - dungeonGenerator.structureSpacing);
         
-        if (CanStructureConnect(front) && transform.eulerAngles.y == 0) { OpenDoor(front); }
-        if (CanStructureConnect(back) && transform.eulerAngles.y == 0) { OpenDoor(back); }
+        if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.front, transform.position)) && transform.eulerAngles.y == 0) 
+        { OpenDoor(DungeonGenerator.Directions.front); }
+        if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.back, transform.position)) && transform.eulerAngles.y == 0) 
+        { OpenDoor(DungeonGenerator.Directions.back); }
         //else ifs are for strange hallway door-close bug
-        if (CanStructureConnect(right) && transform.eulerAngles.y == 0) { OpenDoor(right); }
-        else if(CanStructureConnect(right) && transform.eulerAngles.y == 90) { OpenDoor(back); }
-        if (CanStructureConnect(left) && transform.eulerAngles.y == 0) { OpenDoor(left); }
-        else if (CanStructureConnect(left) && transform.eulerAngles.y == 90) { OpenDoor(front); }
+        if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.right, transform.position)) && transform.eulerAngles.y == 0) 
+        { OpenDoor(DungeonGenerator.Directions.right); }
+        else if(CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.right, transform.position)) && transform.eulerAngles.y == 90) 
+        { OpenDoor(DungeonGenerator.Directions.back); }
+        if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.left, transform.position)) && transform.eulerAngles.y == 0) 
+        { OpenDoor(DungeonGenerator.Directions.left); }
+        else if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.left, transform.position)) && transform.eulerAngles.y == 90) 
+        { OpenDoor(DungeonGenerator.Directions.front); }
     }
 
-    private void OpenDoor(Vector3 direction)
+    private void OpenDoor(DungeonGenerator.Directions direction)
     {
-        if (direction == front) { doors.transform.GetChild(0).gameObject.SetActive(false); }
-        else if(direction == back) { doors.transform.GetChild(1).gameObject.SetActive(false); }
-        else if (direction == right) { doors.transform.GetChild(2).gameObject.SetActive(false); }
-        else if (direction == left) { doors.transform.GetChild(3).gameObject.SetActive(false); }
+        if (direction == DungeonGenerator.Directions.front) { doors.transform.GetChild(0).gameObject.SetActive(false); }
+        else if(direction == DungeonGenerator.Directions.back) { doors.transform.GetChild(1).gameObject.SetActive(false); }
+        else if (direction == DungeonGenerator.Directions.right) { doors.transform.GetChild(2).gameObject.SetActive(false); }
+        else if (direction == DungeonGenerator.Directions.left) { doors.transform.GetChild(3).gameObject.SetActive(false); }
     }
 
     private bool CanStructureConnect(Vector3 chosenSpot)
@@ -73,12 +78,14 @@ public class StructureBehavior : MonoBehaviour
     {
         if (dungeonGenerator.structures[structureToBeChecked].GetComponent<StructureBehavior>().currentStructureType == DungeonGenerator.StructureType.Hallway)
         {
-            if (chosenSpot == front || chosenSpot == back)
+            if (chosenSpot == dungeonGenerator.Direction(DungeonGenerator.Directions.front, transform.position) || 
+                chosenSpot == dungeonGenerator.Direction(DungeonGenerator.Directions.back, transform.position))
             {
                 if (dungeonGenerator.structures[structureToBeChecked].transform.eulerAngles.y == 90) { return false; }
                 return true;
             }
-            else if (chosenSpot == left || chosenSpot == right)
+            else if (chosenSpot == dungeonGenerator.Direction(DungeonGenerator.Directions.left, transform.position) || 
+                chosenSpot == dungeonGenerator.Direction(DungeonGenerator.Directions.right, transform.position))
             {
                 if (dungeonGenerator.structures[structureToBeChecked].transform.eulerAngles.y == 0) { return false; }
                 return true;

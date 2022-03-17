@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
         loadText.CrossFadeAlpha(0, .1f, true);
 
         //levelManager.ChangeGameStateToLoadingScreen();
-        gameState = GameState.LOADINGSCREEN;
+        gameState = GameState.TITLEMENU;
 
         
     }
@@ -208,15 +208,11 @@ public class GameManager : MonoBehaviour
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
                     playerAndCamera.SetActive(true);
                     Cursor.visible = false;
-                    if (levels[currentLevel].GetComponent<DungeonGenerator>().dungeonGenerated == false)
-                    {
-                        levels[currentLevel].GetComponent<DungeonGenerator>().dungeonIsGenerating = true;
-                    }
                     uiManager.LoadLoadingScreen();
                     characterSelection.HideModels();
                     if (levels[currentLevel].activeSelf == true && levels[currentLevel].GetComponent<DungeonGenerator>().dungeonGenerated == true) 
                     {
-                        levelManager.ChangeGameStateToTitleMenu();
+                        levelManager.ChangeGameStateToGamePlay();
                     }
                     return;
                 }
@@ -305,7 +301,8 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(loadedInfo.scene);
             loadedInfo.LoadSavedDungeon(ref currentLevel, levels);
             levelManager.activeScreen = loadedInfo.activeScreen;
-            gameState = loadedInfo.gameState;
+            //gameState = loadedInfo.gameState;
+            levelManager.ChangeGameStateToLoadingScreen();
             playerStats.Health = loadedInfo.health;
             characterSelection.isMale = loadedInfo.genderStatus;
             playerStats.RespawnPos = new Vector3(loadedInfo.playerSpawnPosX, loadedInfo.playerSpawnPosY, loadedInfo.playerSpawnPosZ);
@@ -434,7 +431,7 @@ class SaveInfo
 
         foreach (GameObject level in GameManager.manager.levels)
         {
-            if (level.GetComponent<DungeonGenerator>().dungeonGenerated) { level.GetComponent<DungeonGenerator>().ClearDungeon(); }
+            level.GetComponent<DungeonGenerator>().ClearDungeon();
         }
 
         for (int i = 0; i < savedStructureAmount; i++)

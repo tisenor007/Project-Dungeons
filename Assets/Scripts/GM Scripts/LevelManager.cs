@@ -60,12 +60,14 @@ public class LevelManager : MonoBehaviour
 
     public void ChangeGameStateToNewGame()
     {
+        GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
         SwitchLevel(0);
         GameManager.manager.playerStats.EquipDefaultWeapon(false);
     }
 
     public void ProgressLevel()
     {
+        GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
         if (GameManager.manager.currentLevel != GameManager.manager.levels.Length - 1)
         {
             SwitchLevel(GameManager.manager.currentLevel + 1);
@@ -114,7 +116,6 @@ public class LevelManager : MonoBehaviour
 
     public void SwitchLevel(int desiredLevel)
     {
-        GameManager.manager.ChangeState(GameState.GAMEPLAY);
         GameManager.manager.ResetScene();
 
         foreach (GameObject level in GameManager.manager.levels)
@@ -123,6 +124,7 @@ public class LevelManager : MonoBehaviour
         }
 
         GameManager.manager.currentLevel = desiredLevel;
+        GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonPreGenerating = true;
         GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonIsGenerating = true;
         GameManager.manager.playerAndCamera.transform.GetChild(0).GetComponent<PlayerStats>().ResetStats();
     }

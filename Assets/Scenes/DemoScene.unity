@@ -625,19 +625,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: branchChance
-      value: 25
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: endStructure
       value: 
       objectReference: {fileID: 3697370696446350291, guid: 9e6ad99e61780ee46be5233dd0103f69, type: 3}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
+      propertyPath: includeTraps
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: hallwayChance
       value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: maxStructures
-      value: 100
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: startStructure
@@ -665,7 +669,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: maxBranchLengthRange
-      value: 30
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
+      propertyPath: minBranchLengthRange
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: roomVariations.Array.size
