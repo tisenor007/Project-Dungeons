@@ -4,43 +4,80 @@ using UnityEngine;
 
 public class StoryManager : MonoBehaviour
 {
-    public NoteItem[] notes;
+    //err check last message being read
 
-    [SerializeField] private static NoteItem currentNoteProgression;
+    public NoteItem[] storyNotes;
+    [Tooltip("Read randomly after Story Notes are exhausted.")] public NoteItem[] fillerNotes;
+
+    //progression
+    [SerializeField] private NoteItem currentNote;
+    private int currentProgress;
+    private int fillerValue;
+    [SerializeField] private bool storyFinished;
 
     private void Start()
     {
         SetupNoteProgression();
     }
 
+    //private methods
     private void SetupNoteProgression()
     {
-        if (notes == null) return;
+        if (storyNotes == null) { Debug.LogWarning("NO STORY LOADED"); return; }
 
-        currentNoteProgression = notes[0];
+        currentProgress = 0;
+        currentNote = storyNotes[currentProgress];
     }
 
-    private void ApplyNote()
-    { 
-        //applies note to bottle
+    private void ApplyStoryNote(Interactable note)
+    {
+        if (currentNote == null) { Debug.LogWarning($"NO MESSAGE IN CURRENT NOTE"); return; }
+
+        note.ItemType = currentNote;
     }
 
     private void IncreaseProgression()
-    { 
-        //increase current progression by 1
-    }
-
-    private void ApplyRandomNote()
-    { 
-        // choose a random SO note to inject
-    }
-
-    public void ProgressStory() // should be used in a level manager method inside a note method to call story progression if the note bottle is set to be a StoryNote
     {
-        //apply note to current Bottle
-        ApplyNote();
-        //increase current progression
+        if (currentProgress >= storyNotes.Length - 1) { storyFinished = true; return; }
 
-        //if all story notes have been applied // apply random note
+        currentProgress++;
+        currentNote = storyNotes[currentProgress];
+
+    }
+
+    private void PickRandomNoteValueWithinRange()
+    {
+        int valueToChangeInto = (int)Random.Range(0, fillerNotes.Length-1); //-1 #IE: .Length starts counting at 1 however it's going to be read into an array which starts at 0 ;)
+
+        if (valueToChangeInto == fillerValue || fillerNotes[valueToChangeInto] == currentNote )
+        { PickRandomNoteValueWithinRange(); }
+        else
+        { fillerValue = valueToChangeInto; }
+    }
+
+    private void ApplyRandomNote(Interactable note)
+    {
+        if (fillerNotes == null) { Debug.LogError("NO FILLER NOTES FOR AFTER STORY ENDS"); }
+
+        // choose a random SO note to inject
+        PickRandomNoteValueWithinRange();
+
+        note.ItemType = fillerNotes[fillerValue];
+    }
+
+    //public methods
+    public void ProgressStory(Interactable note) // should be used in a level manager method inside a note method to call story progression if the note bottle is set to be a StoryNote
+    {
+
+        if (!storyFinished)
+        {
+            ApplyStoryNote(note);
+        }
+        else
+        { 
+            ApplyRandomNote(note);
+        }
+
+        IncreaseProgression();
     }
 }

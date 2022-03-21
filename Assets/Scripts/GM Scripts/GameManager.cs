@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public GameObject currentPlayerModel;
     [HideInInspector] public PlayerController playerController;
     private GameState savedScreenState;
+    
     // title acts as default state
     private bool gameplay;
     private bool paused;
@@ -52,6 +53,7 @@ public class GameManager : MonoBehaviour
     [Space]
     [SerializeField] private TextMeshProUGUI saveText;
     [SerializeField] private TextMeshProUGUI loadText;
+    
     //Create a new object within the player, one will be male, the other female
     [SerializeField] private GameObject malePlayer;
     [SerializeField] private GameObject femalePlayer;

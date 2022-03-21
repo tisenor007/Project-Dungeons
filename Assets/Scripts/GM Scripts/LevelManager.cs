@@ -18,10 +18,18 @@ public class LevelManager : MonoBehaviour
     private Canvas notePlain;
     private Text noteWriting;
 
+    private StoryManager story;
+
+    public StoryManager Story { get { return story; } }
+
     private void Start()
     {
+        //setting up Notes/story
         notePlain = GameManager.manager.uiManager.notePlain;
         noteWriting = notePlain.transform.GetChild(0).GetComponentInChildren<Text>();
+        story = transform.parent.GetComponentInChildren<StoryManager>();
+
+        //setting up HUD
         GameManager.manager.uiManager.playerBleeding.color = new Color(100, 0, 0, 0);
     }
 
@@ -272,7 +280,7 @@ public class LevelManager : MonoBehaviour
         newAlpha.a = GameManager.manager.uiManager.brightnessSlider.value / 100;
         GameManager.manager.uiManager.brightnessImage.color = newAlpha;
 
-        Debug.Log($"newAlpha: {newAlpha.a}, Image colour: {GameManager.manager.uiManager.brightnessImage.color}");
+        //Debug.Log($"newAlpha: {newAlpha.a}, Image colour: {GameManager.manager.uiManager.brightnessImage.color}");
     }
     #endregion
 }
