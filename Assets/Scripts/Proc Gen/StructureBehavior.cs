@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class StructureBehavior : MonoBehaviour
 {
-    public DungeonGenerator.StructureType currentStructureType;
+    [HideInInspector] public DungeonGenerator.StructureType currentStructureType;
+    [HideInInspector] public bool trapPlayer = false;
     [HideInInspector] public int currentVariation;
     [SerializeField] private Light[] lights;
     [SerializeField] private GameObject doors;
-    [Header("Only pass this in if room is an end room!")]
-    [SerializeField] private GameObject bossObj;
     private DungeonGenerator dungeonGenerator;
-    private bool trapIntruder = false;
+    private bool playerInStructure = false;
     // Start is called before the first frame update
     void Awake()
     {
@@ -21,21 +20,38 @@ public class StructureBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (currentStructureType == DungeonGenerator.StructureType.EndStructure)
-        //{
-        //    Debug.Log("End Is Here");
-        //}
-        //if (currentStructureType == DungeonGenerator.StructureType.StartStructure)
-        //{
-        //    Debug.Log("Start Is Here");
-        //}
-        if (this.transform.gameObject.activeSelf == true) 
+        switch (trapPlayer)
         {
-            if (!trapIntruder) { OpenDoors(currentStructureType); }
+            case true:
+                ShutAllDoors();
+                break;
+            case false:
+                OpenAvailableDoors();
+                break;
+        }
+
+        switch (playerInStructure)
+        {
+            case true:
+                ShowStructure(true);
+                ShowLights(true);
+                break;
+            case false:
+                ShowStructure(false);
+                ShowLights(false);
+                break;
         }
     }
 
-    private void OpenDoors(DungeonGenerator.StructureType structureType)
+    public void ShutAllDoors()
+    {
+        for (int i = 0; i < doors.transform.childCount; i++)
+        {
+            doors.transform.GetChild(i).gameObject.SetActive(true);
+        }
+    }
+
+    private void OpenAvailableDoors()
     {
         if (dungeonGenerator == null) { return; }
         
@@ -54,12 +70,36 @@ public class StructureBehavior : MonoBehaviour
         { OpenDoor(DungeonGenerator.Directions.front); }
     }
 
+    private void ShowStructure(bool visualStatus)
+    {
+        foreach (Transform child in transform)
+        {
+            child.gameObject.SetActive(visualStatus);
+        }
+    }
+
+    private void ShowLights(bool lightStatus)
+    {
+        foreach (Light light in lights) { light.enabled = lightStatus; }
+    }
+
     private void OpenDoor(DungeonGenerator.Directions direction)
     {
-        if (direction == DungeonGenerator.Directions.front) { doors.transform.GetChild(0).gameObject.SetActive(false); }
-        else if(direction == DungeonGenerator.Directions.back) { doors.transform.GetChild(1).gameObject.SetActive(false); }
-        else if (direction == DungeonGenerator.Directions.right) { doors.transform.GetChild(2).gameObject.SetActive(false); }
-        else if (direction == DungeonGenerator.Directions.left) { doors.transform.GetChild(3).gameObject.SetActive(false); }
+        switch (direction)
+        {
+            case DungeonGenerator.Directions.front:
+                doors.transform.GetChild(0).gameObject.SetActive(false);
+                break;
+            case DungeonGenerator.Directions.back:
+                doors.transform.GetChild(1).gameObject.SetActive(false);
+                break;
+            case DungeonGenerator.Directions.right:
+                doors.transform.GetChild(2).gameObject.SetActive(false);
+                break;
+            case DungeonGenerator.Directions.left:
+                doors.transform.GetChild(3).gameObject.SetActive(false);
+                break;
+        }
     }
 
     private bool CanStructureConnect(Vector3 chosenSpot)
@@ -94,26 +134,13 @@ public class StructureBehavior : MonoBehaviour
         return true;
     }
 
-    private void ShutAllDoors()
-    {
-        for (int i = 0; i < doors.transform.childCount; i++)
-        {
-            doors.transform.GetChild(i).gameObject.SetActive(true);
-        }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player") { foreach (Light light in lights) { light.enabled = true; } }
-        if (currentStructureType == DungeonGenerator.StructureType.EndStructure) 
-        {
-            trapIntruder = true;
-            ShutAllDoors();
-            if (bossObj.GetComponent<Boss>().IsAlive == true) { bossObj.SetActive(true); }
-        }
+        if (other.tag == "Player") { playerInStructure = true; }
     }
+
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player") { foreach (Light light in lights) { light.enabled = false; } }
+        if (other.tag == "Player") { playerInStructure = false; }
     }
 }

@@ -253,19 +253,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: branchChance
-      value: 10
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: endStructure
       value: 
       objectReference: {fileID: 3697370696446350291, guid: 9e6ad99e61780ee46be5233dd0103f69, type: 3}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
+      propertyPath: includeTraps
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: hallwayChance
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: maxStructures
-      value: 100
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: startStructure
@@ -277,15 +281,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: maxBranchLengthRange
-      value: 10
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: minBranchLengthRange
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: roomVariations.Array.size
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
+      propertyPath: trapVariations.Array.size
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: hallwayVariations.Array.size
@@ -303,6 +311,14 @@ PrefabInstance:
       propertyPath: roomVariations.Array.data[2]
       value: 
       objectReference: {fileID: 6756282374643868736, guid: dde1e0879d20b894bb1f546fdd46f00e, type: 3}
+    - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
+      propertyPath: trapVariations.Array.data[0]
+      value: 
+      objectReference: {fileID: 3697370696446350291, guid: 9e6ad99e61780ee46be5233dd0103f69, type: 3}
+    - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
+      propertyPath: trapVariations.Array.data[1]
+      value: 
+      objectReference: {fileID: 3697370696446350291, guid: 9e6ad99e61780ee46be5233dd0103f69, type: 3}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: hallwayVariations.Array.data[0]
       value: 
@@ -1098,12 +1114,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3697370696446350291, guid: 9e6ad99e61780ee46be5233dd0103f69, type: 3}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
+      propertyPath: includeTraps
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: hallwayChance
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: maxStructures
-      value: 10
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: startStructure
@@ -1126,6 +1146,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
+      propertyPath: trapVariations.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: hallwayVariations.Array.size
       value: 4
       objectReference: {fileID: 0}
@@ -1141,6 +1165,10 @@ PrefabInstance:
       propertyPath: roomVariations.Array.data[2]
       value: 
       objectReference: {fileID: 6756282374643868736, guid: dde1e0879d20b894bb1f546fdd46f00e, type: 3}
+    - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
+      propertyPath: trapVariations.Array.data[0]
+      value: 
+      objectReference: {fileID: 5547777761614983092, guid: f30bd08142249784e8270982e317e66c, type: 3}
     - target: {fileID: 4143957343251502162, guid: 43c6662ec69fc804eb20673fdca8208c, type: 3}
       propertyPath: hallwayVariations.Array.data[0]
       value: 

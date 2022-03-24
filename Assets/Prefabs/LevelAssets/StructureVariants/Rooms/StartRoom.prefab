@@ -32,103 +32,8 @@ Transform:
   - {fileID: 9047188231591117971}
   - {fileID: 1222088670392287807}
   m_Father: {fileID: 1471978301049147757}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2250807483858523474
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4572790951872427687}
-  - component: {fileID: 7093929941148646827}
-  - component: {fileID: 3044775345541361706}
-  - component: {fileID: 920128233454683798}
-  m_Layer: 0
-  m_Name: BEGIN_WEAPON_LOCATION
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &4572790951872427687
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2250807483858523474}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.24, y: 2.96, z: 4.57}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1471978301049147757}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &7093929941148646827
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2250807483858523474}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &3044775345541361706
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2250807483858523474}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &920128233454683798
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2250807483858523474}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2277490860664466498
 GameObject:
   m_ObjectHideFlags: 0
@@ -294,7 +199,6 @@ Transform:
   - {fileID: 8130389361204192551}
   - {fileID: 5459864340630550722}
   - {fileID: 9220162426194447153}
-  - {fileID: 4572790951872427687}
   - {fileID: 8347117571248578655}
   - {fileID: 981308523586994375}
   - {fileID: 5234064529342791833}
@@ -314,11 +218,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentStructureType: 0
+  trapPlayer: 0
   currentVariation: 0
   lights:
   - {fileID: 3525804923122959517}
   doors: {fileID: 2277490860664466498}
-  bossObj: {fileID: 0}
 --- !u!65 &7499846708901290056
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2647,7 +2551,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5657507321218668315, guid: 3faf0e1fb4abffb4aabe65fe4ca8a4da, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5657507321218668315, guid: 3faf0e1fb4abffb4aabe65fe4ca8a4da, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4311,7 +4215,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4166405968833009129, guid: d46dc7f9a61522540b34828b7830242f, type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4166405968833009129, guid: d46dc7f9a61522540b34828b7830242f, type: 3}
       propertyPath: m_LocalPosition.x

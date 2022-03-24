@@ -128,9 +128,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentStructureType: 0
+  trapPlayer: 0
   currentVariation: 0
   lights:
   - {fileID: 1681356075903286791}
+  doors: {fileID: 8964412385419634230}
 --- !u!65 &8052384625926683821
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1894,13 +1896,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8319bf063b4da184ea14f89947c2cd05, type: 3}
---- !u!4 &8246514079716883573 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8319bf063b4da184ea14f89947c2cd05, type: 3}
-  m_PrefabInstance: {fileID: 8501452082735569822}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8735382875890280143 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8319bf063b4da184ea14f89947c2cd05, type: 3}
+  m_PrefabInstance: {fileID: 8501452082735569822}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8246514079716883573 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 8319bf063b4da184ea14f89947c2cd05, type: 3}
   m_PrefabInstance: {fileID: 8501452082735569822}
   m_PrefabAsset: {fileID: 0}

@@ -52,16 +52,15 @@ public class DungeonGenerator : MonoBehaviour
     private int branchStartStructNum;
     private int currentBranchStructCount;
     private int currentBranchLength;
+    private bool trapInstantiated = false;
 
     // Update is called once per frame
     void Update()
     {
         if (!dungeonIsGenerating) { return; }
-        
         //pregenerates small dungeon quickly so saving & loading next dungeon will work......
-        if (dungeonPreGenerating && !dungeonGenerated) { GenerateNewDungeon(5); Debug.Log("Pregen Started"); }
+        if (dungeonPreGenerating && !dungeonGenerated) { GenerateNewDungeon(5);}
         else if (!dungeonPreGenerating && !dungeonGenerated) { GenerateNewDungeon(maxStructures); }
-        
     }
 
     //master method
@@ -75,41 +74,28 @@ public class DungeonGenerator : MonoBehaviour
         else if (structures.Count < maxStructureAmount && structures.Count > 0)
         {
             nextStructureType = (StructureType)ChooseNumbByChance((int)StructureType.Room, (int)StructureType.Hallway, roomChance);
-            if (!branchIsGenerating) 
+            switch (branchIsGenerating)
             {
-                GenerateNewStructure(nextStructureType, mainStructureBase);
-                if (IsBranchStuck(mainStructureBase))
-                {
-                    mainStructureBase = mainStructures[Random.Range(0, mainStructures.Count)];
-                    currentStructureType = mainStructureBase.GetComponent<StructureBehavior>().currentStructureType;
-                    currentStructureVariation = mainStructureBase.GetComponent<StructureBehavior>().currentVariation;
-                }
-                //sets up branch
-                currentBranchStructCount = 0;
-                currentBranchLength = -1;
-                currentBranchLength = Random.Range(minBranchLengthRange, maxBranchLengthRange + 1);
-                branchStartStructNum = -1;
-                branchStartStructNum = Random.Range(1, mainStructures.Count);
-                currBranchStructureBase = mainStructures[branchStartStructNum];
-                branchDecision = -1;
-                branchDecision = ChooseNumbByChance(1, 2, branchChance);
-                if (branchDecision == 1 && mainStructures.Count > 1) { branchIsGenerating = true; }
-
-            }
-            else if (branchIsGenerating) 
-            {
-                if (currentBranchStructCount >= currentBranchLength)
-                {
-                    if (includeTraps) { GenerateNewStructure(StructureType.TrapStructure, currBranchStructureBase); }
-                    branchIsGenerating = false;
-                }
-                if (IsBranchStuck(currBranchStructureBase)) 
-                { 
-                    branchIsGenerating = false;
-                    currentStructureType = mainStructureBase.GetComponent<StructureBehavior>().currentStructureType;
-                    currentStructureVariation = mainStructureBase.GetComponent<StructureBehavior>().currentVariation;
-                }
-                GenerateNewStructure(nextStructureType, currBranchStructureBase);
+                case false:
+                    GenerateNewStructure(nextStructureType, mainStructureBase);
+                    if (IsBranchStuck(mainStructureBase))
+                    {
+                        mainStructureBase = mainStructures[Random.Range(0, mainStructures.Count)];
+                        UpdateCurrentStructure(mainStructureBase);
+                    }
+                    //sets up branch
+                    ResetBranchStats();
+                    currentBranchLength = Random.Range(minBranchLengthRange, maxBranchLengthRange + 1);
+                    branchStartStructNum = Random.Range(1, mainStructures.Count);
+                    currBranchStructureBase = mainStructures[branchStartStructNum];
+                    branchDecision = ChooseNumbByChance(1, 2, branchChance);
+                    if (branchDecision == 1 && mainStructures.Count > 1) { branchIsGenerating = true; }
+                    break;
+                case true:
+                    if (currentBranchStructCount >= currentBranchLength){CompleteBranch(includeTraps, mainStructureBase);}
+                    if (IsBranchStuck(currBranchStructureBase)) { CompleteBranch(false, mainStructureBase); }
+                    GenerateNewStructure(nextStructureType, currBranchStructureBase);
+                    break;
             }
         }
         //makes them all children after generation
@@ -133,10 +119,7 @@ public class DungeonGenerator : MonoBehaviour
         mainStructures.Clear();
         mainStructureBase = null;
         currBranchStructureBase = null;
-        currentBranchStructCount = 0;
-        currentBranchLength = -1;
-        branchStartStructNum = -1;
-        branchDecision = -1;
+        ResetBranchStats();
     }
 
     public void CompleteGeneration()
@@ -152,21 +135,23 @@ public class DungeonGenerator : MonoBehaviour
 
     public void GenerateSavedRoom(StructureType savedStructureType, int savedStructureVariation, Vector3 savedPos, Vector3 savedRot)
     {
-        if (savedStructureType == StructureType.Room)
+        switch (savedStructureType)
         {
-            InstantiateStructure(roomVariations[savedStructureVariation], savedPos, savedRot, savedStructureType, savedStructureVariation);
-        }
-        else if (savedStructureType == StructureType.Hallway)
-        {
-            InstantiateStructure(hallwayVariations[savedStructureVariation], savedPos, savedRot, savedStructureType, savedStructureVariation);
-        }
-        else if (savedStructureType == StructureType.StartStructure)
-        {
-            InstantiateStructure(startStructure, savedPos, savedRot, savedStructureType, savedStructureVariation);
-        }
-        else if (savedStructureType == StructureType.EndStructure)
-        {
-            InstantiateStructure(endStructure, savedPos, savedRot, savedStructureType, savedStructureVariation);
+            case StructureType.Room:
+                InstantiateStructure(roomVariations[savedStructureVariation], savedPos, savedRot, savedStructureType, savedStructureVariation);
+                break;
+            case StructureType.Hallway:
+                InstantiateStructure(hallwayVariations[savedStructureVariation], savedPos, savedRot, savedStructureType, savedStructureVariation);
+                break;
+            case StructureType.StartStructure:
+                InstantiateStructure(startStructure, savedPos, savedRot, savedStructureType, savedStructureVariation);
+                break;
+            case StructureType.EndStructure:
+                InstantiateStructure(endStructure, savedPos, savedRot, savedStructureType, savedStructureVariation);
+                break;
+            case StructureType.TrapStructure:
+                InstantiateStructure(trapVariations[savedStructureVariation], savedPos, savedRot, savedStructureType, savedStructureVariation);
+                break;
         }
     }
 
@@ -176,16 +161,16 @@ public class DungeonGenerator : MonoBehaviour
         {
             case Directions.front:
                 return new Vector3(basePos.x + structureSpacing, basePos.y, basePos.z);
-                break;
+                //break;
             case Directions.back:
                 return new Vector3(basePos.x - structureSpacing, basePos.y, basePos.z);
-                break;
+                //break;
             case Directions.left:
                 return new Vector3(basePos.x, basePos.y, basePos.z - structureSpacing);
-                break;
+                //break;
             case Directions.right:
                 return new Vector3(basePos.x, basePos.y, basePos.z + structureSpacing);
-                break;
+                //break;
         }
         return Vector3.zero;
     }
@@ -193,32 +178,30 @@ public class DungeonGenerator : MonoBehaviour
     //tries to add room to dungeon
     private void GenerateNewStructure(StructureType structureType, GameObject baseStruct)
     {
-        if (structureType == StructureType.StartStructure)
+        switch (structureType)
         {
-            InstantiateStructure(startStructure, Vector3.zero, Vector3.zero, StructureType.StartStructure, 0);
-        }
-        else if (structureType == StructureType.Room)
-        {
-            if (!VariantIsRandomized(roomVariations)) { return; }
-            if (!DirectionIsRandomized(baseStruct)) { return; }
-            InstantiateStructure(roomVariations[nextStructureVariation], nextStructureLoc, nextStructureRot, nextStructureType, nextStructureVariation);
-        }
-        else if (structureType == StructureType.Hallway)
-        {
-            if (!VariantIsRandomized(hallwayVariations)) { return; }
-            if (!DirectionIsRandomized(baseStruct)) { return; }
-            InstantiateStructure(hallwayVariations[nextStructureVariation], nextStructureLoc, nextStructureRot, nextStructureType, nextStructureVariation);
-        }
-        else if (structureType == StructureType.EndStructure)
-        {
-            if (!DirectionIsRandomized(baseStruct)) { return; }
-            InstantiateStructure(endStructure, nextStructureLoc, nextStructureRot, StructureType.EndStructure, 0);
-        }
-        else if (structureType == StructureType.TrapStructure)
-        {
-            if (!VariantIsRandomized(trapVariations)) { return; }
-            if (!DirectionIsRandomized(baseStruct)) { return; }
-            InstantiateStructure(trapVariations[nextStructureVariation], nextStructureLoc, nextStructureRot, StructureType.TrapStructure, 0);
+            case StructureType.StartStructure:
+                InstantiateStructure(startStructure, Vector3.zero, Vector3.zero, StructureType.StartStructure, 0);
+                break;
+            case StructureType.Room:
+                if (!VariantIsRandomized(roomVariations)) { return; }
+                if (!DirectionIsRandomized(baseStruct)) { return; }
+                InstantiateStructure(roomVariations[nextStructureVariation], nextStructureLoc, nextStructureRot, nextStructureType, nextStructureVariation);
+                break;
+            case StructureType.Hallway:
+                if (!VariantIsRandomized(hallwayVariations)) { return; }
+                if (!DirectionIsRandomized(baseStruct)) { return; }
+                InstantiateStructure(hallwayVariations[nextStructureVariation], nextStructureLoc, nextStructureRot, nextStructureType, nextStructureVariation);
+                break;
+            case StructureType.EndStructure:
+                if (!DirectionIsRandomized(baseStruct)) { return; }
+                InstantiateStructure(endStructure, nextStructureLoc, nextStructureRot, StructureType.EndStructure, 0);
+                break;
+            case StructureType.TrapStructure:
+                if (!VariantIsRandomized(trapVariations)) { return; }
+                if (!DirectionIsRandomized(baseStruct)) { return; }
+                InstantiateStructure(trapVariations[nextStructureVariation], nextStructureLoc, nextStructureRot, StructureType.TrapStructure, nextStructureVariation);
+                break;
         }
     }
 
@@ -248,24 +231,26 @@ public class DungeonGenerator : MonoBehaviour
         { 
             currentBranchStructCount++;
             currBranchStructureBase = structures[structures.Count-1];
+            UpdateCurrentStructure(currBranchStructureBase);
         }
         else if (!branchIsGenerating) 
         {
             mainStructures.Add(structures[structures.Count - 1]);
             mainStructureBase = structures[structures.Count - 1];
+            UpdateCurrentStructure(mainStructureBase);
         }
 
         if (currentStructureType == StructureType.EndStructure) { CompleteGeneration(); }
+        if (currentStructureType == StructureType.TrapStructure) { trapInstantiated = true; }
     }
-
 
     //makes random direction that next room / structure can go
     private bool DirectionIsRandomized(GameObject baseStruct)
     {
         if (structures.Count <= 0) { nextStructureLoc = Vector3.zero; nextStructureRot = Vector3.zero; return false; }
         //restricts directions based off where it is coming from and where it is going.....
-        if (currentStructureType == StructureType.Hallway && baseStruct.transform.eulerAngles.y == 0) { nextStructureDirection = Random.Range(0, 2); }
-        else if (currentStructureType == StructureType.Hallway && baseStruct.transform.eulerAngles.y == 90) { nextStructureDirection = Random.Range(2, 4); }
+        if (currentStructureType == StructureType.Hallway && baseStruct.transform.eulerAngles.y == 0) { nextStructureDirection = ChooseNumbByChance(0, 1, 50); }// Random.Range(0, 1); }
+        else if (currentStructureType == StructureType.Hallway && baseStruct.transform.eulerAngles.y == 90) { nextStructureDirection = ChooseNumbByChance(2, 3, 50); }// Random.Range(2, 3); }
         else if (currentStructureType == StructureType.Room || currentStructureType == StructureType.TrapStructure) { nextStructureDirection = Random.Range(0, 4); }
 
         if (nextStructureDirection <= 0)
@@ -312,6 +297,30 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
         return false;
+    }
+
+    private void UpdateCurrentStructure(GameObject structureBase)
+    {
+        currentStructureType = structureBase.GetComponent<StructureBehavior>().currentStructureType;
+        currentStructureVariation = structureBase.GetComponent<StructureBehavior>().currentVariation;
+    }
+    
+    private void CompleteBranch(bool trapsIncluded, GameObject structureBase)
+    {
+        if (trapsIncluded)
+        {
+            trapInstantiated = false;
+            GenerateNewStructure(StructureType.TrapStructure, currBranchStructureBase);
+        }
+        if (!trapsIncluded || trapsIncluded && trapInstantiated) { UpdateCurrentStructure(structureBase); branchIsGenerating = false; }
+    }
+
+    private void ResetBranchStats()
+    {
+        currentBranchStructCount = 0;
+        currentBranchLength = -1;
+        branchStartStructNum = -1;
+        branchDecision = -1;
     }
 
     private bool IsBranchStuck(GameObject baseStruct)
