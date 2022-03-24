@@ -38,6 +38,8 @@ public class Enemy : CharacterStats
     [SerializeField] private Image healthColour;
     [SerializeField] private Slider healthBar;
     [SerializeField] private Transform cam;
+    [SerializeField] private GameObject[] availableDrops;
+    [SerializeField] private int itemDropChance;
 
     protected SoundManager.Sound attackSound;
     protected SoundManager.Sound chasingSound;
@@ -193,6 +195,17 @@ public class Enemy : CharacterStats
         
         // ENTER CODE FOR DEATH ANIMATIONS, ETC
         this.gameObject.SetActive(false);
+
+        DropItemOnDeath();
+    }
+
+    protected void DropItemOnDeath()
+    {
+        if (availableDrops.Length <=0) { return; }
+        int dropDecision = ChooseNumbByChance(0, 1, itemDropChance);
+        if (dropDecision == 1) { return; }
+        int selectedItem = UnityEngine.Random.Range(0, availableDrops.Length);
+        Instantiate(availableDrops[selectedItem], transform.position, Quaternion.identity);
     }
 
     public void PlayAudio(Enemy enemy)
@@ -203,5 +216,13 @@ public class Enemy : CharacterStats
             SoundManager.PlaySound(enemy.chasingSound, enemy.transform.position);
         if (enemyState == State.Attacking)
             SoundManager.PlaySound(enemy.attackSound, enemy.transform.position);
+    }
+
+    private int ChooseNumbByChance(int output1, int output2, int chanceNum)
+    {
+        int chance = UnityEngine.Random.Range(0, 101);
+        if (chance < chanceNum) { return output1; }
+        else if (chance > chanceNum) { return output2; }
+        return 0;
     }
 }

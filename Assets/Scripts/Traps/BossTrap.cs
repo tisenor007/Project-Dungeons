@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BossTrap : Trap
 {
-    [SerializeField] StructureBehavior thisStructure;
     [SerializeField] private GameObject bossObj;
 
     // Update is called once per frame

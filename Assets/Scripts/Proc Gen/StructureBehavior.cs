@@ -74,7 +74,7 @@ public class StructureBehavior : MonoBehaviour
     {
         foreach (Transform child in transform)
         {
-            child.gameObject.SetActive(visualStatus);
+            if (child.tag != "DeathBox") { child.gameObject.SetActive(visualStatus); }
         }
     }
 

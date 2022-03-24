@@ -23,8 +23,8 @@ public class DungeonGenerator : MonoBehaviour
     }
     public float structureSpacing = 10;
     public int roomChance = 80;
-    public bool dungeonIsGenerating = false;
-    public bool dungeonPreGenerating = false;
+    [HideInInspector] public bool dungeonIsGenerating = false;
+    [HideInInspector] public bool dungeonPreGenerating = false;
     [HideInInspector] public bool dungeonGenerated = false;
     [HideInInspector] public List<GameObject> structures = new List<GameObject>();
     [SerializeField] private int branchChance;

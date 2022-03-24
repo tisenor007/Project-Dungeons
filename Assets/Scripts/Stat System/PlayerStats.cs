@@ -216,7 +216,7 @@ public class PlayerStats : CharacterStats
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "RestStation") { healing = true; }
-        if (other.tag == "DeathBox") { transform.position = respawnPos; }
+        if (other.tag == "DeathBox") { transform.position = respawnPos; TakeDamage(maxHealth, transform);}
     }
 
     private void OnTriggerExit(Collider other)
