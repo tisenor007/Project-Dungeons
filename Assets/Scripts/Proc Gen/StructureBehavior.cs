@@ -10,7 +10,7 @@ public class StructureBehavior : MonoBehaviour
     [SerializeField] private Light[] lights;
     [SerializeField] private GameObject doors;
     private DungeonGenerator dungeonGenerator;
-    private bool playerInStructure = false;
+    private bool playerInStructure = true;// = false;
     // Start is called before the first frame update
     void Awake()
     {
@@ -30,17 +30,17 @@ public class StructureBehavior : MonoBehaviour
                 break;
         }
 
-        switch (playerInStructure)
-        {
-            case true:
-                ShowStructure(true);
-                ShowLights(true);
-                break;
-            case false:
-                ShowStructure(false);
-                ShowLights(false);
-                break;
-        }
+        //switch (playerInStructure)
+        //{
+        //    case true:
+        //        ShowStructure(true);
+        //        ShowLights(true);
+        //        break;
+        //    case false:
+        //        ShowStructure(false);
+        //        ShowLights(false);
+        //        break;
+        //}
     }
 
     public void ShutAllDoors()
