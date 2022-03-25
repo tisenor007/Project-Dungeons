@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Practice Sword Melee Weapon
   m_EditorClassIdentifier: 
   nameOfItem: Practice Sword
-  colorOfItemShine: {r: 0, g: 0, b: 0, a: 0}
-  weaponObject: {fileID: 1068448664988612747, guid: b8e035859d21f1748a00bd1fc1d7d98d, type: 3}
+  prefab: {fileID: 1068448664988612747, guid: b8e035859d21f1748a00bd1fc1d7d98d, type: 3}
+  sprite: {fileID: 21300000, guid: ae2dab22ad419fd4fbea69a0ae89079d, type: 3}
+  shineColour: 2
   damage: 7
   attackSpeed: 1.34

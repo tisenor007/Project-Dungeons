@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Knuckles
   m_EditorClassIdentifier: 
   nameOfItem: Knuckles
-  colorOfItemShine: {r: 0, g: 0, b: 0, a: 0}
-  weaponObject: {fileID: 7850167633344471769, guid: 8b9e8a9305f6fd1458a0d25a3fd9ef10, type: 3}
+  prefab: {fileID: 7850167633344471769, guid: 8b9e8a9305f6fd1458a0d25a3fd9ef10, type: 3}
+  sprite: {fileID: 21300000, guid: 6ad6d5ff1509c5b42a4fb00c7746f567, type: 3}
+  shineColour: 2
   damage: 5
   attackSpeed: 1.34
