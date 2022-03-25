@@ -17,10 +17,14 @@ public class LevelManager : MonoBehaviour
     private float creditsScrollRate = 100;
     private Canvas notePlain;
     private Text noteWriting;
+    private Color weaponInfoControl = new Color();
+    private Color alphaValueColour;
+    private float weaponDisplayTimer = 3;
 
     private StoryManager story;
 
     public StoryManager Story { get { return story; } }
+    public float WeaponDisplayTimer { set { weaponDisplayTimer = value; } }
 
     private void Start()
     {
@@ -28,13 +32,23 @@ public class LevelManager : MonoBehaviour
         notePlain = GameManager.manager.uiManager.notePlain;
         noteWriting = notePlain.transform.GetChild(0).GetComponentInChildren<Text>();
         story = transform.parent.GetComponentInChildren<StoryManager>();
-
-        //setting up HUD
-        GameManager.manager.uiManager.playerBleeding.color = new Color(100, 0, 0, 0);
     }
 
     public void Update()
     {
+        weaponInfoControl = GameManager.manager.uiManager.weaponInfo.transform.GetChild(0).GetComponent<Image>().color;
+        Debug.Log(weaponInfoControl);
+
+        if (weaponInfoControl.a == 1) // 1 is the max value of alpha
+        {
+            weaponDisplayTimer -= 1 * Time.deltaTime;
+        }
+        
+        if (weaponDisplayTimer <= 0)
+        { 
+            JumpCanvasAlphaTo(0, GameManager.manager.uiManager.weaponInfo);
+        }
+
         if (GameManager.manager.uiManager.credits.enabled == false && creditsYPos != creditsBeginPos)
         {
             creditsYPos = creditsBeginPos;
@@ -69,7 +83,9 @@ public class LevelManager : MonoBehaviour
     public void ChangeGameStateToNewGame()
     {
         SwitchLevel(0);
-        GameManager.manager.playerStats.EquipDefaultWeapon(false);
+
+        // equip default weapon somehow
+        GameManager.manager.playerStats.DefaultWeaponType.Equip(GameManager.manager.playerStats.DefaultWeaponType.prefab, GameManager.manager.playerAndCamera.transform.GetChild(0).gameObject, false); ;
     }
 
     public void ProgressLevel()
@@ -259,9 +275,10 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public void FlashPlayerBleedingUI()
+    // depricated
+    /*public void FlashPlayerBleedingUI()
     {
-        GameManager.manager.uiManager.playerBleeding.color = new Color(100, 0, 0, 100);
+        GameManager.manager.uiManager.playerBleeding.color = new Color(0, 0, 0, 100); // setting alpha to visible
         StartCoroutine("WaitAndDisablePlayerBleeding");
     }
 
@@ -269,6 +286,35 @@ public class LevelManager : MonoBehaviour
     {
         yield return new WaitForSeconds(.3f);
         GameManager.manager.uiManager.playerBleeding.color = new Color (100,0,0,0);
+    }*/
+
+    public void JumpCanvasAlphaTo(int value, Canvas inputCanvas)
+    {
+        float convertedValue = value / 10;
+        Image[] canvasImages = inputCanvas.gameObject.GetComponentsInChildren<Image>();
+        Text[] canvasText = inputCanvas.gameObject.GetComponentsInChildren<Text>();
+
+        if (canvasImages.Length >= 1)
+        {
+            for (int i = 0; i < canvasImages.Length; i++)
+            {
+                Image image = inputCanvas.gameObject.GetComponentsInChildren<Image>()[i];
+                alphaValueColour = new Color(image.color.r, image.color.g, image.color.b, convertedValue);
+                inputCanvas.gameObject.GetComponentsInChildren<Image>()[i].color = alphaValueColour;
+                Debug.LogWarning($"fading {image.gameObject.name} to {value}");
+            }
+        }
+
+        if (canvasText.Length >= 1)
+        {
+            for (int i = 0; i < canvasText.Length; i++)
+            {
+                Text text = inputCanvas.gameObject.GetComponentsInChildren<Text>()[i];
+                alphaValueColour = new Color(text.color.r, text.color.g, text.color.b, convertedValue);
+                inputCanvas.gameObject.GetComponentsInChildren<Text>()[i].color = alphaValueColour;
+                Debug.LogWarning($"fading {text.gameObject.name} to {value}");
+            }
+        }
     }
     #endregion
 
