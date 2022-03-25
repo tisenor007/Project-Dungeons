@@ -93,7 +93,7 @@ public class GameManager : MonoBehaviour
         {
             case GameState.TITLEMENU:
                 {
-                    SoundManager.PlaySound(SoundManager.Sound.MenuMusic);
+                    SoundManager.PlayMusic(SoundManager.Sound.MenuMusic);
                     if (SceneManager.GetActiveScene() != SceneManager.GetSceneByBuildIndex(0))
                     {
                         SceneManager.LoadScene(0, LoadSceneMode.Single);
@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
                     Cursor.visible = false;
 
                     SoundManager.PlaySound(SoundManager.Sound.CaveAmbience);
-                    SoundManager.PlaySound(SoundManager.Sound.GameplayMusic);
+                    SoundManager.PlayMusic(SoundManager.Sound.GameplayMusic);
                     SoundManager.PlaySound(SoundManager.Sound.WaterDripping);
                     //Debug.LogError("SOUND PLAYED");
                     return;
@@ -146,6 +146,7 @@ public class GameManager : MonoBehaviour
                 }
             case GameState.PAUSE:
                 {
+                    SoundManager.PlayMusic(SoundManager.Sound.PauseMusic);
                     if (SceneManager.GetActiveScene() != SceneManager.GetSceneByBuildIndex(1))
                     {
                         SceneManager.LoadScene(1, LoadSceneMode.Single);
@@ -179,6 +180,7 @@ public class GameManager : MonoBehaviour
                     characterSelection.HideModels();
                     Cursor.visible = true;
                     playerAndCamera.SetActive(false);
+                    SoundManager.PlayMusic(SoundManager.Sound.CreditMusic);
                     return;
                 }
             case GameState.CHARACTERSELECTION:
@@ -188,11 +190,15 @@ public class GameManager : MonoBehaviour
                         SceneManager.LoadScene(3, LoadSceneMode.Single);
                         SaveScreenState();
                     }
-                    if (Time.timeScale == 1) { Time.timeScale = 0; }
+                    SoundManager.PlayMusic(SoundManager.Sound.CharacterSelectionMusic);
+                    if (Time.timeScale ==  1) { Time.timeScale = 0; }
+                    Debug.LogError("TIME: " + Time.deltaTime);
+                    Debug.LogError("SCALE: " + Time.timeScale);
                     uiManager.LoadCharacterSelection();
                     characterSelection.ShowModels();
                     Cursor.visible = true;
                     playerAndCamera.SetActive(false);
+                    
                     return;
                 }
             case GameState.SAVEOPTION:

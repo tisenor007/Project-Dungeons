@@ -42,6 +42,7 @@ public class LevelManager : MonoBehaviour
     //buttons
     public void ButtonStartNewGame()
     {
+        SoundManager.PlaySound(SoundManager.Sound.CannonShot);
         ChangeGameStateToGamePlay();
         Debug.LogWarning("SetupGUI");
         //game set up goes here
@@ -56,13 +57,13 @@ public class LevelManager : MonoBehaviour
     public void ChangeGameStateToGamePlay()
     {
         GameManager.manager.ChangeState(GameState.GAMEPLAY);
+        SoundManager.PlayMusic(SoundManager.Sound.GameplayMusic);
     }
 
     public void ChangeGameStateToNewGame()
     {
-        GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
-        SwitchLevel(0);
-        GameManager.manager.playerStats.EquipDefaultWeapon(false);
+        StartCoroutine(LoadGameplay());
+        
     }
 
     public void ProgressLevel()
@@ -101,7 +102,7 @@ public class LevelManager : MonoBehaviour
 
     public void ChangeGameStateToCharacterSelection()
     {
-        GameManager.manager.ChangeState(GameState.CHARACTERSELECTION);
+        StartCoroutine(LoadCharacterSelectioScreen());
     }
 
     public void ChangeGameStateToSaveOption()
@@ -194,6 +195,7 @@ public class LevelManager : MonoBehaviour
     {
         notePlain.enabled = false;
         noteWriting.text = null;
+        SoundManager.PlaySound(SoundManager.Sound.PaperAway);
     }
 
     //misc commands
@@ -257,6 +259,27 @@ public class LevelManager : MonoBehaviour
     {
         GameManager.manager.uiManager.playerBleeding.color = new Color(100, 0, 0, 100);
         StartCoroutine("WaitAndDisablePlayerBleeding");
+    }
+
+    IEnumerator LoadCharacterSelectioScreen()
+    {
+        SoundManager.PlaySound(SoundManager.Sound.CannonShot);
+        Debug.LogError("sound started");
+        yield return new WaitForSecondsRealtime(4.0f);
+        Debug.LogError("sound over");
+        GameManager.manager.ChangeState(GameState.CHARACTERSELECTION);
+        //SoundManager.PlayMusic(SoundManager.Sound.CharacterSelectionMusic);
+    }
+
+    IEnumerator LoadGameplay()
+    {
+        SoundManager.PlaySound(SoundManager.Sound.CannonShot);
+        Debug.LogError("sound started");
+        yield return new WaitForSecondsRealtime(4.0f);
+        Debug.LogError("sound over");
+        GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
+        SwitchLevel(0);
+        GameManager.manager.playerStats.EquipDefaultWeapon(false);
     }
 
     IEnumerator WaitAndDisablePlayerBleeding()
