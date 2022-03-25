@@ -1,5 +1,46 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!64 &6737216331796216904
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9175398469116503269}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 0}
+--- !u!65 &6338739002731897556
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5428760388029935541}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.08, y: 0.07999998, z: 0.0004710817}
+  m_Center: {x: 0.000000004452886, y: -0.0000000031723175, z: -0.00023554085}
+--- !u!64 &2078813106108308590
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6327688097134514540}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6561780360773022435, guid: 7c6a7332ce6c27a4f99ab3e8c386e683, type: 3}
 --- !u!1001 &1131314494916558158
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -89,7 +130,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5547777761614983092, guid: f30bd08142249784e8270982e317e66c, type: 3}
       propertyPath: m_Name
-      value: lvl2RoomTemplate
+      value: lvl2RoomTemplate Variant
       objectReference: {fileID: 0}
     - target: {fileID: 5564960683661034875, guid: f30bd08142249784e8270982e317e66c, type: 3}
       propertyPath: m_IsActive
@@ -254,14 +295,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7450873825058427024, guid: 7c6a7332ce6c27a4f99ab3e8c386e683, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 7c6a7332ce6c27a4f99ab3e8c386e683, type: 3}
       propertyPath: m_Name
       value: Level2Roomlayout3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7c6a7332ce6c27a4f99ab3e8c386e683, type: 3}
+--- !u!1 &9175398469116503269 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 7c6a7332ce6c27a4f99ab3e8c386e683, type: 3}
+  m_PrefabInstance: {fileID: 8328556053894994356}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5428760388029935541 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4089881258449663489, guid: 7c6a7332ce6c27a4f99ab3e8c386e683, type: 3}
+  m_PrefabInstance: {fileID: 8328556053894994356}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7906360000115211019 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -7048712732938444097, guid: 7c6a7332ce6c27a4f99ab3e8c386e683, type: 3}
+  m_PrefabInstance: {fileID: 8328556053894994356}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6327688097134514540 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2613371286591408344, guid: 7c6a7332ce6c27a4f99ab3e8c386e683, type: 3}
   m_PrefabInstance: {fileID: 8328556053894994356}
   m_PrefabAsset: {fileID: 0}
