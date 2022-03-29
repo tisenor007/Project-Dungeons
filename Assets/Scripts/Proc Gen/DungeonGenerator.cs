@@ -81,7 +81,6 @@ public class DungeonGenerator : MonoBehaviour
                     if (IsBranchStuck(mainStructureBase))
                     {
                         mainStructureBase = mainStructures[Random.Range(0, mainStructures.Count)];
-                        UpdateCurrentStructure(mainStructureBase);
                     }
                     //sets up branch
                     ResetBranchStats();
@@ -184,20 +183,24 @@ public class DungeonGenerator : MonoBehaviour
                 InstantiateStructure(startStructure, Vector3.zero, Vector3.zero, StructureType.StartStructure, 0);
                 break;
             case StructureType.Room:
+                UpdateCurrentStructure(baseStruct);
                 if (!VariantIsRandomized(roomVariations)) { return; }
                 if (!DirectionIsRandomized(baseStruct)) { return; }
                 InstantiateStructure(roomVariations[nextStructureVariation], nextStructureLoc, nextStructureRot, nextStructureType, nextStructureVariation);
                 break;
             case StructureType.Hallway:
+                UpdateCurrentStructure(baseStruct);
                 if (!VariantIsRandomized(hallwayVariations)) { return; }
                 if (!DirectionIsRandomized(baseStruct)) { return; }
                 InstantiateStructure(hallwayVariations[nextStructureVariation], nextStructureLoc, nextStructureRot, nextStructureType, nextStructureVariation);
                 break;
             case StructureType.EndStructure:
+                UpdateCurrentStructure(baseStruct);
                 if (!DirectionIsRandomized(baseStruct)) { return; }
                 InstantiateStructure(endStructure, nextStructureLoc, nextStructureRot, StructureType.EndStructure, 0);
                 break;
             case StructureType.TrapStructure:
+                UpdateCurrentStructure(baseStruct);
                 if (!VariantIsRandomized(trapVariations)) { return; }
                 if (!DirectionIsRandomized(baseStruct)) { return; }
                 InstantiateStructure(trapVariations[nextStructureVariation], nextStructureLoc, nextStructureRot, StructureType.TrapStructure, nextStructureVariation);
