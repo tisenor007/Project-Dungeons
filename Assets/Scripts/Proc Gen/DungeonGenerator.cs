@@ -225,9 +225,9 @@ public class DungeonGenerator : MonoBehaviour
         if (StructureIsHere(structureDestination)) { return; }
 
         structures.Add(Instantiate(structure, structureDestination, Quaternion.Euler(structureRotation)));
-        currentStructureType = nextStructType;
+        //currentStructureType = nextStructType;
         structure.GetComponent<StructureBehavior>().currentStructureType = nextStructType;
-        currentStructureVariation = nextStructVariation;
+        //currentStructureVariation = nextStructVariation;
         structure.GetComponent<StructureBehavior>().currentVariation = nextStructVariation;
 
         if (branchIsGenerating) 
@@ -242,9 +242,9 @@ public class DungeonGenerator : MonoBehaviour
             mainStructureBase = structures[structures.Count - 1];
             //UpdateCurrentStructure(mainStructureBase);
         }
-
-        if (currentStructureType == StructureType.EndStructure) { CompleteGeneration(); }
-        if (currentStructureType == StructureType.TrapStructure) { trapInstantiated = true; }
+        if (nextStructType == StructureType.StartStructure) { UpdateCurrentStructure(mainStructureBase); }
+        if (nextStructType == StructureType.EndStructure) { CompleteGeneration(); }
+        if (nextStructType == StructureType.TrapStructure) { trapInstantiated = true; }
     }
 
     //makes random direction that next room / structure can go
