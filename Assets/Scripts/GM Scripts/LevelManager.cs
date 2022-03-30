@@ -264,9 +264,9 @@ public class LevelManager : MonoBehaviour
     IEnumerator LoadCharacterSelectioScreen()
     {
         SoundManager.PlaySound(SoundManager.Sound.CannonShot);
-        Debug.LogError("sound started");
+        //Debug.LogError("sound started");
         yield return new WaitForSecondsRealtime(4.0f);
-        Debug.LogError("sound over");
+        //Debug.LogError("sound over");
         GameManager.manager.ChangeState(GameState.CHARACTERSELECTION);
         //SoundManager.PlayMusic(SoundManager.Sound.CharacterSelectionMusic);
     }
@@ -274,9 +274,9 @@ public class LevelManager : MonoBehaviour
     IEnumerator LoadGameplay()
     {
         SoundManager.PlaySound(SoundManager.Sound.CannonShot);
-        Debug.LogError("sound started");
+        //Debug.LogError("sound started");
         yield return new WaitForSecondsRealtime(4.0f);
-        Debug.LogError("sound over");
+        //Debug.LogError("sound over");
         GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
         SwitchLevel(0);
         GameManager.manager.playerStats.EquipDefaultWeapon(false);
