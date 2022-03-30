@@ -234,13 +234,13 @@ public class DungeonGenerator : MonoBehaviour
         { 
             currentBranchStructCount++;
             currBranchStructureBase = structures[structures.Count-1];
-            UpdateCurrentStructure(currBranchStructureBase);
+            //UpdateCurrentStructure(currBranchStructureBase);
         }
         else if (!branchIsGenerating) 
         {
             mainStructures.Add(structures[structures.Count - 1]);
             mainStructureBase = structures[structures.Count - 1];
-            UpdateCurrentStructure(mainStructureBase);
+            //UpdateCurrentStructure(mainStructureBase);
         }
 
         if (currentStructureType == StructureType.EndStructure) { CompleteGeneration(); }
