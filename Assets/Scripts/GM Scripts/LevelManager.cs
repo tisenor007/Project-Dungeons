@@ -64,6 +64,7 @@ public class LevelManager : MonoBehaviour
     //buttons
     public void ButtonStartNewGame()
     {
+        SoundManager.PlaySound(SoundManager.Sound.CannonShot);
         ChangeGameStateToGamePlay();
         Debug.LogWarning("SetupGUI");
         //game set up goes here
@@ -78,18 +79,18 @@ public class LevelManager : MonoBehaviour
     public void ChangeGameStateToGamePlay()
     {
         GameManager.manager.ChangeState(GameState.GAMEPLAY);
+        SoundManager.PlayMusic(SoundManager.Sound.GameplayMusic);
     }
 
     public void ChangeGameStateToNewGame()
     {
-        SwitchLevel(0);
-
-        // equip default weapon somehow
-        GameManager.manager.playerStats.DefaultWeaponType.Equip(GameManager.manager.playerStats.DefaultWeaponType.prefab, GameManager.manager.playerAndCamera.transform.GetChild(0).gameObject, false); ;
+        StartCoroutine(LoadGameplay());
+        
     }
 
     public void ProgressLevel()
     {
+        GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
         if (GameManager.manager.currentLevel != GameManager.manager.levels.Length - 1)
         {
             SwitchLevel(GameManager.manager.currentLevel + 1);
@@ -123,7 +124,7 @@ public class LevelManager : MonoBehaviour
 
     public void ChangeGameStateToCharacterSelection()
     {
-        GameManager.manager.ChangeState(GameState.CHARACTERSELECTION);
+        StartCoroutine(LoadCharacterSelectioScreen());
     }
 
     public void ChangeGameStateToSaveOption()
@@ -138,7 +139,6 @@ public class LevelManager : MonoBehaviour
 
     public void SwitchLevel(int desiredLevel)
     {
-        GameManager.manager.ChangeState(GameState.GAMEPLAY);
         GameManager.manager.ResetScene();
 
         foreach (GameObject level in GameManager.manager.levels)
@@ -147,6 +147,7 @@ public class LevelManager : MonoBehaviour
         }
 
         GameManager.manager.currentLevel = desiredLevel;
+        GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonPreGenerating = true;
         GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonIsGenerating = true;
         GameManager.manager.playerAndCamera.transform.GetChild(0).GetComponent<PlayerStats>().ResetStats();
     }
@@ -216,6 +217,7 @@ public class LevelManager : MonoBehaviour
     {
         notePlain.enabled = false;
         noteWriting.text = null;
+        SoundManager.PlaySound(SoundManager.Sound.PaperAway);
     }
 
     //misc commands
@@ -280,6 +282,27 @@ public class LevelManager : MonoBehaviour
     {
         GameManager.manager.uiManager.playerBleeding.color = new Color(0, 0, 0, 100); // setting alpha to visible
         StartCoroutine("WaitAndDisablePlayerBleeding");
+    }
+
+    IEnumerator LoadCharacterSelectioScreen()
+    {
+        SoundManager.PlaySound(SoundManager.Sound.CannonShot);
+        Debug.LogError("sound started");
+        yield return new WaitForSecondsRealtime(4.0f);
+        Debug.LogError("sound over");
+        GameManager.manager.ChangeState(GameState.CHARACTERSELECTION);
+        //SoundManager.PlayMusic(SoundManager.Sound.CharacterSelectionMusic);
+    }
+
+    IEnumerator LoadGameplay()
+    {
+        SoundManager.PlaySound(SoundManager.Sound.CannonShot);
+        Debug.LogError("sound started");
+        yield return new WaitForSecondsRealtime(4.0f);
+        Debug.LogError("sound over");
+        GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
+        SwitchLevel(0);
+        GameManager.manager.playerStats.EquipDefaultWeapon(false);
     }
 
     IEnumerator WaitAndDisablePlayerBleeding()

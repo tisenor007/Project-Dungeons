@@ -133,21 +133,12 @@ public class PlayerStats : CharacterStats
         //create Weapon in Players hand
         weaponObject = Instantiate(weaponType.prefab, playerHand);
 
-        //resize weapon accronding to size and magic numbers?
-        if (!GameManager.manager.characterSelection.isMale) 
-        {
-            weaponObject.transform.localScale = new Vector3
-            (15 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.x,
-            15 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.y,
-            15 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.z);
-        }
-        else if (GameManager.manager.characterSelection.isMale)
-        {
-            weaponObject.transform.localScale = new Vector3
-            (1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.x,
-            1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.y,
-            1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.z);
-        }
+        //resize weapon accronding to size?
+        weaponObject.transform.localScale = new Vector3
+        (1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.x,
+        1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.y,
+        1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.z);
+        
 
         //set player hit area
         hitArea.PlayerStats = this;
@@ -245,7 +236,8 @@ public class PlayerStats : CharacterStats
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "RestStation") { healing = true; }
-        if (other.tag == "DeathBox") { transform.position = respawnPos; }
+        if (other.tag == "DeathBox") { transform.position = respawnPos; TakeDamage(maxHealth, transform);}
+        if (other.tag == "WIN") { GameManager.manager.levelManager.ChangeGameStateToWin(); }
     }
 
     private void OnTriggerExit(Collider other)

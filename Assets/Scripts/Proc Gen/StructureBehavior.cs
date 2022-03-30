@@ -5,56 +5,101 @@ using UnityEngine;
 public class StructureBehavior : MonoBehaviour
 {
     [HideInInspector] public DungeonGenerator.StructureType currentStructureType;
+    [HideInInspector] public bool trapPlayer = false;
     [HideInInspector] public int currentVariation;
     [SerializeField] private Light[] lights;
     [SerializeField] private GameObject doors;
-    [Header("Only pass this in if room is an end room!")]
-    [SerializeField] private GameObject bossObj;
     private DungeonGenerator dungeonGenerator;
-    private Vector3 front;
-    private Vector3 back;
-    private Vector3 right;
-    private Vector3 left;
-    private bool trapIntruder = false;
+    private bool playerInStructure = false;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        dungeonGenerator = GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (this.transform.gameObject.activeSelf == true) 
+        switch (trapPlayer)
         {
-            dungeonGenerator = GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>();
-            if (!trapIntruder) { OpenDoors(currentStructureType); }
+            case true:
+                ShutAllDoors();
+                break;
+            case false:
+                OpenAvailableDoors();
+                break;
+        }
+
+        switch (playerInStructure)
+        {
+            case true:
+                ShowStructure(true);
+                ShowLights(true);
+                break;
+            case false:
+                ShowStructure(false);
+                ShowLights(false);
+                break;
         }
     }
 
-    private void OpenDoors(DungeonGenerator.StructureType structureType)
+    public void ShutAllDoors()
     {
-        if (dungeonGenerator == null) { return; }
-        front = new Vector3(transform.position.x + dungeonGenerator.structureSpacing, transform.position.y, transform.position.z);
-        back = new Vector3(transform.position.x - dungeonGenerator.structureSpacing, transform.position.y, transform.position.z);
-        right = new Vector3(transform.position.x, transform.position.y, transform.position.z + dungeonGenerator.structureSpacing);
-        left = new Vector3(transform.position.x, transform.position.y, transform.position.z - dungeonGenerator.structureSpacing);
-        
-        if (CanStructureConnect(front) && transform.eulerAngles.y == 0) { OpenDoor(front); }
-        if (CanStructureConnect(back) && transform.eulerAngles.y == 0) { OpenDoor(back); }
-        //else ifs are for strange hallway door-close bug
-        if (CanStructureConnect(right) && transform.eulerAngles.y == 0) { OpenDoor(right); }
-        else if(CanStructureConnect(right) && transform.eulerAngles.y == 90) { OpenDoor(back); }
-        if (CanStructureConnect(left) && transform.eulerAngles.y == 0) { OpenDoor(left); }
-        else if (CanStructureConnect(left) && transform.eulerAngles.y == 90) { OpenDoor(front); }
+        for (int i = 0; i < doors.transform.childCount; i++)
+        {
+            doors.transform.GetChild(i).gameObject.SetActive(true);
+        }
     }
 
-    private void OpenDoor(Vector3 direction)
+    private void OpenAvailableDoors()
     {
-        if (direction == front) { doors.transform.GetChild(0).gameObject.SetActive(false); }
-        else if(direction == back) { doors.transform.GetChild(1).gameObject.SetActive(false); }
-        else if (direction == right) { doors.transform.GetChild(2).gameObject.SetActive(false); }
-        else if (direction == left) { doors.transform.GetChild(3).gameObject.SetActive(false); }
+        if (dungeonGenerator == null) { return; }
+        
+        if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.front, transform.position)) && transform.eulerAngles.y == 0) 
+        { OpenDoor(DungeonGenerator.Directions.front); }
+        if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.back, transform.position)) && transform.eulerAngles.y == 0) 
+        { OpenDoor(DungeonGenerator.Directions.back); }
+        //else ifs are for strange hallway door-close bug
+        if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.right, transform.position)) && transform.eulerAngles.y == 0) 
+        { OpenDoor(DungeonGenerator.Directions.right); }
+        else if(CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.right, transform.position)) && transform.eulerAngles.y == 90) 
+        { OpenDoor(DungeonGenerator.Directions.back); }
+        if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.left, transform.position)) && transform.eulerAngles.y == 0) 
+        { OpenDoor(DungeonGenerator.Directions.left); }
+        else if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.left, transform.position)) && transform.eulerAngles.y == 90) 
+        { OpenDoor(DungeonGenerator.Directions.front); }
+    }
+
+    private void ShowStructure(bool visualStatus)
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.tag != "DeathBox") { child.gameObject.SetActive(visualStatus); }
+        }
+    }
+
+    private void ShowLights(bool lightStatus)
+    {
+        foreach (Light light in lights) { light.enabled = lightStatus; }
+    }
+
+    private void OpenDoor(DungeonGenerator.Directions direction)
+    {
+        switch (direction)
+        {
+            case DungeonGenerator.Directions.front:
+                doors.transform.GetChild(0).gameObject.SetActive(false);
+                break;
+            case DungeonGenerator.Directions.back:
+                doors.transform.GetChild(1).gameObject.SetActive(false);
+                break;
+            case DungeonGenerator.Directions.right:
+                doors.transform.GetChild(2).gameObject.SetActive(false);
+                break;
+            case DungeonGenerator.Directions.left:
+                doors.transform.GetChild(3).gameObject.SetActive(false);
+                break;
+        }
     }
 
     private bool CanStructureConnect(Vector3 chosenSpot)
@@ -73,12 +118,14 @@ public class StructureBehavior : MonoBehaviour
     {
         if (dungeonGenerator.structures[structureToBeChecked].GetComponent<StructureBehavior>().currentStructureType == DungeonGenerator.StructureType.Hallway)
         {
-            if (chosenSpot == front || chosenSpot == back)
+            if (chosenSpot == dungeonGenerator.Direction(DungeonGenerator.Directions.front, transform.position) || 
+                chosenSpot == dungeonGenerator.Direction(DungeonGenerator.Directions.back, transform.position))
             {
                 if (dungeonGenerator.structures[structureToBeChecked].transform.eulerAngles.y == 90) { return false; }
                 return true;
             }
-            else if (chosenSpot == left || chosenSpot == right)
+            else if (chosenSpot == dungeonGenerator.Direction(DungeonGenerator.Directions.left, transform.position) || 
+                chosenSpot == dungeonGenerator.Direction(DungeonGenerator.Directions.right, transform.position))
             {
                 if (dungeonGenerator.structures[structureToBeChecked].transform.eulerAngles.y == 0) { return false; }
                 return true;
@@ -87,26 +134,13 @@ public class StructureBehavior : MonoBehaviour
         return true;
     }
 
-    private void ShutAllDoors()
-    {
-        for (int i = 0; i < doors.transform.childCount; i++)
-        {
-            doors.transform.GetChild(i).gameObject.SetActive(true);
-        }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Player") { foreach (Light light in lights) { light.enabled = true; } }
-        if (currentStructureType == DungeonGenerator.StructureType.EndStructure) 
-        {
-            trapIntruder = true;
-            ShutAllDoors();
-            if (bossObj.GetComponent<Boss>().IsAlive == true) { bossObj.SetActive(true); }
-        }
+        if (other.tag == "Player") { playerInStructure = true; }
     }
+
     private void OnTriggerExit(Collider other)
     {
-        if (other.tag == "Player") { foreach (Light light in lights) { light.enabled = false; } }
+        if (other.tag == "Player") { playerInStructure = false; }
     }
 }

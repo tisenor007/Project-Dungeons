@@ -121,6 +121,13 @@ public class UIManager : MonoBehaviour
         DisableAll();
         loadingScreen.enabled = true;
     }
+
+    IEnumerator Wait()
+    {
+        //yield on a new YieldInstruction that waits for 5 seconds.
+        yield return new WaitForSeconds(5);
+
+    }
 }
 
 
