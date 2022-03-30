@@ -8,6 +8,7 @@ public class PlayerStats : CharacterStats
     //equiment
     public Collider weaponHitArea;
     public GameObject shield;
+    [HideInInspector] public bool inWater = false;
     private GameObject weaponObject;
 
     //initialization

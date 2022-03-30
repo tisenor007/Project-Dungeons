@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class StructureBehavior : MonoBehaviour
 {
+    public GameObject doors;
     [HideInInspector] public DungeonGenerator.StructureType currentStructureType;
     [HideInInspector] public bool trapPlayer = false;
     [HideInInspector] public int currentVariation;
     [SerializeField] private Light[] lights;
-    [SerializeField] private GameObject doors;
     private DungeonGenerator dungeonGenerator;
     private bool playerInStructure = false;
     // Start is called before the first frame update
