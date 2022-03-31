@@ -60,13 +60,7 @@ public class LevelManager : MonoBehaviour
 
     public void ChangeGameStateToNewGame(Button playButton)
     {
-<<<<<<< Updated upstream
-        SwitchLevel(0);
-        GameManager.manager.playerStats.EquipDefaultWeapon(false);
-=======
-        StartCoroutine(LoadGameplay(playButton));
-        
->>>>>>> Stashed changes
+        StartCoroutine(LoadGameplay(playButton)); // run code in here in LoadGameplay()
     }
 
     public void ProgressLevel()
@@ -104,11 +98,7 @@ public class LevelManager : MonoBehaviour
 
     public void ChangeGameStateToCharacterSelection(Button playButton)
     {
-<<<<<<< Updated upstream
-        GameManager.manager.ChangeState(GameState.CHARACTERSELECTION);
-=======
         StartCoroutine(LoadCharacterSelectioScreen(playButton));
->>>>>>> Stashed changes
     }
 
     public void ChangeGameStateToSaveOption()
@@ -265,9 +255,6 @@ public class LevelManager : MonoBehaviour
         GameManager.manager.uiManager.playerBleeding.color = new Color(100, 0, 0, 100);
         StartCoroutine("WaitAndDisablePlayerBleeding");
     }
-
-<<<<<<< Updated upstream
-=======
     IEnumerator LoadCharacterSelectioScreen(Button playButton)
     {
         playButton.interactable = false;
@@ -291,7 +278,6 @@ public class LevelManager : MonoBehaviour
         GameManager.manager.playerStats.EquipDefaultWeapon(false);
     }
 
->>>>>>> Stashed changes
     IEnumerator WaitAndDisablePlayerBleeding()
     {
         yield return new WaitForSeconds(.3f);
