@@ -133,23 +133,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2535d7ea71fb3aa49a1623af20eb6891, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isAlive: 1
+  health: 0
   maxHealth: 0
   damage: 0
-  enemyState: 0
-  enemyNavMeshAgent: {fileID: 0}
-  playerStats: {fileID: 0}
-  viewDistance: 0
-  hearingDistance: 0
-  attackDistance: 0
-  speed: 0
-  distanceFromPlayer: 0
-  hitTimer: 0
-  hitDuration: 0
-  stunnedHitDuration: 0
-  playerLocation: {x: 0, y: 0, z: 0}
+  attackSpeed: 0.5
+  currentWeapon: {fileID: 0}
+  defaultWeapon: {fileID: 0}
   healthColour: {fileID: 0}
   healthBar: {fileID: 0}
   cam: {fileID: 0}
+  availableDrops:
+  - {fileID: 8300489967171371579, guid: b53e6223002d3fc44b1df9d31930c35e, type: 3}
+  - {fileID: 1087364117351341910, guid: 2ae27301cb9a05a4997cfacc78540d76, type: 3}
+  - {fileID: 4166405968833009130, guid: d46dc7f9a61522540b34828b7830242f, type: 3}
+  itemDropChance: 50
   walkDistance: 0
   currentRotationDistance: 0
   walkToLocation: {x: 0, y: 0, z: 0}

@@ -124,20 +124,11 @@ public class PlayerStats : CharacterStats
 
         weaponObject = Instantiate(newWeaponObj, playerHands);
 
-        if (!GameManager.manager.characterSelection.isMale) 
-        {
-            weaponObject.transform.localScale = new Vector3
-            (15 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.x,
-            15 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.y,
-            15 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.z);
-        }
-        else if (GameManager.manager.characterSelection.isMale)
-        {
-            weaponObject.transform.localScale = new Vector3
-            (1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.x,
-            1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.y,
-            1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.z);
-        }
+        weaponObject.transform.localScale = new Vector3
+        (1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.x,
+        1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.y,
+        1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.z);
+        
 
         HitArea hitArea = weaponObject.transform.GetChild(0).GetComponentInChildren<HitArea>();
 
@@ -216,7 +207,8 @@ public class PlayerStats : CharacterStats
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "RestStation") { healing = true; }
-        if (other.tag == "DeathBox") { transform.position = respawnPos; }
+        if (other.tag == "DeathBox") { transform.position = respawnPos; TakeDamage(maxHealth, transform);}
+        if (other.tag == "WIN") { GameManager.manager.levelManager.ChangeGameStateToWin(); }
     }
 
     private void OnTriggerExit(Collider other)
