@@ -334,14 +334,14 @@ public class PlayerController : MonoBehaviour
 
     public void Attack() 
     {
-        if (playerStats.shield.activeSelf == false && playerStats.weaponHitArea.enabled == false) 
-        { playerStats.weaponHitArea.enabled = true; } 
+        if (playerStats.shield.activeSelf == false && playerStats.weaponHitAreaCollider.enabled == false) 
+        { playerStats.weaponHitAreaCollider.enabled = true; } 
     }
 
     public void StopAttacking() 
     {
-        if (playerStats.weaponHitArea == null) { return; }
-        if (playerStats.weaponHitArea.enabled == true) { playerStats.weaponHitArea.enabled = false; } 
+        if (playerStats.weaponHitAreaCollider == null) { return; }
+        if (playerStats.weaponHitAreaCollider.enabled == true) { playerStats.weaponHitAreaCollider.enabled = false; } 
     }
 
     public bool IsAttacking()

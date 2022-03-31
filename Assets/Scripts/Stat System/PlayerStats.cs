@@ -8,7 +8,7 @@ public class PlayerStats : CharacterStats
     //equiment
     public GameObject weaponObject;
     public GameObject shield;
-    public Collider weaponHitArea;
+    public Collider weaponHitAreaCollider;
 
     //initialization
     [SerializeField] private GameObject maleHand;
@@ -28,17 +28,20 @@ public class PlayerStats : CharacterStats
     private float restStationHealTimer = 0;
     private GameObject activePlayerHand;
 
-    private int damageValue = 0;
-    private int savedDamageValue;
-    private int[] damageThresholds = { 75, 50, 25, 15 }; // limits at which GUI reacts
+    private float damageValue = 0;
+    private int savedHealth;
+    
+
+    [SerializeField] private HitArea hA;
 
     public Vector3 RespawnPos { get { return respawnPos; } set { respawnPos = value; } }
     public GameObject WeaponObject { get { return weaponObject; } }
 
     private void Start()
     {
+        maxHealth = 100;
         //set up weapon
-        if (currentWeaponType != null) currentWeaponType = defaultWeapon;
+        if (currentWeaponType == null) currentWeaponType = defaultWeapon;
 
         damage = currentWeaponType.damage;
         attackSpeed = currentWeaponType.attackSpeed;
@@ -116,22 +119,24 @@ public class PlayerStats : CharacterStats
     #region Equip Modification
     public void EquipWeapon(Weapon weaponType, bool discardWeapon)
     {
-        //gets
+        //get hand pos from old weapon
         Transform playerHand = weaponObject.transform.parent;
-        HitArea hitArea = weaponObject.transform.GetChild(0).GetComponentInChildren<HitArea>();
-
+        
         //drop an interteractable?
         if (discardWeapon)
         {
             DiscardWeapon();
         }
-        else 
+        else
         {
             RemoveWeapon();
         }
 
-        //create Weapon in Players hand
+        //create Weapon in Players hand // replacing old weapon
         weaponObject = Instantiate(weaponType.prefab, playerHand);
+
+        //get hit area of new weapon
+        HitArea hitArea = weaponObject.transform.GetChild(0).GetComponentInChildren<HitArea>();
 
         //resize weapon accronding to size?
         weaponObject.transform.localScale = new Vector3
@@ -139,13 +144,7 @@ public class PlayerStats : CharacterStats
         1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.y,
         1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.z);
         
-
-        //set player hit area
-        hitArea.PlayerStats = this;
-        hitArea.PlayerController = gameObject.GetComponent<PlayerController>();
-        weaponHitArea = hitArea.gameObject.GetComponent<Collider>();
-
-        // set player stats
+        //set player stats
         // damage
         damage = weaponType.damage;
 
@@ -155,6 +154,9 @@ public class PlayerStats : CharacterStats
         // item type
         currentWeaponType = weaponType;
 
+        //set player hit area
+        weaponHitAreaCollider = hitArea.gameObject.GetComponent<Collider>();
+        hitArea.SetupPlayerFields(this.gameObject);
 
         Debug.Log($"Set {gameObject.name}, damage = {damage}, speed = {attackSpeed}, type = {currentWeaponType}.");
     }
@@ -187,15 +189,20 @@ public class PlayerStats : CharacterStats
         healthText.text = "" + health;
 
         //meta feedback
-        if (damageValue == savedDamageValue) return;
+        if (health == savedHealth) return;
+
+        savedHealth = health;
+
+        int[] damageThresholds = { 75, 50, 25, 15}; // limits at which GUI reacts
 
         //calc
         if (health > damageThresholds[0]) damageValue = 0;
-        else if (health < damageThresholds[1]) damageValue = 25;
-        else if (health < damageThresholds[2]) damageValue = 50;
-        else if (health < damageThresholds[3]) damageValue = 75;
-        else if (health < damageThresholds[4]) damageValue = 100;
+        else if (health > damageThresholds[1]) damageValue = .20f;
+        else if (health > damageThresholds[2]) damageValue = .40f;
+        else if (health > damageThresholds[3]) damageValue = .70f;
+        else if (health < damageThresholds[3]) damageValue = 1;
 
+        Debug.LogWarning($"updating meta UI health {health}, bar {healthBar}, text {healthText}, Damage Value {damageValue}");
         lM.JumpCanvasAlphaTo(damageValue, uM.playerBlood);
     }
 
@@ -216,10 +223,12 @@ public class PlayerStats : CharacterStats
         }
 
         if (activePlayerHand == null) { return; }
-        weaponHitArea = activePlayerHand.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Collider>();
 
-        if (weaponHitArea == null) { return; }
-        weaponObject = weaponHitArea.transform.parent.parent.gameObject; // parent.parent is to get: hitarea > handpos > weapon root
+        weaponHitAreaCollider = activePlayerHand.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Collider>();
+
+        if (weaponHitAreaCollider == null) { return; }
+        
+        weaponObject = weaponHitAreaCollider.transform.parent.parent.gameObject; // parent.parent is to get: hitarea > handpos > weapon root
     }
     
     #endregion

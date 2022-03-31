@@ -6293,7 +6293,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -7914,7 +7914,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -0.14000034, y: -0.009500444}
   m_SizeDelta: {x: -0.7575002, y: -0.4174}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -10024,10 +10024,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   structureSpacing: 31
   roomChance: 60
-  hallwayChance: 40
   dungeonIsGenerating: 0
+  dungeonPreGenerating: 0
   dungeonGenerated: 0
   structures: []
+  branchChance: 0
+  minBranchLengthRange: 0
+  maxBranchLengthRange: 0
   startStructure: {fileID: 4297637643960629045, guid: a809ca3a09778ab4d8063736a59ffc6c, type: 3}
   endStructure: {fileID: 3697370696446350291, guid: 9e6ad99e61780ee46be5233dd0103f69, type: 3}
   roomVariations:
@@ -10039,6 +10042,8 @@ MonoBehaviour:
   - {fileID: 6487028986003717193, guid: 4881e96f4800e9341974f7b6c1f0b8c8, type: 3}
   - {fileID: 6730794946218561581, guid: 511c3a01940824541a8aa55a34d787f8, type: 3}
   - {fileID: 7013559803462372987, guid: d9798d678f5227940a5eafef226a657a, type: 3}
+  includeTraps: 0
+  trapVariations: []
   maxStructures: 25
 --- !u!4 &811135845
 Transform:
@@ -12211,6 +12216,14 @@ PrefabInstance:
       propertyPath: playerController
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6096700873657066519, guid: 5bffb16854ed9f64c934b60164de3dbf, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6096700873657066519, guid: 5bffb16854ed9f64c934b60164de3dbf, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6452856474992912090, guid: 5bffb16854ed9f64c934b60164de3dbf, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -12266,11 +12279,11 @@ PrefabInstance:
     - target: {fileID: 7676479150056116648, guid: 5bffb16854ed9f64c934b60164de3dbf, type: 3}
       propertyPath: levels.Array.data[0]
       value: 
-      objectReference: {fileID: 1376282925}
+      objectReference: {fileID: 0}
     - target: {fileID: 7676479150056116648, guid: 5bffb16854ed9f64c934b60164de3dbf, type: 3}
       propertyPath: levels.Array.data[1]
       value: 
-      objectReference: {fileID: 1376282925}
+      objectReference: {fileID: 0}
     - target: {fileID: 7676479150056116649, guid: 5bffb16854ed9f64c934b60164de3dbf, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -12318,6 +12331,10 @@ PrefabInstance:
     - target: {fileID: 7676479150056116651, guid: 5bffb16854ed9f64c934b60164de3dbf, type: 3}
       propertyPath: m_Name
       value: GameManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7781191413282138755, guid: 5bffb16854ed9f64c934b60164de3dbf, type: 3}
+      propertyPath: m_Name
+      value: Text Controls
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5bffb16854ed9f64c934b60164de3dbf, type: 3}
@@ -17467,11 +17484,6 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.0013461113, y: -2.9447231, z: -3.2188456}
     m_Extent: {x: 12.270477, y: 12.887332, z: 7.6038}
   m_DirtyAABB: 0
---- !u!1 &1376282925 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3543195480034803728, guid: 5bffb16854ed9f64c934b60164de3dbf, type: 3}
-  m_PrefabInstance: {fileID: 995180249}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1385201849
 GameObject:
   m_ObjectHideFlags: 0
@@ -21810,7 +21822,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -21987,12 +21999,12 @@ GameObject:
   - component: {fileID: 1750512761}
   - component: {fileID: 1750512760}
   m_Layer: 0
-  m_Name: GameManager Dev
+  m_Name: GameManager BetaDev
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1750512760
 MonoBehaviour:
   m_ObjectHideFlags: 0
