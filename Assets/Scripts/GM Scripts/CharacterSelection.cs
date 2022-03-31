@@ -6,6 +6,7 @@ public class CharacterSelection : MonoBehaviour
     [HideInInspector] public bool isMale = true;
     [SerializeField] private GameObject maleDisplay;
     [SerializeField] private GameObject femaleDisplay;
+    [SerializeField] private GameObject backgroundDisplay;
     [SerializeField] private Text characterNameText;
 
     private enum Character
@@ -53,6 +54,7 @@ public class CharacterSelection : MonoBehaviour
     {
         maleDisplay.SetActive(isMale);
         femaleDisplay.SetActive(!isMale);
+        backgroundDisplay.SetActive(true);
     }
 
 
@@ -60,5 +62,6 @@ public class CharacterSelection : MonoBehaviour
     {
         maleDisplay.SetActive(false);
         femaleDisplay.SetActive(false);
+        backgroundDisplay.SetActive(false);
     }
 }
