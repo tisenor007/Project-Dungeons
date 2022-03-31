@@ -36,6 +36,7 @@ public class LevelManager : MonoBehaviour
 
     public void Update()
     {
+        //ui
         weaponInfoControl = GameManager.manager.uiManager.weaponInfo.transform.GetChild(0).GetComponent<Image>().color;
 
         if (weaponInfoControl.a == 1) // 1 is the max value of alpha
@@ -47,6 +48,7 @@ public class LevelManager : MonoBehaviour
         { 
             JumpCanvasAlphaTo(0, GameManager.manager.uiManager.weaponInfo);
         }
+
 
         if (GameManager.manager.uiManager.credits.enabled == false && creditsYPos != creditsBeginPos)
         {
@@ -283,27 +285,6 @@ public class LevelManager : MonoBehaviour
         StartCoroutine("WaitAndDisablePlayerBleeding");
     }*/
 
-    IEnumerator LoadCharacterSelectioScreen()
-    {
-        SoundManager.PlaySound(SoundManager.Sound.CannonShot);
-        Debug.LogError("sound started");
-        yield return new WaitForSecondsRealtime(4.0f);
-        Debug.LogError("sound over");
-        GameManager.manager.ChangeState(GameState.CHARACTERSELECTION);
-        //SoundManager.PlayMusic(SoundManager.Sound.CharacterSelectionMusic);
-    }
-
-    IEnumerator LoadGameplay()
-    {
-        SoundManager.PlaySound(SoundManager.Sound.CannonShot);
-        Debug.LogError("sound started");
-        yield return new WaitForSecondsRealtime(4.0f);
-        Debug.LogError("sound over");
-        GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
-        SwitchLevel(0);
-        GameManager.manager.playerStats.EquipWeapon(GameManager.manager.playerStats.DefaultWeaponType, false);
-    }
-
     public void JumpCanvasAlphaTo(float value, Canvas inputCanvas)
     {
         Image[] canvasImages = inputCanvas.gameObject.GetComponentsInChildren<Image>();
@@ -331,6 +312,29 @@ public class LevelManager : MonoBehaviour
             }
         }
     }
+
+    IEnumerator LoadCharacterSelectioScreen()
+    {
+        SoundManager.PlaySound(SoundManager.Sound.CannonShot);
+        Debug.LogError("sound started");
+        yield return new WaitForSecondsRealtime(4.0f);
+        Debug.LogError("sound over");
+        GameManager.manager.ChangeState(GameState.CHARACTERSELECTION);
+        //SoundManager.PlayMusic(SoundManager.Sound.CharacterSelectionMusic);
+    }
+
+    IEnumerator LoadGameplay()
+    {
+        SoundManager.PlaySound(SoundManager.Sound.CannonShot);
+        Debug.LogError("sound started");
+        yield return new WaitForSecondsRealtime(4.0f);
+        Debug.LogError("sound over");
+        GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
+        SwitchLevel(0);
+        GameManager.manager.playerStats.EquipWeapon(GameManager.manager.playerStats.DefaultWeaponType, false);
+    }
+
+
     #endregion
 
     #region Options
