@@ -58,10 +58,15 @@ public class LevelManager : MonoBehaviour
         GameManager.manager.ChangeState(GameState.GAMEPLAY);
     }
 
-    public void ChangeGameStateToNewGame()
+    public void ChangeGameStateToNewGame(Button playButton)
     {
+<<<<<<< Updated upstream
         SwitchLevel(0);
         GameManager.manager.playerStats.EquipDefaultWeapon(false);
+=======
+        StartCoroutine(LoadGameplay(playButton));
+        
+>>>>>>> Stashed changes
     }
 
     public void ProgressLevel()
@@ -97,9 +102,13 @@ public class LevelManager : MonoBehaviour
         GameManager.manager.ChangeState(GameState.CREDITS);
     }
 
-    public void ChangeGameStateToCharacterSelection()
+    public void ChangeGameStateToCharacterSelection(Button playButton)
     {
+<<<<<<< Updated upstream
         GameManager.manager.ChangeState(GameState.CHARACTERSELECTION);
+=======
+        StartCoroutine(LoadCharacterSelectioScreen(playButton));
+>>>>>>> Stashed changes
     }
 
     public void ChangeGameStateToSaveOption()
@@ -257,6 +266,32 @@ public class LevelManager : MonoBehaviour
         StartCoroutine("WaitAndDisablePlayerBleeding");
     }
 
+<<<<<<< Updated upstream
+=======
+    IEnumerator LoadCharacterSelectioScreen(Button playButton)
+    {
+        playButton.interactable = false;
+        SoundManager.PlaySound(SoundManager.Sound.CannonShot);
+        Debug.LogError("sound started");
+        yield return new WaitForSecondsRealtime(4.0f);
+        Debug.LogError("sound over");
+        GameManager.manager.ChangeState(GameState.CHARACTERSELECTION);
+        //SoundManager.PlayMusic(SoundManager.Sound.CharacterSelectionMusic);
+    }
+
+    IEnumerator LoadGameplay(Button playButton)
+    {
+        playButton.interactable = false;
+        SoundManager.PlaySound(SoundManager.Sound.CannonShot);
+        Debug.LogError("sound started");
+        yield return new WaitForSecondsRealtime(4.0f);
+        Debug.LogError("sound over");
+        GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
+        SwitchLevel(0);
+        GameManager.manager.playerStats.EquipDefaultWeapon(false);
+    }
+
+>>>>>>> Stashed changes
     IEnumerator WaitAndDisablePlayerBleeding()
     {
         yield return new WaitForSeconds(.3f);
