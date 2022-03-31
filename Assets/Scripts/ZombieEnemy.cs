@@ -9,6 +9,7 @@ public class ZombieEnemy : Enemy
     void Start()
     {
         this.viewDistance = 10;
+        maxHealth = 100;
         this.health = maxHealth;
         this.attackSpeed = 5.0f;
         this.damage = 25;
