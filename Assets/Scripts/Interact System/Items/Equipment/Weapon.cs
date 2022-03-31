@@ -31,10 +31,10 @@ public abstract class Weapon : Equipment
     { 
         UIManager uM = GameManager.manager.uiManager;
 
-        lM.WeaponDisplayTimer = 3;
         //uM.weaponInfo.transform.GetChild(0).GetComponentInChildren<Image>().sprite = this.sprite;
-        uM.weaponInfo.transform.GetChild(0).GetComponentInChildren<Text>().text = $"{nameOfItem}\nDMG:{damage}|SPD:{attackSpeed}";
+        uM.weaponInfo.transform.GetChild(0).GetComponentInChildren<Text>().text = $"{nameOfItem}:\nDMG = {damage}\nSPD = {attackSpeed}";
         
+        lM.WeaponDisplayTimer = 3;
         lM.JumpCanvasAlphaTo(10, uM.weaponInfo);
     }
 }

@@ -37,7 +37,6 @@ public class LevelManager : MonoBehaviour
     public void Update()
     {
         weaponInfoControl = GameManager.manager.uiManager.weaponInfo.transform.GetChild(0).GetComponent<Image>().color;
-        Debug.Log(weaponInfoControl);
 
         if (weaponInfoControl.a == 1) // 1 is the max value of alpha
         {
@@ -282,7 +281,7 @@ public class LevelManager : MonoBehaviour
     {
         GameManager.manager.uiManager.playerBleeding.color = new Color(0, 0, 0, 100); // setting alpha to visible
         StartCoroutine("WaitAndDisablePlayerBleeding");
-    }
+    }*/
 
     IEnumerator LoadCharacterSelectioScreen()
     {
@@ -302,18 +301,11 @@ public class LevelManager : MonoBehaviour
         Debug.LogError("sound over");
         GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
         SwitchLevel(0);
-        GameManager.manager.playerStats.EquipDefaultWeapon(false);
+        GameManager.manager.playerStats.EquipWeapon(GameManager.manager.playerStats.DefaultWeaponType, false);
     }
 
-    IEnumerator WaitAndDisablePlayerBleeding()
+    public void JumpCanvasAlphaTo(float value, Canvas inputCanvas)
     {
-        yield return new WaitForSeconds(.3f);
-        GameManager.manager.uiManager.playerBleeding.color = new Color (100,0,0,0);
-    }*/
-
-    public void JumpCanvasAlphaTo(int value, Canvas inputCanvas)
-    {
-        float convertedValue = value / 10;
         Image[] canvasImages = inputCanvas.gameObject.GetComponentsInChildren<Image>();
         Text[] canvasText = inputCanvas.gameObject.GetComponentsInChildren<Text>();
 
@@ -322,7 +314,7 @@ public class LevelManager : MonoBehaviour
             for (int i = 0; i < canvasImages.Length; i++)
             {
                 Image image = inputCanvas.gameObject.GetComponentsInChildren<Image>()[i];
-                alphaValueColour = new Color(image.color.r, image.color.g, image.color.b, convertedValue);
+                alphaValueColour = new Color(image.color.r, image.color.g, image.color.b, value);
                 inputCanvas.gameObject.GetComponentsInChildren<Image>()[i].color = alphaValueColour;
                 Debug.LogWarning($"fading {image.gameObject.name} to {value}");
             }
@@ -333,7 +325,7 @@ public class LevelManager : MonoBehaviour
             for (int i = 0; i < canvasText.Length; i++)
             {
                 Text text = inputCanvas.gameObject.GetComponentsInChildren<Text>()[i];
-                alphaValueColour = new Color(text.color.r, text.color.g, text.color.b, convertedValue);
+                alphaValueColour = new Color(text.color.r, text.color.g, text.color.b, value);
                 inputCanvas.gameObject.GetComponentsInChildren<Text>()[i].color = alphaValueColour;
                 Debug.LogWarning($"fading {text.gameObject.name} to {value}");
             }
