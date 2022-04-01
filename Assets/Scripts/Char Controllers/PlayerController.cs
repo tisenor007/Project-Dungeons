@@ -36,8 +36,8 @@ public class PlayerController : MonoBehaviour
 
     private enum PlayerWeaponIndex
     {
-        Knuckles,
         Dagger,
+        Knuckles,
         Cutlass,
         Club
     }
@@ -110,7 +110,7 @@ public class PlayerController : MonoBehaviour
             if (Time.time > jumpTimer && isGrounded() == false) { movementMode = MovementMode.Falling; }
             animator.SetFloat("Velocity", moveIntensity);
             animator.SetLayerWeight(1, attackBlend);
-            UpdateAttackAnims(playerStats.CurrentWeapon.name);
+            UpdateAttackAnims(playerStats.CurrentWeaponType.nameOfItem);
 
             switch (movementMode)
             {
@@ -196,7 +196,8 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateAttackAnims(string weaponName)
     {
-       //tried to use switch statement here, was not allow due to emun.ToString() for some reason......
+        //tried to use switch statement here, was not allow due to emun.ToString() for some reason...... VVVV
+                                                                                                    /// strings arent inherently constant switch statements require cases to be constant, 
         if (weaponName == PlayerWeaponIndex.Knuckles.ToString())
         { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Knuckles); return; }
         else if (weaponName == PlayerWeaponIndex.Dagger.ToString())
@@ -205,7 +206,8 @@ public class PlayerController : MonoBehaviour
         { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Cutlass); return; }
         else if (weaponName == PlayerWeaponIndex.Club.ToString())
         { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Club); return; }
-        animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Dagger);
+
+        animator.SetFloat("WeaponAnimState", .03f);
     }
 
     public void Interact()
