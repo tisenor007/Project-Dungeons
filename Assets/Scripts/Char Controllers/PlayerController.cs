@@ -206,8 +206,6 @@ public class PlayerController : MonoBehaviour
         { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Cutlass); return; }
         else if (weaponName == PlayerWeaponIndex.Club.ToString())
         { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Club); return; }
-
-        animator.SetFloat("WeaponAnimState", .03f);
     }
 
     public void Interact()
@@ -362,7 +360,7 @@ public class PlayerController : MonoBehaviour
 
         attackTimer = playerStats.AttackSpeed;
         attackBlend = 1;
-        AnimationAttackTiming = Time.time + 1.5f; // fix animations ?
+        AnimationAttackTiming = Time.time + .34f; // fix animations ?
         Attack();
     }
 
