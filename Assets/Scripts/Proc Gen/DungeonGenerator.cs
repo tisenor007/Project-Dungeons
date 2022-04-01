@@ -53,6 +53,7 @@ public class DungeonGenerator : MonoBehaviour
     private int currentBranchStructCount;
     private int currentBranchLength;
     private bool trapInstantiated = false;
+    private bool branchIsComplete = false;
 
     // Update is called once per frame
     void Update()
@@ -68,9 +69,7 @@ public class DungeonGenerator : MonoBehaviour
     public void GenerateNewDungeon(int maxStructureAmount)
     {
         if (structures.Count <=0) 
-        {
-            GenerateNewStructure(StructureType.StartStructure, mainStructureBase);
-        }
+        {GenerateNewStructure(StructureType.StartStructure, mainStructureBase);}
         //adds rooms to dungeon until max number is met
         else if (structures.Count < maxStructureAmount && structures.Count > 0)
         {
@@ -80,29 +79,24 @@ public class DungeonGenerator : MonoBehaviour
                 case false:
                     GenerateNewStructure(chosenStructureType, mainStructureBase);
                     if (IsBranchStuck(mainStructureBase))
-                    {
-                        mainStructureBase = mainStructures[Random.Range(0, mainStructures.Count)];
-                    }
+                    {mainStructureBase = mainStructures[Random.Range(0, mainStructures.Count)];}
                     //sets up branch
                     ResetBranchStats();
-                    currentBranchLength = Random.Range(minBranchLengthRange, maxBranchLengthRange + 1);
-                    branchStartStructNum = Random.Range(1, mainStructures.Count);
-                    currBranchStructureBase = mainStructures[branchStartStructNum];
+                    RandomizeCurrBranchStats();
                     branchDecision = ChooseNumbByChance(1, 2, branchChance);
                     if (branchDecision == 1 && mainStructures.Count > 1) { branchIsGenerating = true; }
                     break;
                 case true:
-                    if (currentBranchStructCount >= currentBranchLength){CompleteBranch(includeTraps, mainStructureBase);}
-                    if (IsBranchStuck(currBranchStructureBase)) { CompleteBranch(false, mainStructureBase); }
+                    if (currentBranchStructCount >= currentBranchLength){ branchIsComplete = true; }
+                    if (IsBranchStuck(currBranchStructureBase)) { branchIsComplete = true; }
+                    if (branchIsComplete) { CompleteBranch(ref branchIsGenerating, mainStructureBase); break; }
                     GenerateNewStructure(chosenStructureType, currBranchStructureBase);
                     break;
             }
         }
         //makes them all children after generation
         else if (structures.Count >= maxStructureAmount) 
-        {
-            GenerateNewStructure(StructureType.EndStructure, mainStructureBase);
-        }
+        {GenerateNewStructure(StructureType.EndStructure, mainStructureBase);}
     }
 
     public void ClearDungeon()
@@ -112,9 +106,7 @@ public class DungeonGenerator : MonoBehaviour
         dungeonPreGenerating = false;
         branchIsGenerating = false;
         foreach (GameObject structure in structures) 
-        { 
-            Destroy(structure);
-        }
+        { Destroy(structure);}
         structures.Clear();
         mainStructures.Clear();
         mainStructureBase = null;
@@ -228,9 +220,9 @@ public class DungeonGenerator : MonoBehaviour
 
         structures.Add(Instantiate(structure, structureDestination, Quaternion.Euler(structureRotation)));
         //currentStructureType = nextStructType;
-        structure.GetComponent<StructureBehavior>().currentStructureType = nextStructType;
+        //structure.GetComponent<StructureBehavior>().currentStructureType = nextStructType;
         //currentStructureVariation = nextStructVariation;
-        structure.GetComponent<StructureBehavior>().currentVariation = nextStructVariation;
+        //structure.GetComponent<StructureBehavior>().currentVariation = nextStructVariation;
 
         if (branchIsGenerating) 
         { 
@@ -310,14 +302,24 @@ public class DungeonGenerator : MonoBehaviour
         currentStructureVariation = structureBase.GetComponent<StructureBehavior>().currentVariation;
     }
     
-    private void CompleteBranch(bool trapsIncluded, GameObject structureBase)
+    private void CompleteBranch(ref bool isBranchGenerating, GameObject structureBase)
     {
-        if (trapsIncluded)
+        if (includeTraps)
         {
             trapInstantiated = false;
             GenerateNewStructure(StructureType.TrapStructure, currBranchStructureBase);
         }
-        if (!trapsIncluded || trapsIncluded && trapInstantiated) { UpdateCurrentStructure(structureBase); branchIsGenerating = false; }
+        else if (!includeTraps) 
+        { isBranchGenerating = false; }
+        if (includeTraps && trapInstantiated) 
+        { isBranchGenerating = false; }
+    }
+
+    private void RandomizeCurrBranchStats()
+    {
+        currentBranchLength = Random.Range(minBranchLengthRange, maxBranchLengthRange + 1);
+        branchStartStructNum = Random.Range(1, mainStructures.Count);
+        currBranchStructureBase = mainStructures[branchStartStructNum];
     }
 
     private void ResetBranchStats()

@@ -36,8 +36,8 @@ public class PlayerController : MonoBehaviour
 
     private enum PlayerWeaponIndex
     {
-        Dagger,
         Knuckles,
+        Dagger,
         Cutlass,
         Club
     }
@@ -209,6 +209,7 @@ public class PlayerController : MonoBehaviour
         { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Cutlass); return; }
         else if (weaponName == PlayerWeaponIndex.Club.ToString())
         { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Club); return; }
+        animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Dagger);
     }
 
     public void Interact()
