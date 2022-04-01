@@ -116,9 +116,37 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1198091866712430683, guid: 7aaafe6db1c90b447867314ac3281ce0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1990274529159346994, guid: 7aaafe6db1c90b447867314ac3281ce0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4560395657478822864, guid: 7aaafe6db1c90b447867314ac3281ce0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4849979810876691194, guid: 7aaafe6db1c90b447867314ac3281ce0, type: 3}
       propertyPath: m_Name
       value: lvl2BossRoom Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 6419530888463912394, guid: 7aaafe6db1c90b447867314ac3281ce0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6484572066041006180, guid: 7aaafe6db1c90b447867314ac3281ce0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8828432827218118392, guid: 7aaafe6db1c90b447867314ac3281ce0, type: 3}
+      propertyPath: doors
+      value: 
+      objectReference: {fileID: 7037763829032117665}
+    - target: {fileID: 9189904990941418810, guid: 7aaafe6db1c90b447867314ac3281ce0, type: 3}
+      propertyPath: m_RootOrder
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7aaafe6db1c90b447867314ac3281ce0, type: 3}
@@ -136,6 +164,11 @@ MonoBehaviour:
 --- !u!4 &4339545525835114068 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6112686802388750675, guid: 7aaafe6db1c90b447867314ac3281ce0, type: 3}
+  m_PrefabInstance: {fileID: 7560850993270765319}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7037763829032117665 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 668398622108111526, guid: 7aaafe6db1c90b447867314ac3281ce0, type: 3}
   m_PrefabInstance: {fileID: 7560850993270765319}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7762888023068360016

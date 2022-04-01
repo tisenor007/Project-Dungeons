@@ -213,12 +213,12 @@ public class SoundManager : MonoBehaviour
                     {
                         
                         characterSelectionMusicLoop = 1;
-                        Debug.LogError("TRUE");
+                        //Debug.LogError("TRUE");
                         return true;
                     }
                     else
                     {
-                        Debug.LogError("FALSE");
+                        //Debug.LogError("FALSE");
                         return false;
                     }
                 }
@@ -266,7 +266,7 @@ public class SoundManager : MonoBehaviour
                     {
                         soundLengthDictionary[sound] = currentArrayAudioClipLength;
                         //soundLengthDictionary[sound] = 0;
-                        Debug.LogError("playing song");
+                        //Debug.LogError("playing song");
                         soundTimeDictionary[sound] = Time.time;
                         return true;
                     }

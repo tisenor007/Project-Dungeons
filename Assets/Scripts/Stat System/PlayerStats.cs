@@ -9,6 +9,7 @@ public class PlayerStats : CharacterStats
     public GameObject weaponObject;
     public GameObject shield;
     public Collider weaponHitAreaCollider;
+    [HideInInspector] public bool inWater = false;
 
     //initialization
     [SerializeField] private GameObject maleHand;

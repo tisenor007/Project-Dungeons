@@ -61,6 +61,7 @@ public class DungeonGenerator : MonoBehaviour
         //pregenerates small dungeon quickly so saving & loading next dungeon will work......
         if (dungeonPreGenerating && !dungeonGenerated) { GenerateNewDungeon(5);}
         else if (!dungeonPreGenerating && !dungeonGenerated) { GenerateNewDungeon(maxStructures); }
+        Debug.Log(nextStructureType);
     }
 
     //master method
@@ -73,15 +74,14 @@ public class DungeonGenerator : MonoBehaviour
         //adds rooms to dungeon until max number is met
         else if (structures.Count < maxStructureAmount && structures.Count > 0)
         {
-            nextStructureType = (StructureType)ChooseNumbByChance((int)StructureType.Room, (int)StructureType.Hallway, roomChance);
+            StructureType chosenStructureType = (StructureType)ChooseNumbByChance((int)StructureType.Room, (int)StructureType.Hallway, roomChance);
             switch (branchIsGenerating)
             {
                 case false:
-                    GenerateNewStructure(nextStructureType, mainStructureBase);
+                    GenerateNewStructure(chosenStructureType, mainStructureBase);
                     if (IsBranchStuck(mainStructureBase))
                     {
                         mainStructureBase = mainStructures[Random.Range(0, mainStructures.Count)];
-                        UpdateCurrentStructure(mainStructureBase);
                     }
                     //sets up branch
                     ResetBranchStats();
@@ -94,7 +94,7 @@ public class DungeonGenerator : MonoBehaviour
                 case true:
                     if (currentBranchStructCount >= currentBranchLength){CompleteBranch(includeTraps, mainStructureBase);}
                     if (IsBranchStuck(currBranchStructureBase)) { CompleteBranch(false, mainStructureBase); }
-                    GenerateNewStructure(nextStructureType, currBranchStructureBase);
+                    GenerateNewStructure(chosenStructureType, currBranchStructureBase);
                     break;
             }
         }
@@ -178,26 +178,31 @@ public class DungeonGenerator : MonoBehaviour
     //tries to add room to dungeon
     private void GenerateNewStructure(StructureType structureType, GameObject baseStruct)
     {
+        nextStructureType = structureType;
         switch (structureType)
         {
             case StructureType.StartStructure:
                 InstantiateStructure(startStructure, Vector3.zero, Vector3.zero, StructureType.StartStructure, 0);
                 break;
             case StructureType.Room:
+                UpdateCurrentStructure(baseStruct);
                 if (!VariantIsRandomized(roomVariations)) { return; }
                 if (!DirectionIsRandomized(baseStruct)) { return; }
                 InstantiateStructure(roomVariations[nextStructureVariation], nextStructureLoc, nextStructureRot, nextStructureType, nextStructureVariation);
                 break;
             case StructureType.Hallway:
+                UpdateCurrentStructure(baseStruct);
                 if (!VariantIsRandomized(hallwayVariations)) { return; }
                 if (!DirectionIsRandomized(baseStruct)) { return; }
                 InstantiateStructure(hallwayVariations[nextStructureVariation], nextStructureLoc, nextStructureRot, nextStructureType, nextStructureVariation);
                 break;
             case StructureType.EndStructure:
+                UpdateCurrentStructure(baseStruct);
                 if (!DirectionIsRandomized(baseStruct)) { return; }
                 InstantiateStructure(endStructure, nextStructureLoc, nextStructureRot, StructureType.EndStructure, 0);
                 break;
             case StructureType.TrapStructure:
+                UpdateCurrentStructure(baseStruct);
                 if (!VariantIsRandomized(trapVariations)) { return; }
                 if (!DirectionIsRandomized(baseStruct)) { return; }
                 InstantiateStructure(trapVariations[nextStructureVariation], nextStructureLoc, nextStructureRot, StructureType.TrapStructure, nextStructureVariation);
@@ -222,26 +227,26 @@ public class DungeonGenerator : MonoBehaviour
         if (StructureIsHere(structureDestination)) { return; }
 
         structures.Add(Instantiate(structure, structureDestination, Quaternion.Euler(structureRotation)));
-        currentStructureType = nextStructType;
+        //currentStructureType = nextStructType;
         structure.GetComponent<StructureBehavior>().currentStructureType = nextStructType;
-        currentStructureVariation = nextStructVariation;
+        //currentStructureVariation = nextStructVariation;
         structure.GetComponent<StructureBehavior>().currentVariation = nextStructVariation;
 
         if (branchIsGenerating) 
         { 
             currentBranchStructCount++;
             currBranchStructureBase = structures[structures.Count-1];
-            UpdateCurrentStructure(currBranchStructureBase);
+            //UpdateCurrentStructure(currBranchStructureBase);
         }
         else if (!branchIsGenerating) 
         {
             mainStructures.Add(structures[structures.Count - 1]);
             mainStructureBase = structures[structures.Count - 1];
-            UpdateCurrentStructure(mainStructureBase);
+            //UpdateCurrentStructure(mainStructureBase);
         }
-
-        if (currentStructureType == StructureType.EndStructure) { CompleteGeneration(); }
-        if (currentStructureType == StructureType.TrapStructure) { trapInstantiated = true; }
+        if (nextStructType == StructureType.StartStructure) { UpdateCurrentStructure(mainStructureBase); }
+        if (nextStructType == StructureType.EndStructure) { CompleteGeneration(); }
+        if (nextStructType == StructureType.TrapStructure) { trapInstantiated = true; }
     }
 
     //makes random direction that next room / structure can go
@@ -251,7 +256,7 @@ public class DungeonGenerator : MonoBehaviour
         //restricts directions based off where it is coming from and where it is going.....
         if (currentStructureType == StructureType.Hallway && baseStruct.transform.eulerAngles.y == 0) { nextStructureDirection = ChooseNumbByChance(0, 1, 50); }// Random.Range(0, 1); }
         else if (currentStructureType == StructureType.Hallway && baseStruct.transform.eulerAngles.y == 90) { nextStructureDirection = ChooseNumbByChance(2, 3, 50); }// Random.Range(2, 3); }
-        else if (currentStructureType == StructureType.Room || currentStructureType == StructureType.TrapStructure) { nextStructureDirection = Random.Range(0, 4); }
+        else if (currentStructureType != StructureType.Hallway) { nextStructureDirection = Random.Range(0, 4); }
 
         if (nextStructureDirection <= 0)
         {

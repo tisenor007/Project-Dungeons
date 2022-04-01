@@ -205,7 +205,7 @@ public class Enemy : CharacterStats
         int dropDecision = ChooseNumbByChance(0, 1, itemDropChance);
         if (dropDecision == 1) { return; }
         int selectedItem = UnityEngine.Random.Range(0, availableDrops.Length);
-        Instantiate(availableDrops[selectedItem], transform.position, Quaternion.identity);
+        Instantiate(availableDrops[selectedItem], new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), Quaternion.identity);
     }
 
     public void PlayAudio(Enemy enemy)
