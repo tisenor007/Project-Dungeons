@@ -8,7 +8,7 @@ public enum ShineColour
     HEAL,
     WEAPON,
     FIRE,
-    TREASURE,
+    TREASUREorNOTE,
 }
 
 [RequireComponent(typeof(Light))]
@@ -183,15 +183,15 @@ public class Interactable : MonoBehaviour
                     return;}
 
             case ShineColour.WEAPON: {
-                    light.color = Color.red;
+                    light.color = new Color32(145, 56, 49, 255);
                     return;}
 
             case ShineColour.FIRE: {
-                    light.color = new Color(255, 165, 0); // orange
+                    light.color = new Color32(255, 165, 0, 255); // orange
                     return;}
 
-            case ShineColour.TREASURE: {
-                    light.color = new Color(255, 223, 0); // "gold yellow"
+            case ShineColour.TREASUREorNOTE: {
+                    light.color = new Color32(255, 223, 0, 255); // "gold yellow"
                     return;}
         }
     }
