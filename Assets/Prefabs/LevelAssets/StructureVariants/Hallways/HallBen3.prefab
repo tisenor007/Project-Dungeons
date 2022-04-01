@@ -784,12 +784,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4b9519d799719c40adf363b8131e1ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentStructureType: 0
+  doors: {fileID: 7589717618561507051}
+  currentStructureType: 1
   trapPlayer: 0
   currentVariation: 0
   lights:
   - {fileID: 5804646973222439280}
-  doors: {fileID: 7589717618561507051}
 --- !u!65 &1882759254443352215
 BoxCollider:
   m_ObjectHideFlags: 0

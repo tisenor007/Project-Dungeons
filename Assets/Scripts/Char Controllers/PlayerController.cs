@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
     private float attackBlend;
     private float attackBlendAcceleration = 10.0f;
     private float attackBlendDeceleration = 3.5f;
-    private float AnimationAttackTiming;
+    private float animationAttackTiming;
     private Vector3 moveDirection;
     private float jumpTimeDuration = 1.34f;
     private float jumpTimer;
@@ -75,6 +75,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 cameraDestination;
     private float cameraCatchUpSpeed = 0.00525f;
     [SerializeField] private float attackTimer;
+    private float attackAnimDuration;
 
     public bool CanMove { set{ canMove = value; } } 
 
@@ -202,14 +203,15 @@ public class PlayerController : MonoBehaviour
         //tried to use switch statement here, was not allow due to emun.ToString() for some reason...... VVVV
                                                                                                     /// strings arent inherently constant switch statements require cases to be constant, 
         if (weaponName == PlayerWeaponIndex.Knuckles.ToString())
-        { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Knuckles); return; }
+        { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Knuckles); attackAnimDuration = 0.34f; return; }
         else if (weaponName == PlayerWeaponIndex.Dagger.ToString())
-        { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Dagger); return; }
+        { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Dagger); attackAnimDuration = 0.34f; return; }
         else if (weaponName == PlayerWeaponIndex.Cutlass.ToString())
-        { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Cutlass); return; }
+        { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Cutlass); attackAnimDuration = 0.34f; return; }
         else if (weaponName == PlayerWeaponIndex.Club.ToString())
-        { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Club); return; }
+        { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Club); attackAnimDuration = 0.8f; return; }
         animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Dagger);
+        attackAnimDuration = 0.34f;
     }
 
     public void Interact()
@@ -355,7 +357,7 @@ public class PlayerController : MonoBehaviour
     private void ActivateAttack()
     {
         if (attackBlend >= 1) { return; }
-        if (Time.time <= AnimationAttackTiming) { return; }
+        if (Time.time <= animationAttackTiming) { return; }
         if (movementMode == MovementMode.Sprinting) { return; }
         if (movementMode == MovementMode.Falling) { return; }
         if (movementMode == MovementMode.Jumping) { return; }
@@ -364,7 +366,7 @@ public class PlayerController : MonoBehaviour
 
         attackTimer = playerStats.AttackSpeed;
         attackBlend = 1;
-        AnimationAttackTiming = Time.time + .34f; // fix animations ?
+        animationAttackTiming = Time.time + attackAnimDuration; // fix animations ?
         Attack();
     }
 
@@ -382,7 +384,7 @@ public class PlayerController : MonoBehaviour
 
     public bool IsAttacking()
     {
-        if (Time.time <= AnimationAttackTiming) { return true; }
+        if (Time.time <= animationAttackTiming) { return true; }
         //if (attackBlend > 0) { return true; }
 
         return false;
@@ -390,7 +392,7 @@ public class PlayerController : MonoBehaviour
 
     private void ActivateBlock()
     {
-        if (Time.time <= AnimationAttackTiming) { return; }
+        if (Time.time <= animationAttackTiming) { return; }
         if (movementMode == MovementMode.Sprinting) { return; }
         if (movementMode == MovementMode.Falling) { return; }
 
