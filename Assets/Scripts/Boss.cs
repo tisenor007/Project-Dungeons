@@ -13,7 +13,7 @@ public class Boss : Enemy
     void Start()
     {
         this.viewDistance = 15;
-        this.Health = 400;
+        this.health = maxHealth; 
         this.attackSpeed = 4f;
         this.damage = 30;
         this.speed = 5.0f;

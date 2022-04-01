@@ -36,8 +36,8 @@ public class PlayerController : MonoBehaviour
 
     private enum PlayerWeaponIndex
     {
-        Knuckles,
         Dagger,
+        Knuckles,
         Cutlass,
         Club
     }
@@ -63,7 +63,7 @@ public class PlayerController : MonoBehaviour
     private float attackBlend;
     private float attackBlendAcceleration = 10.0f;
     private float attackBlendDeceleration = 3.5f;
-    private float attackTimer;
+    private float AnimationAttackTiming;
     private Vector3 moveDirection;
     private float jumpTimeDuration = 1.34f;
     private float jumpTimer;
@@ -74,6 +74,7 @@ public class PlayerController : MonoBehaviour
     private bool canMove;
     private Vector3 cameraDestination;
     private float cameraCatchUpSpeed = 0.00525f;
+    [SerializeField] private float attackTimer;
 
     public bool CanMove { set{ canMove = value; } } 
 
@@ -100,13 +101,19 @@ public class PlayerController : MonoBehaviour
         cameraDestination = new Vector3(transform.position.x + 7, transform.position.y + 18, transform.position.z - 7);
         gameCamera.transform.position = Vector3.Lerp(gameCamera.transform.position, cameraDestination, cameraCatchUpSpeed);
 
+        //attack countdown
+        if (attackTimer > 0)
+        {
+            attackTimer -= Time.deltaTime; 
+        }
+
         //animation movement controller
         {
             CheckPlayerInputandPerformPlayerActions();
             if (Time.time > jumpTimer && isGrounded() == false) { movementMode = MovementMode.Falling; }
             animator.SetFloat("Velocity", moveIntensity);
             animator.SetLayerWeight(1, attackBlend);
-            UpdateAttackAnims(playerStats.CurrentWeapon.name);
+            UpdateAttackAnims(playerStats.CurrentWeaponType.nameOfItem);
 
             switch (movementMode)
             {
@@ -192,7 +199,8 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateAttackAnims(string weaponName)
     {
-       //tried to use switch statement here, was not allow due to emun.ToString() for some reason......
+        //tried to use switch statement here, was not allow due to emun.ToString() for some reason...... VVVV
+                                                                                                    /// strings arent inherently constant switch statements require cases to be constant, 
         if (weaponName == PlayerWeaponIndex.Knuckles.ToString())
         { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Knuckles); return; }
         else if (weaponName == PlayerWeaponIndex.Dagger.ToString())
@@ -201,7 +209,6 @@ public class PlayerController : MonoBehaviour
         { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Cutlass); return; }
         else if (weaponName == PlayerWeaponIndex.Club.ToString())
         { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Club); return; }
-        animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Dagger);
     }
 
     public void Interact()
@@ -258,31 +265,29 @@ public class PlayerController : MonoBehaviour
         if (hitColInteraction.Length == 0) { return; }
         
         float r = interactionRadius - .1f; // MN#: -.1 due to radius encompasing hitColInteraction enough to not miss turning off the light
-        
-            foreach (Collider col in hitColInteraction)
+
+        foreach (Collider col in hitColInteraction)
+        {
+            float distance = Vector3.Distance(transform.position, col.transform.position);
+            //Debug.LogError($"hit {col.gameObject.name}");
+
+            if (col.gameObject.GetComponent<Interactable>() != null)
             {
+                Interactable interactable = col.gameObject.GetComponent<Interactable>();
 
-                float distance = Vector3.Distance(transform.position, col.transform.position);
-                //Debug.LogError($"hit {col.gameObject.name}");
-
-                if (col.gameObject.GetComponent<Interactable>() != null)
+                if (distance >= r && interactable.FeedbackEnabled)
                 {
-                    Interactable interactable = col.gameObject.GetComponent<Interactable>();
-
-                    if (distance >= r && interactable.FeedbackEnabled)
-                    {
-                        interactable.DisableFeedback();
-                    }
-                    else if (distance <= r && !interactable.FeedbackEnabled)
-                    {
-                        Physics.IgnoreCollision(this.transform.GetChild(0).GetComponent<Collider>(), col, true);
-
-                        interactable.EnableFeedback();
-                    }
+                    interactable.DisableFeedback();
                 }
-                else { Debug.LogError("INTERACTABLE LAYER BEING USED BY NON-INTERACTABLE, CHECK \"Debug.LogError(hit { col.gameObject.name} );\""); }
+                else if (distance <= r && !interactable.FeedbackEnabled)
+                {
+                    Physics.IgnoreCollision(this.transform.GetChild(0).GetComponent<Collider>(), col, true);
+
+                    interactable.EnableFeedback();
+                }
             }
-        
+            else { Debug.LogError("INTERACTABLE LAYER BEING USED BY NON-INTERACTABLE, CHECK \"Debug.LogError(hit { col.gameObject.name} );\""); }
+        }
     }
 
     private void UpdateMoveIntensity(MovementMode movementMode)
@@ -349,32 +354,34 @@ public class PlayerController : MonoBehaviour
     private void ActivateAttack()
     {
         if (attackBlend >= 1) { return; }
-        if (Time.time <= attackTimer) { return; }
+        if (Time.time <= AnimationAttackTiming) { return; }
         if (movementMode == MovementMode.Sprinting) { return; }
         if (movementMode == MovementMode.Falling) { return; }
         if (movementMode == MovementMode.Jumping) { return; }
         if (Input.GetMouseButton(1) == true) { return; }
+        if (attackTimer > 0) { return; }
 
+        attackTimer = playerStats.AttackSpeed;
         attackBlend = 1;
-        attackTimer = Time.time + playerStats.AttackSpeed;
+        AnimationAttackTiming = Time.time + .34f; // fix animations ?
         Attack();
     }
 
     public void Attack() 
     {
-        if (playerStats.shield.activeSelf == false && playerStats.weaponHitArea.enabled == false) 
-        { playerStats.weaponHitArea.enabled = true; } 
+        if (playerStats.shield.activeSelf == false && playerStats.weaponHitAreaCollider.enabled == false) 
+        { playerStats.weaponHitAreaCollider.enabled = true; } 
     }
 
     public void StopAttacking() 
     {
-        if (playerStats.weaponHitArea == null) { return; }
-        if (playerStats.weaponHitArea.enabled == true) { playerStats.weaponHitArea.enabled = false; } 
+        if (playerStats.weaponHitAreaCollider == null) { return; }
+        if (playerStats.weaponHitAreaCollider.enabled == true) { playerStats.weaponHitAreaCollider.enabled = false; } 
     }
 
     public bool IsAttacking()
     {
-        if (Time.time <= attackTimer) { return true; }
+        if (Time.time <= AnimationAttackTiming) { return true; }
         //if (attackBlend > 0) { return true; }
 
         return false;
@@ -382,7 +389,7 @@ public class PlayerController : MonoBehaviour
 
     private void ActivateBlock()
     {
-        if (Time.time <= attackTimer) { return; }
+        if (Time.time <= AnimationAttackTiming) { return; }
         if (movementMode == MovementMode.Sprinting) { return; }
         if (movementMode == MovementMode.Falling) { return; }
 

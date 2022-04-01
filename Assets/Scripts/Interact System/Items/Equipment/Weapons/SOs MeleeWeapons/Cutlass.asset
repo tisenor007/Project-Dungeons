@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Cutlass
   m_EditorClassIdentifier: 
   nameOfItem: Cutlass
-  colorOfItemShine: {r: 0, g: 0, b: 0, a: 0}
-  weaponObject: {fileID: 6730379207356729951, guid: 2cedb67aa37a2b34b9464824f288e167, type: 3}
+  prefab: {fileID: 6730379207356729951, guid: 2cedb67aa37a2b34b9464824f288e167, type: 3}
+  sprite: {fileID: 21300000, guid: 2e63330a85b2a114daa6f7e8ad3a6be0, type: 3}
+  shineColour: 2
   damage: 10
   attackSpeed: 0.34

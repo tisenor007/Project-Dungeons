@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a452d8ebcd0c0547825dcb7618cd980, type: 3}
-  m_Name: Test Stick
+  m_Name: Chicken Shank
   m_EditorClassIdentifier: 
-  nameOfItem: Test
-  colorOfItemShine: {r: 1, g: 0, b: 0.6483221, a: 0}
-  weaponObject: {fileID: 1068448664988612747, guid: b8e035859d21f1748a00bd1fc1d7d98d, type: 3}
-  damage: 2
-  attackSpeed: 0.34
+  nameOfItem: Chicken Shank
+  prefab: {fileID: 2561910286966388736, guid: 065f84b2a6c1c4042993f0687a00bcd8, type: 3}
+  sprite: {fileID: 21300000, guid: 6821e0570134d6f4ba94476470f82f84, type: 3}
+  shineColour: 2
+  damage: 5
+  attackSpeed: 0.5

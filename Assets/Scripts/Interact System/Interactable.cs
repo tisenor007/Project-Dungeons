@@ -2,11 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum ShineColour
+{ 
+    NULL,
+    HEAL,
+    WEAPON,
+    FIRE,
+    TREASUREorNOTE,
+}
+
 [RequireComponent(typeof(Light))]
 [RequireComponent(typeof(BoxCollider))]
 public class Interactable : MonoBehaviour
 {
-    // this interactable class works like a 
+    // the interactable class allows for easy script to player interaction
+
+    // LevelManager method create interactable allows creation at runtime
+
+    // TYPES
+    // possibly requireing insertion of new types below, 
+    // item type allows for Items to be picked up by interaction
+    // station type allows for menu interaction
+
+    // all types can be added to, for instance, 
+    // items could pick up into an inventory and interact furter with an inventory system instead
 
     public bool isFloatingObject = false;
 
@@ -42,6 +61,10 @@ public class Interactable : MonoBehaviour
         floatingDirection = Vector3.up;
 
         DisableFeedback();
+
+        if (itemType != null) { SetShineColour(feedbackLight, itemType.ShineColour); }
+        else if (stationType != null) { SetShineColour(feedbackLight, stationType.ShineColour); }
+        else { RemoveGameObjectWFeedback(); }
 
         if (isFloatingObject && IsInGround())
         {
@@ -145,5 +168,31 @@ public class Interactable : MonoBehaviour
         //interactableObject.GetComponent<MeshRenderer>().enabled = false;
         //interactableObject.GetComponent<Collider>().enabled = false;
         DisableFeedback();
+    }
+
+    public void SetShineColour(Light light, ShineColour setColour)
+    {
+        switch (setColour)
+        {
+            case ShineColour.NULL: {
+                    light.color = Color.white;
+                    return;}
+
+            case ShineColour.HEAL: {
+                    light.color = Color.green;
+                    return;}
+
+            case ShineColour.WEAPON: {
+                    light.color = new Color32(145, 56, 49, 255);
+                    return;}
+
+            case ShineColour.FIRE: {
+                    light.color = new Color32(255, 165, 0, 255); // orange
+                    return;}
+
+            case ShineColour.TREASUREorNOTE: {
+                    light.color = new Color32(255, 223, 0, 255); // "gold yellow"
+                    return;}
+        }
     }
 }

@@ -17,16 +17,39 @@ public class LevelManager : MonoBehaviour
     private float creditsScrollRate = 100;
     private Canvas notePlain;
     private Text noteWriting;
+    private Color weaponInfoControl = new Color();
+    private Color alphaValueColour;
+    private float weaponDisplayTimer = 3;
+
+    private StoryManager story;
+
+    public StoryManager Story { get { return story; } }
+    public float WeaponDisplayTimer { set { weaponDisplayTimer = value; } }
 
     private void Start()
     {
+        //setting up Notes/story
         notePlain = GameManager.manager.uiManager.notePlain;
         noteWriting = notePlain.transform.GetChild(0).GetComponentInChildren<Text>();
-        GameManager.manager.uiManager.playerBleeding.color = new Color(100, 0, 0, 0);
+        story = transform.parent.GetComponentInChildren<StoryManager>();
     }
 
     public void Update()
     {
+        //ui
+        weaponInfoControl = GameManager.manager.uiManager.weaponInfo.transform.GetChild(0).GetComponent<Image>().color;
+
+        if (weaponInfoControl.a == 1) // 1 is the max value of alpha
+        {
+            weaponDisplayTimer -= 1 * Time.deltaTime;
+        }
+        
+        if (weaponDisplayTimer <= 0)
+        { 
+            JumpCanvasAlphaTo(0, GameManager.manager.uiManager.weaponInfo);
+        }
+
+
         if (GameManager.manager.uiManager.credits.enabled == false && creditsYPos != creditsBeginPos)
         {
             creditsYPos = creditsBeginPos;
@@ -255,10 +278,39 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public void FlashPlayerBleedingUI()
+    // depricated
+    /*public void FlashPlayerBleedingUI()
     {
-        GameManager.manager.uiManager.playerBleeding.color = new Color(100, 0, 0, 100);
+        GameManager.manager.uiManager.playerBleeding.color = new Color(0, 0, 0, 100); // setting alpha to visible
         StartCoroutine("WaitAndDisablePlayerBleeding");
+    }*/
+
+    public void JumpCanvasAlphaTo(float value, Canvas inputCanvas)
+    {
+        Image[] canvasImages = inputCanvas.gameObject.GetComponentsInChildren<Image>();
+        Text[] canvasText = inputCanvas.gameObject.GetComponentsInChildren<Text>();
+
+        if (canvasImages.Length >= 1)
+        {
+            for (int i = 0; i < canvasImages.Length; i++)
+            {
+                Image image = inputCanvas.gameObject.GetComponentsInChildren<Image>()[i];
+                alphaValueColour = new Color(image.color.r, image.color.g, image.color.b, value);
+                inputCanvas.gameObject.GetComponentsInChildren<Image>()[i].color = alphaValueColour;
+                Debug.LogWarning($"fading {image.gameObject.name} to {value}");
+            }
+        }
+
+        if (canvasText.Length >= 1)
+        {
+            for (int i = 0; i < canvasText.Length; i++)
+            {
+                Text text = inputCanvas.gameObject.GetComponentsInChildren<Text>()[i];
+                alphaValueColour = new Color(text.color.r, text.color.g, text.color.b, value);
+                inputCanvas.gameObject.GetComponentsInChildren<Text>()[i].color = alphaValueColour;
+                Debug.LogWarning($"fading {text.gameObject.name} to {value}");
+            }
+        }
     }
 
     IEnumerator LoadCharacterSelectioScreen()
@@ -279,14 +331,10 @@ public class LevelManager : MonoBehaviour
         //Debug.LogError("sound over");
         GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
         SwitchLevel(0);
-        GameManager.manager.playerStats.EquipDefaultWeapon(false);
+        GameManager.manager.playerStats.EquipWeapon(GameManager.manager.playerStats.DefaultWeaponType, false);
     }
 
-    IEnumerator WaitAndDisablePlayerBleeding()
-    {
-        yield return new WaitForSeconds(.3f);
-        GameManager.manager.uiManager.playerBleeding.color = new Color (100,0,0,0);
-    }
+
     #endregion
 
     #region Options
@@ -297,7 +345,7 @@ public class LevelManager : MonoBehaviour
         newAlpha.a = GameManager.manager.uiManager.brightnessSlider.value / 100;
         GameManager.manager.uiManager.brightnessImage.color = newAlpha;
 
-        Debug.Log($"newAlpha: {newAlpha.a}, Image colour: {GameManager.manager.uiManager.brightnessImage.color}");
+        //Debug.Log($"newAlpha: {newAlpha.a}, Image colour: {GameManager.manager.uiManager.brightnessImage.color}");
     }
     #endregion
 }

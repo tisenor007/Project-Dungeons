@@ -23,7 +23,8 @@ public class GhostEnemy : Enemy
         ghostBody = transform.GetChild(1);
 
         this.viewDistance = 10;
-        this.Health = 50;
+        maxHealth = 50; 
+        this.health = maxHealth;
         this.attackSpeed = 1.0f;
         this.damage = 5;
         this.speed = 6.0f;

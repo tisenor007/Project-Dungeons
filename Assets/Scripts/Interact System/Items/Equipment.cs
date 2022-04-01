@@ -5,7 +5,6 @@ using UnityEngine;
 [SerializeField]
 public abstract class Equipment : Item
 {
-    GameObject equipmentObject;
     // basic equip type method
     // will be equiped on pickup, 
     // should eject overidden equipment!
@@ -19,17 +18,12 @@ public abstract class Equipment : Item
 
         Equip(equipment, interactor, true);
 
+
     }
 
     public virtual void Equip(GameObject equipment, GameObject interactor, bool inGamePickup)
     {
-        FindEquipmentObject(equipment);
         Debug.Log($"Equiping {nameOfItem}");
-    }
-
-    public virtual void FindEquipmentObject(GameObject equipmentGameObject)
-    {
-        equipmentObject = equipmentGameObject;
     }
 
     public PlayerStats FindPlayerStats(GameObject interactor)

@@ -4,11 +4,8 @@ using UnityEngine;
 
 public class HitArea : MonoBehaviour
 {
-    [SerializeField] private PlayerStats playerStats;
+    [SerializeField] private int damage;
     [SerializeField] private PlayerController playerController;
-
-    public PlayerStats PlayerStats { set { playerStats = value; } }
-    public PlayerController PlayerController { set { playerController = value; } }
 
     private void Update()
     {
@@ -17,17 +14,27 @@ public class HitArea : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        //Debug.LogWarning($"a {gameObject.name} is colliding with {other.name}");
+
         if (other.tag == "Enemy" && CanDealDamage())
         {
-            other.GetComponent<Enemy>().TakeDamage(playerStats.Damage, other.GetComponent<Transform>());
+            other.GetComponent<Enemy>().TakeDamage(damage, other.GetComponent<Transform>());
         }
     }
 
     private bool CanDealDamage()
     {
-        if (playerController == null) { return false; }
-        if (playerStats == null) { return false; }
+        if (playerController == null) { Debug.LogError("hit area missing script"); return false; }
+        if (damage == 0) { Debug.LogError("hit area missing script"); return false; }
 
         return playerController.IsAttacking();
+    }
+
+    public void SetupPlayerFields(GameObject player)
+    {
+        damage = player.GetComponent<PlayerStats>().Damage;
+        playerController = player.GetComponent<PlayerController>();
+
+        Debug.Log("setup HitArea fields");
     }
 }

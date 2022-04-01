@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public GameObject currentPlayerModel;
     [HideInInspector] public PlayerController playerController;
     private GameState savedScreenState;
+    private string dataPathSaveLoadDIT = "/savedInfo.dat";
+    
     // title acts as default state
     private bool gameplay;
     private bool paused;
@@ -52,6 +54,7 @@ public class GameManager : MonoBehaviour
     [Space]
     [SerializeField] private TextMeshProUGUI saveText;
     [SerializeField] private TextMeshProUGUI loadText;
+    
     //Create a new object within the player, one will be male, the other female
     [SerializeField] private GameObject malePlayer;
     [SerializeField] private GameObject femalePlayer;
@@ -84,7 +87,7 @@ public class GameManager : MonoBehaviour
 
         FadeText();
 
-        levelManager.LoadButtonFade(File.Exists(Application.persistentDataPath + "/savedInfo.dat"));
+        levelManager.LoadButtonFade(File.Exists(Application.persistentDataPath + dataPathSaveLoadDIT));
         levelManager.NextLevelButtonFade(currentLevel);
         levelManager.UpdateDungeon();
         AudioListener.volume = 0.25f;
@@ -271,14 +274,14 @@ public class GameManager : MonoBehaviour
     public void Save() // canned file save method
     {
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/savedInfo.dat");
+        FileStream file = File.Create(Application.persistentDataPath + dataPathSaveLoadDIT);
 
         SaveInfo savedInfo = new SaveInfo();
         savedInfo.scene = SceneManager.GetActiveScene().buildIndex;
         savedInfo.activeScreen = levelManager.activeScreen;
         savedInfo.gameState = gameState;
         savedInfo.health = playerStats.Health;
-        savedInfo.JsonWeapon = JsonUtility.ToJson(playerStats.CurrentWeapon);
+        savedInfo.JsonWeapon = JsonUtility.ToJson(playerStats.CurrentWeaponType);
         savedInfo.genderStatus = characterSelection.isMale;
         savedInfo.playerSpawnPosX = playerAndCamera.transform.GetChild(0).gameObject.transform.position.x;
         savedInfo.playerSpawnPosY = playerAndCamera.transform.GetChild(0).gameObject.transform.position.y;
@@ -298,7 +301,7 @@ public class GameManager : MonoBehaviour
         if (File.Exists(Application.persistentDataPath + "/savedInfo.dat"))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/savedInfo.dat", FileMode.Open);
+            FileStream file = File.Open(Application.persistentDataPath + dataPathSaveLoadDIT, FileMode.Open);
             SaveInfo loadedInfo = (SaveInfo)bf.Deserialize(file);
             file.Close();
 
@@ -308,15 +311,14 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(loadedInfo.scene);
             loadedInfo.LoadSavedDungeon(ref currentLevel, levels);
             levelManager.activeScreen = loadedInfo.activeScreen;
-            //gameState = loadedInfo.gameState;
-            levelManager.ChangeGameStateToLoadingScreen();
-            playerStats.Health = loadedInfo.health;
+            levelManager.ChangeGameStateToLoadingScreen(); // load scene
+            playerStats.TakeDamage(playerStats.MaxHealth - loadedInfo.health, playerStats.transform); // load player health (player should start at max)
             characterSelection.isMale = loadedInfo.genderStatus;
             playerStats.RespawnPos = new Vector3(loadedInfo.playerSpawnPosX, loadedInfo.playerSpawnPosY, loadedInfo.playerSpawnPosZ);
             playerAndCamera.transform.GetChild(0).position = playerStats.RespawnPos;
             characterSelection.SetPlayerModel();
             JsonUtility.FromJsonOverwrite(loadedInfo.JsonWeapon, playerSavedWeapon);
-            playerSavedWeapon.Equip(playerSavedWeapon.weaponObject, playerAndCamera.transform.GetChild(0).gameObject, false);
+            playerSavedWeapon.Equip(playerSavedWeapon.prefab, playerAndCamera.transform.GetChild(0).gameObject, false);
             loadText.CrossFadeAlpha(1, .1f, true);
             StartCoroutine(WaitToFadeText("load"));
         }
@@ -341,7 +343,6 @@ public class GameManager : MonoBehaviour
 
     public void ResetScene()
     {
-        playerStats.EquipDefaultWeapon(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
 

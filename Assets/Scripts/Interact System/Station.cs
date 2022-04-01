@@ -5,6 +5,13 @@ using UnityEngine;
 [RequireComponent(typeof(Interactable))]
 public abstract class Station : ScriptableObject
 {
+    //properties
+    [SerializeField]
+    private ShineColour shineColour; 
+
+    //gets/sets
+    public ShineColour ShineColour { get { return shineColour; } }
+
     public virtual void OnTriggerStation(GameObject interactable, GameObject interactor)
     {
         Debug.Log($"{interactor.name} triggered {interactable.name}.");

@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isFloatingObject: 1
   itemType: {fileID: 11400000, guid: 6cb7b082fbbdf4849ba26a710522fb9e, type: 2}
+  stationType: {fileID: 0}
 --- !u!108 &5657507321218668314
 Light:
   m_ObjectHideFlags: 0
@@ -177,6 +178,10 @@ PrefabInstance:
     - target: {fileID: 7850167633344471769, guid: 8b9e8a9305f6fd1458a0d25a3fd9ef10, type: 3}
       propertyPath: m_Name
       value: Knuckles
+      objectReference: {fileID: 0}
+    - target: {fileID: 8707529138760542273, guid: 8b9e8a9305f6fd1458a0d25a3fd9ef10, type: 3}
+      propertyPath: damage
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8b9e8a9305f6fd1458a0d25a3fd9ef10, type: 3}
