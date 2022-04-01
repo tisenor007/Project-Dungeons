@@ -65,7 +65,6 @@ public class LevelManager : MonoBehaviour
     //buttons
     public void ButtonStartNewGame()
     {
-        SoundManager.PlaySound(SoundManager.Sound.CannonShot);
         ChangeGameStateToGamePlay();
         Debug.LogWarning("SetupGUI");
         //game set up goes here
@@ -80,18 +79,15 @@ public class LevelManager : MonoBehaviour
     public void ChangeGameStateToGamePlay()
     {
         GameManager.manager.ChangeState(GameState.GAMEPLAY);
-        SoundManager.PlayMusic(SoundManager.Sound.GameplayMusic);
     }
 
-    public void ChangeGameStateToNewGame()
+    public void ChangeGameStateToNewGame(Button playButton)
     {
-        StartCoroutine(LoadGameplay());
-        
+        StartCoroutine(LoadGameplay(playButton)); // run code in here in LoadGameplay()
     }
 
     public void ProgressLevel()
     {
-        GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
         if (GameManager.manager.currentLevel != GameManager.manager.levels.Length - 1)
         {
             SwitchLevel(GameManager.manager.currentLevel + 1);
@@ -123,9 +119,9 @@ public class LevelManager : MonoBehaviour
         GameManager.manager.ChangeState(GameState.CREDITS);
     }
 
-    public void ChangeGameStateToCharacterSelection()
+    public void ChangeGameStateToCharacterSelection(Button playButton)
     {
-        StartCoroutine(LoadCharacterSelectioScreen());
+        StartCoroutine(LoadCharacterSelectioScreen(playButton));
     }
 
     public void ChangeGameStateToSaveOption()
@@ -140,6 +136,7 @@ public class LevelManager : MonoBehaviour
 
     public void SwitchLevel(int desiredLevel)
     {
+        GameManager.manager.ChangeState(GameState.GAMEPLAY);
         GameManager.manager.ResetScene();
 
         foreach (GameObject level in GameManager.manager.levels)
@@ -148,7 +145,6 @@ public class LevelManager : MonoBehaviour
         }
 
         GameManager.manager.currentLevel = desiredLevel;
-        GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonPreGenerating = true;
         GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonIsGenerating = true;
         GameManager.manager.playerAndCamera.transform.GetChild(0).GetComponent<PlayerStats>().ResetStats();
     }
@@ -218,7 +214,6 @@ public class LevelManager : MonoBehaviour
     {
         notePlain.enabled = false;
         noteWriting.text = null;
-        SoundManager.PlaySound(SoundManager.Sound.PaperAway);
     }
 
     //misc commands
@@ -312,9 +307,9 @@ public class LevelManager : MonoBehaviour
             }
         }
     }
-
-    IEnumerator LoadCharacterSelectioScreen()
+    IEnumerator LoadCharacterSelectioScreen(Button playButton)
     {
+        playButton.interactable = false;
         SoundManager.PlaySound(SoundManager.Sound.CannonShot);
         //Debug.LogError("sound started");
         yield return new WaitForSecondsRealtime(4.0f);
@@ -323,8 +318,9 @@ public class LevelManager : MonoBehaviour
         //SoundManager.PlayMusic(SoundManager.Sound.CharacterSelectionMusic);
     }
 
-    IEnumerator LoadGameplay()
+    IEnumerator LoadGameplay(Button playButton)
     {
+        playButton.interactable = false;
         SoundManager.PlaySound(SoundManager.Sound.CannonShot);
         //Debug.LogError("sound started");
         yield return new WaitForSecondsRealtime(4.0f);
