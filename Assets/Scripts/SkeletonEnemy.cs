@@ -18,7 +18,7 @@ public class SkeletonEnemy : Enemy
     void Start()
     {
         this.viewDistance = 10;
-        maxHealth = 75;
+        maxHealth = 50;
         this.health = maxHealth;
         this.attackSpeed = 3.0f;
         this.damage = 15;
