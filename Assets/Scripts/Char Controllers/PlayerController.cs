@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
     private float attackBlend;
     private float attackBlendAcceleration = 10.0f;
     private float attackBlendDeceleration = 3.5f;
-    private float attackTimer;
+    private float AnimationAttackTiming;
     private Vector3 moveDirection;
     private float jumpTimeDuration = 1.34f;
     private float jumpTimer;
@@ -63,6 +63,7 @@ public class PlayerController : MonoBehaviour
     private PlayerStats playerStats;
     Collider[] hitColInteraction;
     private bool canMove;
+    [SerializeField] private float attackTimer;
 
     public bool CanMove { set{ canMove = value; } } 
 
@@ -87,6 +88,12 @@ public class PlayerController : MonoBehaviour
         //Cam movement/placement
         gameCamera.transform.localEulerAngles = new Vector3(50, -45, 0);
         gameCamera.transform.position = new Vector3(transform.position.x + 8, transform.position.y + 15, transform.position.z - 8);
+
+        //attack countdown
+        if (attackTimer > 0)
+        {
+            attackTimer -= Time.deltaTime; 
+        }
 
         //animation movement controller
         {
@@ -231,31 +238,31 @@ public class PlayerController : MonoBehaviour
         if (hitColInteraction.Length == 0) { return; }
         
         float r = interactionRadius - .1f; // MN#: -.1 due to radius encompasing hitColInteraction enough to not miss turning off the light
-        
-            foreach (Collider col in hitColInteraction)
+
+        foreach (Collider col in hitColInteraction)
+        {
+
+            float distance = Vector3.Distance(transform.position, col.transform.position);
+            //Debug.LogError($"hit {col.gameObject.name}");
+
+            if (col.gameObject.GetComponent<Interactable>() != null)
             {
+                Interactable interactable = col.gameObject.GetComponent<Interactable>();
 
-                float distance = Vector3.Distance(transform.position, col.transform.position);
-                //Debug.LogError($"hit {col.gameObject.name}");
-
-                if (col.gameObject.GetComponent<Interactable>() != null)
+                if (distance >= r && interactable.FeedbackEnabled)
                 {
-                    Interactable interactable = col.gameObject.GetComponent<Interactable>();
-
-                    if (distance >= r && interactable.FeedbackEnabled)
-                    {
-                        interactable.DisableFeedback();
-                    }
-                    else if (distance <= r && !interactable.FeedbackEnabled)
-                    {
-                        Physics.IgnoreCollision(this.transform.GetChild(0).GetComponent<Collider>(), col, true);
-
-                        interactable.EnableFeedback();
-                    }
+                    interactable.DisableFeedback();
                 }
-                else { Debug.LogError("INTERACTABLE LAYER BEING USED BY NON-INTERACTABLE, CHECK \"Debug.LogError(hit { col.gameObject.name} );\""); }
+                else if (distance <= r && !interactable.FeedbackEnabled)
+                {
+                    Physics.IgnoreCollision(this.transform.GetChild(0).GetComponent<Collider>(), col, true);
+
+                    interactable.EnableFeedback();
+                }
             }
-        
+            else { Debug.LogError("INTERACTABLE LAYER BEING USED BY NON-INTERACTABLE, CHECK \"Debug.LogError(hit { col.gameObject.name} );\""); }
+        }
+
     }
 
     private void UpdateMoveIntensity(MovementMode movementMode)
@@ -321,14 +328,16 @@ public class PlayerController : MonoBehaviour
     private void ActivateAttack()
     {
         if (attackBlend >= 1) { return; }
-        if (Time.time <= attackTimer) { return; }
+        if (Time.time <= AnimationAttackTiming) { return; }
         if (movementMode == MovementMode.Sprinting) { return; }
         if (movementMode == MovementMode.Falling) { return; }
         if (movementMode == MovementMode.Jumping) { return; }
         if (Input.GetMouseButton(1) == true) { return; }
+        if (attackTimer > 0) { return; }
 
+        attackTimer = playerStats.AttackSpeed;
         attackBlend = 1;
-        attackTimer = Time.time + playerStats.AttackSpeed;
+        AnimationAttackTiming = 10f; // fix animations ?
         Attack();
     }
 
@@ -346,7 +355,7 @@ public class PlayerController : MonoBehaviour
 
     public bool IsAttacking()
     {
-        if (Time.time <= attackTimer) { return true; }
+        if (Time.time <= AnimationAttackTiming) { return true; }
         //if (attackBlend > 0) { return true; }
 
         return false;
@@ -354,7 +363,7 @@ public class PlayerController : MonoBehaviour
 
     private void ActivateBlock()
     {
-        if (Time.time <= attackTimer) { return; }
+        if (Time.time <= AnimationAttackTiming) { return; }
         if (movementMode == MovementMode.Sprinting) { return; }
         if (movementMode == MovementMode.Falling) { return; }
 
