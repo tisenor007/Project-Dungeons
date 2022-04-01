@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class PlayerStats : CharacterStats
 {
     //equiment
-    public GameObject weaponObject;
+    private GameObject weaponObject;
     public GameObject shield;
     public Collider weaponHitAreaCollider;
     [HideInInspector] public bool inWater = false;
@@ -200,8 +200,8 @@ public class PlayerStats : CharacterStats
         if (health > damageThresholds[0]) damageValue = 0;
         else if (health > damageThresholds[1]) damageValue = .20f;
         else if (health > damageThresholds[2]) damageValue = .40f;
-        else if (health > damageThresholds[3]) damageValue = .70f;
-        else if (health < damageThresholds[3]) damageValue = 1;
+        else if (health > damageThresholds[3]) damageValue = .60f;
+        else if (health < damageThresholds[3]) damageValue = .80f;
 
         Debug.LogWarning($"updating meta UI health {health}, bar {healthBar}, text {healthText}, Damage Value {damageValue}");
         lM.JumpCanvasAlphaTo(damageValue, uM.playerBlood);
