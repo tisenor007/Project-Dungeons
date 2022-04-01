@@ -72,6 +72,8 @@ public class PlayerController : MonoBehaviour
     private PlayerStats playerStats;
     Collider[] hitColInteraction;
     private bool canMove;
+    private Vector3 cameraDestination;
+    private float cameraCatchUpSpeed = 0.00525f;
 
     public bool CanMove { set{ canMove = value; } } 
 
@@ -94,8 +96,9 @@ public class PlayerController : MonoBehaviour
         }
 
         //Cam movement/placement
-        gameCamera.transform.localEulerAngles = new Vector3(50, -45, 0);
-        gameCamera.transform.position = new Vector3(transform.position.x + 8, transform.position.y + 15, transform.position.z - 8);
+        gameCamera.transform.localEulerAngles = new Vector3(65, -45, 0);
+        cameraDestination = new Vector3(transform.position.x + 7, transform.position.y + 18, transform.position.z - 7);
+        gameCamera.transform.position = Vector3.Lerp(gameCamera.transform.position, cameraDestination, cameraCatchUpSpeed);
 
         //animation movement controller
         {
