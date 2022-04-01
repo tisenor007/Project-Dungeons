@@ -241,7 +241,6 @@ public class PlayerController : MonoBehaviour
 
         foreach (Collider col in hitColInteraction)
         {
-
             float distance = Vector3.Distance(transform.position, col.transform.position);
             //Debug.LogError($"hit {col.gameObject.name}");
 
@@ -262,7 +261,6 @@ public class PlayerController : MonoBehaviour
             }
             else { Debug.LogError("INTERACTABLE LAYER BEING USED BY NON-INTERACTABLE, CHECK \"Debug.LogError(hit { col.gameObject.name} );\""); }
         }
-
     }
 
     private void UpdateMoveIntensity(MovementMode movementMode)
@@ -337,7 +335,7 @@ public class PlayerController : MonoBehaviour
 
         attackTimer = playerStats.AttackSpeed;
         attackBlend = 1;
-        AnimationAttackTiming = 10f; // fix animations ?
+        AnimationAttackTiming = Time.time + 1.5f; // fix animations ?
         Attack();
     }
 
