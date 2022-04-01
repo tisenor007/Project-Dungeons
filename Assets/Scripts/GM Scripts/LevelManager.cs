@@ -19,7 +19,7 @@ public class LevelManager : MonoBehaviour
     private Text noteWriting;
     private Color weaponInfoControl = new Color();
     private Color alphaValueColour;
-    private float weaponDisplayTimer = 3;
+    [SerializeField] private float weaponDisplayTimer = 3;
 
     private StoryManager story;
 
@@ -39,7 +39,7 @@ public class LevelManager : MonoBehaviour
         //ui
         weaponInfoControl = GameManager.manager.uiManager.weaponInfo.transform.GetChild(0).GetComponent<Image>().color;
 
-        if (weaponInfoControl.a == 1) // 1 is the max value of alpha
+        if (weaponInfoControl.a >= 1) // 1 is the max value of alpha
         {
             weaponDisplayTimer -= 1 * Time.deltaTime;
         }
