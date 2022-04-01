@@ -26,11 +26,20 @@ public class PlayerController : MonoBehaviour
         Jumping,
         Falling
     }
+
     private enum BlendState
     {
         Idle_Running_Sprinting,
         Jumping,
         Falling
+    }
+
+    private enum PlayerWeaponIndex
+    {
+        Knuckles,
+        Dagger,
+        Cutlass,
+        Club
     }
 
     [Header("Interaction")]
@@ -94,6 +103,7 @@ public class PlayerController : MonoBehaviour
             if (Time.time > jumpTimer && isGrounded() == false) { movementMode = MovementMode.Falling; }
             animator.SetFloat("Velocity", moveIntensity);
             animator.SetLayerWeight(1, attackBlend);
+            UpdateAttackAnims(playerStats.CurrentWeapon.name);
 
             switch (movementMode)
             {
@@ -175,6 +185,20 @@ public class PlayerController : MonoBehaviour
             canMove = true;
             GameManager.manager.levelManager.StopReadingNote();
         }
+    }
+
+    private void UpdateAttackAnims(string weaponName)
+    {
+       //tried to use switch statement here, was not allow due to emun.ToString() for some reason......
+        if (weaponName == PlayerWeaponIndex.Knuckles.ToString())
+        { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Knuckles); return; }
+        else if (weaponName == PlayerWeaponIndex.Dagger.ToString())
+        { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Dagger); return; }
+        else if (weaponName == PlayerWeaponIndex.Cutlass.ToString())
+        { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Cutlass); return; }
+        else if (weaponName == PlayerWeaponIndex.Club.ToString())
+        { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Club); return; }
+        animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Dagger);
     }
 
     public void Interact()
