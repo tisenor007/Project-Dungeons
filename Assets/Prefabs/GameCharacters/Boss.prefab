@@ -183,7 +183,9 @@ MonoBehaviour:
   healthColour: {fileID: 0}
   healthBar: {fileID: 0}
   cam: {fileID: 0}
-  treasureChest: {fileID: 0}
+  availableDrops:
+  - {fileID: 4428007975566506854, guid: a7aeda2539ef7164d8565b6c7bae168a, type: 3}
+  itemDropChance: 100
 --- !u!54 &7762588276979746970
 Rigidbody:
   m_ObjectHideFlags: 0

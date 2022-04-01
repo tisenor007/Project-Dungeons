@@ -259,6 +259,7 @@ public class GameManager : MonoBehaviour
         if (gameState == GameState.WIN) { return; }
         if (gameState == GameState.SAVEOPTION) { return; }
         if (gameState == GameState.OPTIONS) { return; }
+        if (gameState == GameState.CHARACTERSELECTION) { return; }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {

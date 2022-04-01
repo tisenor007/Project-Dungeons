@@ -5,7 +5,7 @@ using UnityEngine;
 public class StructureBehavior : MonoBehaviour
 {
     public GameObject doors;
-    [HideInInspector] public DungeonGenerator.StructureType currentStructureType;
+    public DungeonGenerator.StructureType currentStructureType;
     [HideInInspector] public bool trapPlayer = false;
     [HideInInspector] public int currentVariation;
     [SerializeField] private Light[] lights;
@@ -54,20 +54,29 @@ public class StructureBehavior : MonoBehaviour
     private void OpenAvailableDoors()
     {
         if (dungeonGenerator == null) { return; }
-        
-        if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.front, transform.position)) && transform.eulerAngles.y == 0) 
-        { OpenDoor(DungeonGenerator.Directions.front); }
-        if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.back, transform.position)) && transform.eulerAngles.y == 0) 
-        { OpenDoor(DungeonGenerator.Directions.back); }
-        //else ifs are for strange hallway door-close bug
-        if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.right, transform.position)) && transform.eulerAngles.y == 0) 
-        { OpenDoor(DungeonGenerator.Directions.right); }
-        else if(CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.right, transform.position)) && transform.eulerAngles.y == 90) 
-        { OpenDoor(DungeonGenerator.Directions.back); }
-        if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.left, transform.position)) && transform.eulerAngles.y == 0) 
-        { OpenDoor(DungeonGenerator.Directions.left); }
-        else if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.left, transform.position)) && transform.eulerAngles.y == 90) 
-        { OpenDoor(DungeonGenerator.Directions.front); }
+        switch (currentStructureType)
+        {
+            case DungeonGenerator.StructureType.Hallway:
+                if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.front, transform.position)))
+                { OpenDoor(DungeonGenerator.Directions.front); }
+                if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.back, transform.position)))
+                { OpenDoor(DungeonGenerator.Directions.back); }
+                if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.right, transform.position)) && transform.eulerAngles.y == 90)
+                { OpenDoor(DungeonGenerator.Directions.back); }
+                if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.left, transform.position)) && transform.eulerAngles.y == 90)
+                { OpenDoor(DungeonGenerator.Directions.front); }
+                break;
+            default:
+                if(CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.front, transform.position)))
+                { OpenDoor(DungeonGenerator.Directions.front); }
+                if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.back, transform.position)))
+                { OpenDoor(DungeonGenerator.Directions.back); }
+                if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.right, transform.position)))
+                { OpenDoor(DungeonGenerator.Directions.right); }
+                if (CanStructureConnect(dungeonGenerator.Direction(DungeonGenerator.Directions.left, transform.position)))
+                { OpenDoor(DungeonGenerator.Directions.left); }
+                break;
+        }
     }
 
     private void ShowStructure(bool visualStatus)

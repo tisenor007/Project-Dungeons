@@ -61,6 +61,7 @@ public class DungeonGenerator : MonoBehaviour
         //pregenerates small dungeon quickly so saving & loading next dungeon will work......
         if (dungeonPreGenerating && !dungeonGenerated) { GenerateNewDungeon(5);}
         else if (!dungeonPreGenerating && !dungeonGenerated) { GenerateNewDungeon(maxStructures); }
+        Debug.Log(nextStructureType);
     }
 
     //master method
@@ -73,11 +74,11 @@ public class DungeonGenerator : MonoBehaviour
         //adds rooms to dungeon until max number is met
         else if (structures.Count < maxStructureAmount && structures.Count > 0)
         {
-            nextStructureType = (StructureType)ChooseNumbByChance((int)StructureType.Room, (int)StructureType.Hallway, roomChance);
+            StructureType chosenStructureType = (StructureType)ChooseNumbByChance((int)StructureType.Room, (int)StructureType.Hallway, roomChance);
             switch (branchIsGenerating)
             {
                 case false:
-                    GenerateNewStructure(nextStructureType, mainStructureBase);
+                    GenerateNewStructure(chosenStructureType, mainStructureBase);
                     if (IsBranchStuck(mainStructureBase))
                     {
                         mainStructureBase = mainStructures[Random.Range(0, mainStructures.Count)];
@@ -93,7 +94,7 @@ public class DungeonGenerator : MonoBehaviour
                 case true:
                     if (currentBranchStructCount >= currentBranchLength){CompleteBranch(includeTraps, mainStructureBase);}
                     if (IsBranchStuck(currBranchStructureBase)) { CompleteBranch(false, mainStructureBase); }
-                    GenerateNewStructure(nextStructureType, currBranchStructureBase);
+                    GenerateNewStructure(chosenStructureType, currBranchStructureBase);
                     break;
             }
         }
@@ -177,6 +178,7 @@ public class DungeonGenerator : MonoBehaviour
     //tries to add room to dungeon
     private void GenerateNewStructure(StructureType structureType, GameObject baseStruct)
     {
+        nextStructureType = structureType;
         switch (structureType)
         {
             case StructureType.StartStructure:
@@ -254,7 +256,7 @@ public class DungeonGenerator : MonoBehaviour
         //restricts directions based off where it is coming from and where it is going.....
         if (currentStructureType == StructureType.Hallway && baseStruct.transform.eulerAngles.y == 0) { nextStructureDirection = ChooseNumbByChance(0, 1, 50); }// Random.Range(0, 1); }
         else if (currentStructureType == StructureType.Hallway && baseStruct.transform.eulerAngles.y == 90) { nextStructureDirection = ChooseNumbByChance(2, 3, 50); }// Random.Range(2, 3); }
-        else if (currentStructureType == StructureType.Room || currentStructureType == StructureType.TrapStructure) { nextStructureDirection = Random.Range(0, 4); }
+        else if (currentStructureType != StructureType.Hallway) { nextStructureDirection = Random.Range(0, 4); }
 
         if (nextStructureDirection <= 0)
         {

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Boss : Enemy
 {
-    [SerializeField] private GameObject treasureChest;
     private float stamina = 10;
     private float recoverTime = 6;
     private float staminaTimer;
@@ -64,8 +63,5 @@ public class Boss : Enemy
     public override void TakeDamage(int damage, Transform character)
     {
         base.TakeDamage(damage, character);
-        if (treasureChest == null) { return; }
-        if (isAlive) { treasureChest.SetActive(false); }
-        else if (!IsAlive) { treasureChest.SetActive(true); }
     }
 }
