@@ -9,10 +9,11 @@ public class GhostEnemy : Enemy
 
     public float bobUp;
     public float bobDown;
-    public float bobSpeed = 0.5f;
+    public float bobSpeed = 0.5f; // units per seconds
 
-    public float slowSpin = 10.0f;
-    public float fastSpin = 100.0f;
+    // rotation speeds
+    public float noramlSpeedSpin = 10.0f; // degrees per seconds
+    public float fastSpeedSpin = 100.0f; // degrees per seconds
 
     public bool movingDown = false;
 
@@ -42,25 +43,25 @@ public class GhostEnemy : Enemy
         InitEnemy();
     }
 
-    void Radius() // || -90 > -0 > 0 > 90 > 180 > -180 > -90 ||
+    void Rotate() // || -90 > -0 > 0 > 90 > 180 > -180 > -90 ||
     {
-        transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime, Space.Self);
-
-        if (transform.localEulerAngles.y > 0 && transform.localEulerAngles.y < 45)
+        // set rotation speed 
+        if (transform.localEulerAngles.y > 0 && transform.localEulerAngles.y < 45) // 0..45 degrees (45 degrees total)
         {
             //Debug.Log("45");
-            rotationSpeed = slowSpin;
+            rotationSpeed = noramlSpeedSpin;
         }
-        else if (transform.localEulerAngles.y > 180 && transform.localEulerAngles.y < 225)
+        else if (transform.localEulerAngles.y > 180 && transform.localEulerAngles.y < 225) // 180..225 degrees (45 degrees total)
         {
             //Debug.Log("180");
-            rotationSpeed = fastSpin;
+            rotationSpeed = fastSpeedSpin;
         }
         else
         {
             rotationSpeed = 100f;
         }
 
+        transform.Rotate(Vector3.up * rotationSpeed * Time.deltaTime, Space.Self);
     }
 
     void Bobbing()
@@ -87,18 +88,15 @@ public class GhostEnemy : Enemy
             }
         }
 
-
     }
 
     public override void Idle()
     {
-        //PlayAudio(this);
-        //SoundManager.PlaySound(SoundManager.Sound.GhostIdle);
         Bobbing();
         playerLocation = playerStats.gameObject.transform.position;
         enemyNavMeshAgent.speed = speed;
         transform.Translate(Vector3.forward * Time.deltaTime * speed);
-        Radius();
+        Rotate();
 
         if (distanceFromPlayer <= viewDistance)
         {
@@ -110,7 +108,7 @@ public class GhostEnemy : Enemy
         enemyNavMeshAgent.speed = 10;
 
         enemyNavMeshAgent.SetDestination(playerLocation);
-        //SoundManager.PlaySound(SoundManager.Sound.GhostChasing);
+
         if (distanceFromPlayer <= attackDistance)
         {
             enemyNavMeshAgent.speed = speed;

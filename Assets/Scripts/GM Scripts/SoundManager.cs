@@ -18,7 +18,7 @@ public class SoundManager : MonoBehaviour
     private static Dictionary<Sound, float> soundTimeDictionary;
     public static Dictionary<Sound, float> soundLengthDictionary;
     private static Dictionary<Sound, float> soundVolumeDictionary;
-    //public static Dictionary<Sound, float> musicCutOffDictionary;
+    public static Dictionary<Sound, float> musicCutOffDictionary;
     private static SoundAssets.SoundAudioClip currentSoundAudioClip;
     private static float currentArrayAudioClipLength;
 
@@ -175,8 +175,8 @@ public class SoundManager : MonoBehaviour
             {
                 oneShotMusicAudioSource.Stop();
                 soundLengthDictionary[previousMusic] = 0;
-                oneShotMusicAudioSource.PlayOneShot(GetAudioClip(sound), soundVolumeDictionary[sound]);
                 //oneShotMusicAudioSource.time = musicCutOffDictionary[sound];
+                oneShotMusicAudioSource.PlayOneShot(GetAudioClip(sound), soundVolumeDictionary[sound]);
                 previousMusic = sound;
 
             }

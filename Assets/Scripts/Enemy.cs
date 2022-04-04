@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
-using TMPro;
-using System;
+using System.Collections.Generic;
 
 public class Enemy : CharacterStats
 {
@@ -13,12 +10,24 @@ public class Enemy : CharacterStats
     {
         Idle,
         Chasing,
-        Attacking
+        Attacking,
+        Stunned,
+        Dying
     }
 
     protected State enemyState;
+    protected string[] animationStates;
     protected NavMeshAgent enemyNavMeshAgent;
     protected PlayerStats playerStats;
+    protected Animator animator;
+    protected AnimationClip clip;
+    protected string currentAnimationState;
+
+    protected Material[] enemyModel;
+
+    protected float attackAnimTime;
+    protected float stunnedAnimTime;
+    protected float dyingAnimTime;
 
     protected float viewDistance;
     protected float hearingDistance;
@@ -28,7 +37,9 @@ public class Enemy : CharacterStats
 
     protected float distanceFromPlayer;
     protected float hitTimer;
+    protected float stunnedTimer;
     protected float stunnedHitDuration;
+    protected float dyingTimer;
 
     protected Vector3 playerLocation;
     protected Vector3 enemyLocation;
@@ -62,17 +73,30 @@ public class Enemy : CharacterStats
         {
             case State.Idle:
                 PlayAudio(this);
+                SwitchAnimation("Idle");
                 Idle();
                 break;
 
             case State.Chasing:
                 PlayAudio(this);
+                SwitchAnimation("Chasing");
                 Chasing();
                 break;
 
             case State.Attacking:
-                
+                //PlayAudio(this);
+                //SwitchAnimation("Attacking Idle");
                 Attacking();
+                break;
+
+            case State.Stunned:
+                //PlayAudio(this);
+                //SwitchAnimation("Stunned");
+                Stunned();
+                break;
+
+            case State.Dying:
+                Dying();
                 break;
         }
 
@@ -112,25 +136,34 @@ public class Enemy : CharacterStats
 
     void Attacking()
     {
-        enemyNavMeshAgent.SetDestination(enemyLocation);
-
+        //if (currentAnimationState != "Attacking Idle" && currentAnimationState != "Swinging" && currentAnimationState != "Stunned") { SwitchAnimation("Attacking Idle"); Debug.LogWarning("STATE CHANGED TO ATTACKIDLE"); }
         hitTimer -= Time.deltaTime;
+
 
         if (hitTimer <= 0.0f)
         {
-            if (playerStats.shield.activeSelf == true)
+            SwitchAnimation("Swinging");
+            animator.Play("Swinging");
+
+            if (playerStats.shield.activeSelf == true) // attack is blocked
             {
+                stunnedTimer = 1.5f;
                 playerStats.TakeDamage((int)(damage / 4), playerStats.GetComponent<Transform>());
-                hitTimer = stunnedHitDuration; // <----- will be replaced by a possible stunned state
-                SoundManager.PlaySound(SoundManager.Sound.MetalClang, playerLocation);
+                SwitchState(State.Stunned);
             }
-            else
+            else // attack hits
             {
+                
+                SwitchAnimation("Attacking Idle");
+                //animator.SetFloat("AttackAnim", 0);
                 playerStats.TakeDamage(damage, playerStats.GetComponent<Transform>());
                 hitTimer = attackSpeed;
                 PlayAudio(this);
+                //animator.SetFloat("AttackAnim", 0.0f);
             }
-        }   
+
+            SwitchAnimation("Attacking Idle");
+        }
 
         if (distanceFromPlayer > attackDistance)
         {
@@ -138,9 +171,42 @@ public class Enemy : CharacterStats
         }
     }
 
+    void Stunned()
+    {
+        SwitchAnimation("Stunned");
+        stunnedTimer -= Time.deltaTime;
+
+        if (stunnedTimer <= 0.0f)
+        {
+            SwitchAnimation("Attacking Idle");
+            hitTimer = attackSpeed;
+            SwitchState(State.Attacking);
+        }
+    }
+
+    void Dying()
+    {
+        Debug.LogWarning(this.dyingTimer);
+        this.dyingTimer -= Time.deltaTime;
+
+        if (this.dyingTimer <= 0.0f)
+        {
+            FadeOut();
+        }
+    }
+
+    void FadeOut()
+    {
+        this.gameObject.SetActive(false);
+
+    }
+
     protected void SwitchState(State newState)
     {
+        if (currentAnimationState == "Dying") { return; }
+
         enemyState = newState;
+        Debug.LogWarning("CURRENT STATE: " + newState);
     }
 
     public void UpdateHealth()
@@ -169,6 +235,7 @@ public class Enemy : CharacterStats
         healthBar = transform.GetChild(0).GetChild(0).GetComponent<Slider>();
         healthColour.color = new Color32(74, 227, 14, 255);
 
+        // references
         cam = GameManager.manager.playerAndCamera.transform.GetChild(1);
         playerStats = GameManager.manager.playerStats;
         enemyNavMeshAgent = GetComponent<NavMeshAgent>();
@@ -176,6 +243,17 @@ public class Enemy : CharacterStats
         maxHealth = Health;
         healthBar.maxValue = maxHealth;
         stunnedHitDuration = attackSpeed * 1.5f;
+
+        animator = transform.GetChild(1).GetComponent<Animator>();
+        int numOfMaterials = this.transform.GetChild(1).GetChild(1).GetComponent<SkinnedMeshRenderer>().materials.Length;
+        enemyModel = new Material[numOfMaterials];
+
+        for (int i = 0; i > numOfMaterials; i++)
+        {
+            enemyModel[i] = this.transform.GetChild(1).GetChild(1).GetComponent<SkinnedMeshRenderer>().materials[i];
+        }
+
+        SetAnimations();
     }
 
     public override void TakeDamage(int damage, Transform character)
@@ -192,9 +270,14 @@ public class Enemy : CharacterStats
     {
         SoundManager.PlaySound(this.deathSound, enemyLocation); 
         base.Death();
-        
+
         // ENTER CODE FOR DEATH ANIMATIONS, ETC
-        this.gameObject.SetActive(false);
+        //this.gameObject.SetActive(false);
+
+        this.dyingTimer = this.dyingAnimTime;
+        SwitchState(State.Dying);
+        Debug.LogWarning("animation dying");
+        SwitchAnimation("Dying");
 
         DropItemOnDeath();
     }
@@ -216,6 +299,53 @@ public class Enemy : CharacterStats
             SoundManager.PlaySound(enemy.chasingSound, enemy.transform.position);
         if (enemyState == State.Attacking)
             SoundManager.PlaySound(enemy.attackSound, enemy.transform.position);
+    }
+
+    public void SetAnimations()
+    {
+        animationStates = new string[8];
+
+        animationStates[0] = "Idle";
+        animationStates[1] = "Chasing";
+        animationStates[2] = "Attacking Idle";
+        animationStates[3] = "Stunned";
+        animationStates[4] = "Hit";
+        animationStates[5] = "Dying";
+        animationStates[6] = "Swinging";
+        animationStates[7] = "Dead";
+
+        AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+
+        foreach (AnimationClip clip in clips)
+        {
+            switch (clip.name)
+            {
+                case "attackAnim":
+                    attackAnimTime = clip.length;
+                    break;
+                case "stunnedAnim":
+                    stunnedAnimTime = clip.length;
+                    break;
+                case "deathAnim":
+                    this.dyingAnimTime = clip.length;
+                    this.dyingTimer = dyingAnimTime;
+                    break;
+            }
+        }
+    }
+
+    public void SwitchAnimation(string nextState)
+    {
+        if (animator.GetBool(nextState) == true) return;
+
+        foreach (string state in animationStates)
+        {
+            animator.SetBool(state, false);
+        }
+
+        animator.SetBool(nextState, true);
+        currentAnimationState = nextState;
+        Debug.LogWarning("NEW ANIMATION STATE: " + nextState);
     }
 
     private int ChooseNumbByChance(int output1, int output2, int chanceNum)

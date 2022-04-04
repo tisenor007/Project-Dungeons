@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ZombieEnemy : Enemy
 {
-    public float turnAroundAngle;
+    private float turnAroundAngle;
+    
 
     void Start()
     {
@@ -22,6 +23,8 @@ public class ZombieEnemy : Enemy
         this.idleSound = SoundManager.Sound.ZombieIdle;
 
         turnAroundAngle = transform.localEulerAngles.y;
+
+        
 
         InitEnemy();
     }
@@ -47,11 +50,14 @@ public class ZombieEnemy : Enemy
 
     public override void Chasing()
     {
+        //animator.SetBool("Chasing", true);
+
         viewDistance = 20;
         enemyNavMeshAgent.SetDestination(playerLocation);
 
         if (distanceFromPlayer <= attackDistance)
         {
+            hitTimer = attackSpeed;
             enemyNavMeshAgent.speed = speed;
             SwitchState(State.Attacking);
         }
