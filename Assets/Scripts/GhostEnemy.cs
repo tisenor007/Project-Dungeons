@@ -96,7 +96,7 @@ public class GhostEnemy : Enemy
         //PlayAudio(this);
         //SoundManager.PlaySound(SoundManager.Sound.GhostIdle);
         Bobbing();
-        playerLocation = playerStats.gameObject.transform.position;
+        playerLocation = GameManager.manager.playerStats.gameObject.transform.position;
         enemyNavMeshAgent.speed = speed;
         transform.Translate(Vector3.forward * Time.deltaTime * speed);
         Radius();

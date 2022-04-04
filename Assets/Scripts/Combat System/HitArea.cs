@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class HitArea : MonoBehaviour
 {
-    [SerializeField] private int damage;
-    [SerializeField] private PlayerController playerController;
-
     private void Update()
     {
         this.GetComponent<Collider>().enabled = CanDealDamage();
@@ -18,23 +15,26 @@ public class HitArea : MonoBehaviour
 
         if (other.tag == "Enemy" && CanDealDamage())
         {
-            other.GetComponent<Enemy>().TakeDamage(damage, other.GetComponent<Transform>());
+            if (!GameManager.manager.playerController.IsAttacking()) { return; }
+            other.GetComponent<Enemy>().TakeDamage(GameManager.manager.playerStats.Damage, other.GetComponent<Transform>());
         }
     }
 
     private bool CanDealDamage()
     {
-        if (playerController == null) { Debug.LogError("hit area missing script"); return false; }
-        if (damage == 0) { Debug.LogError("hit area missing script"); return false; }
-
-        return playerController.IsAttacking();
+        if (this.gameObject.activeSelf == true)
+        {
+            if (GameManager.manager.playerController == null) { Debug.LogWarning("hit area missing script"); return false; }
+            if (GameManager.manager.playerStats.Damage == 0) { Debug.LogWarning("hit area missing script"); return false; }
+        }
+        return GameManager.manager.playerController;
     }
 
-    public void SetupPlayerFields(GameObject player)
-    {
-        damage = player.GetComponent<PlayerStats>().Damage;
-        playerController = player.GetComponent<PlayerController>();
+    //public void SetupPlayerFields(GameObject player)
+    //{
+    //    damage = player.GetComponent<PlayerStats>().Damage;
+    //    playerController = player.GetComponent<PlayerController>();
 
-        Debug.Log("setup HitArea fields");
-    }
+    //    Debug.Log("setup HitArea fields");
+    //}
 }
