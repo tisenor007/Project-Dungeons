@@ -23,8 +23,8 @@ public class DungeonGenerator : MonoBehaviour
     }
     public float structureSpacing = 10;
     public int roomChance = 80;
-    [HideInInspector] public bool dungeonIsGenerating = false;
-    [HideInInspector] public bool dungeonPreGenerating = false;
+    public bool dungeonIsGenerating = false;
+    public bool dungeonPreGenerating = false;
     [HideInInspector] public bool dungeonGenerated = false;
     [HideInInspector] public List<GameObject> structures = new List<GameObject>();
     [SerializeField] private int branchChance;
@@ -60,7 +60,7 @@ public class DungeonGenerator : MonoBehaviour
     {
         if (!dungeonIsGenerating) { return; }
         //pregenerates small dungeon quickly so saving & loading next dungeon will work......
-        if (dungeonPreGenerating && !dungeonGenerated) { GenerateNewDungeon(5);}
+        if (dungeonPreGenerating && !dungeonGenerated) { GenerateNewDungeon(10);}
         else if (!dungeonPreGenerating && !dungeonGenerated) { GenerateNewDungeon(maxStructures); }
     }
 
@@ -120,7 +120,8 @@ public class DungeonGenerator : MonoBehaviour
         branchIsGenerating = false;
         dungeonGenerated = true;
         if (!dungeonPreGenerating) { return; }
-        ClearDungeon(); 
+        ClearDungeon();
+        dungeonPreGenerating = false;
         dungeonIsGenerating = true; 
     }
 
@@ -306,7 +307,7 @@ public class DungeonGenerator : MonoBehaviour
         if (includeTraps)
         {
             trapInstantiated = false;
-            GenerateNewStructure(StructureType.TrapStructure, currBranchStructureBase);
+            GenerateNewStructure(StructureType.TrapStructure, structureBase);
         }
         else if (!includeTraps) 
         { isBranchGenerating = false; }

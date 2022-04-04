@@ -10,9 +10,9 @@ public class LevelManager : MonoBehaviour
     public int activeScreen;
 
     [SerializeField] private GameObject popUpPrefab;
-    private static float creditsBottomPos = 2800;
-    private static float creditsTopPos = -1425;
-    private static float creditsBeginPos = -500;
+    private static float creditsBottomPos = 2825;
+    private static float creditsTopPos = -2125;
+    private static float creditsBeginPos = -750;
     private float creditsYPos = creditsBeginPos;
     private float creditsScrollRate = 100;
     private Canvas notePlain;
@@ -268,7 +268,7 @@ public class LevelManager : MonoBehaviour
 
     private void ScrollCredits()
     {
-        int childOrderNum = 0;
+        int childOrderNum = 2;
         GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position = new Vector3(GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.x, creditsYPos, GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.z);
 
         if (GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y >= creditsBottomPos) { creditsYPos = creditsTopPos; }
