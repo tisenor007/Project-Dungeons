@@ -333,19 +333,27 @@ public class LevelManager : MonoBehaviour
         SwitchLevel(0);
         GameManager.manager.playerStats.EquipWeapon(GameManager.manager.playerStats.DefaultWeaponType, false);
     }
-
+    public float GetBrightnessSliderValue()
+    {
+        return GameManager.manager.uiManager.brightnessSlider.value;
+    }
 
     #endregion
 
     #region Options
-    public void BrightnessSlider()
+    public void SetBrightness(float brightnessValue)
     {
         // sets the alpha of an image to the value of a slider
         Color newAlpha = GameManager.manager.uiManager.brightnessImage.color;
-        newAlpha.a = GameManager.manager.uiManager.brightnessSlider.value / 100;
+        newAlpha.a = brightnessValue;
         GameManager.manager.uiManager.brightnessImage.color = newAlpha;
 
         //Debug.Log($"newAlpha: {newAlpha.a}, Image colour: {GameManager.manager.uiManager.brightnessImage.color}");
+    }
+
+    public void SetVolume(float volumeValue)
+    {
+        AudioListener.volume = volumeValue;
     }
     #endregion
 }

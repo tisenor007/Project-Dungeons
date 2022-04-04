@@ -62,7 +62,6 @@ public class DungeonGenerator : MonoBehaviour
         //pregenerates small dungeon quickly so saving & loading next dungeon will work......
         if (dungeonPreGenerating && !dungeonGenerated) { GenerateNewDungeon(5);}
         else if (!dungeonPreGenerating && !dungeonGenerated) { GenerateNewDungeon(maxStructures); }
-        Debug.Log(nextStructureType);
     }
 
     //master method
@@ -222,7 +221,7 @@ public class DungeonGenerator : MonoBehaviour
         //currentStructureType = nextStructType;
         //structure.GetComponent<StructureBehavior>().currentStructureType = nextStructType;
         //currentStructureVariation = nextStructVariation;
-        //structure.GetComponent<StructureBehavior>().currentVariation = nextStructVariation;
+        structure.GetComponent<StructureBehavior>().currentVariation = nextStructVariation;
 
         if (branchIsGenerating) 
         { 
@@ -317,8 +316,8 @@ public class DungeonGenerator : MonoBehaviour
 
     private void RandomizeCurrBranchStats()
     {
-        currentBranchLength = Random.Range(minBranchLengthRange, maxBranchLengthRange + 1);
-        branchStartStructNum = Random.Range(1, mainStructures.Count);
+        currentBranchLength = Random.Range(minBranchLengthRange, maxBranchLengthRange+1);
+        branchStartStructNum = Random.Range(0, mainStructures.Count-1);
         currBranchStructureBase = mainStructures[branchStartStructNum];
     }
 
