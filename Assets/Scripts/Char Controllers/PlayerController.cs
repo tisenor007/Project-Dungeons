@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
     Collider[] hitColInteraction;
     private bool canMove;
     private Vector3 cameraDestination;
-    private float cameraCatchUpSpeed = 0.00525f;
+    private float cameraCatchUpSpeed = 0.0525f;
     [SerializeField] private float attackTimer;
     private float attackAnimDuration;
     private static int attackButton = 0;
