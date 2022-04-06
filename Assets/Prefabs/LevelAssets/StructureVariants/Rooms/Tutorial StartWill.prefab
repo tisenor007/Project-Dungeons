@@ -408,7 +408,7 @@ Transform:
   m_LocalScale: {x: 57.50229, y: 57.50229, z: 4.314302}
   m_Children: []
   m_Father: {fileID: 7877602223447875231}
-  m_RootOrder: 19
+  m_RootOrder: 62
   m_LocalEulerAnglesHint: {x: 5.395, y: -120.236, z: 0}
 --- !u!33 &3566339092274963271
 MeshFilter:
@@ -3856,6 +3856,22 @@ PrefabInstance:
     - target: {fileID: 726696184837552757, guid: f30bd08142249784e8270982e317e66c, type: 3}
       propertyPath: m_InnerSpotAngle
       value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 998358996251057884, guid: f30bd08142249784e8270982e317e66c, type: 3}
+      propertyPath: m_RootOrder
+      value: 63
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525934202773565138, guid: f30bd08142249784e8270982e317e66c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3408090311064832421, guid: f30bd08142249784e8270982e317e66c, type: 3}
+      propertyPath: m_RootOrder
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 4317216253211087033, guid: f30bd08142249784e8270982e317e66c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5547777761614983092, guid: f30bd08142249784e8270982e317e66c, type: 3}
       propertyPath: m_Name
