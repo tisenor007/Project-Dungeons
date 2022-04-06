@@ -342,7 +342,7 @@ public class PlayerController : MonoBehaviour
         if (isGrounded() == false) { return; }
         if (playerStats.Health <= playerStats.MaxHealth / 4) { movementMode = MovementMode.Running; return; }
         if (IsBlocking()) { movementMode = MovementMode.Running; return; }
-        if (playerStats.inWater) { return; }
+        if (playerStats.inWater) { movementMode = MovementMode.Running; return; }
 
         movementMode = MovementMode.Sprinting;
     }

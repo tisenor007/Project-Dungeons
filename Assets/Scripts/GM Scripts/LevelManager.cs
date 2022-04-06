@@ -150,7 +150,7 @@ public class LevelManager : MonoBehaviour
         GameManager.manager.currentLevel = desiredLevel;
         GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonPreGenerating = true;
         GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonIsGenerating = true;
-        GameManager.manager.playerAndCamera.transform.GetChild(0).GetComponent<PlayerStats>().ResetStats();
+        GameManager.manager.playerStats.ResetStats();
     }
 
     public void UpdateDungeon()
@@ -331,7 +331,6 @@ public class LevelManager : MonoBehaviour
         //Debug.LogError("sound over");
         GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
         SwitchLevel(0);
-        GameManager.manager.playerStats.EquipWeapon(GameManager.manager.playerStats.DefaultWeaponType, false);
     }
     public float GetBrightnessSliderValue()
     {

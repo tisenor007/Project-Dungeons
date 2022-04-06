@@ -67,7 +67,9 @@ public class PlayerStats : CharacterStats
         transform.parent.localEulerAngles = Vector3.zero;
 
         playerController.StopAttacking();
+        EquipWeapon(DefaultWeaponType, false);
         healing = false;
+        inWater = false;
     }
 
     public override void TakeDamage(int damage, Transform character)
