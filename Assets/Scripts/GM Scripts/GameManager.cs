@@ -264,6 +264,7 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            if (gameState == GameState.PAUSE) { levelManager.ChangeGameStateToGamePlay(); return; }
             levelManager.ChangeGameStateToPause();
         }
         
