@@ -19,7 +19,7 @@ public class LevelManager : MonoBehaviour
     private Text noteWriting;
     private Color weaponInfoControl = new Color();
     private Color alphaValueColour;
-    private float weaponDisplayTimer = 3;
+    [SerializeField] private float weaponDisplayTimer = 3;
 
     private StoryManager story;
 
@@ -39,7 +39,7 @@ public class LevelManager : MonoBehaviour
         //ui
         weaponInfoControl = GameManager.manager.uiManager.weaponInfo.transform.GetChild(0).GetComponent<Image>().color;
 
-        if (weaponInfoControl.a == 1) // 1 is the max value of alpha
+        if (weaponInfoControl.a >= 1) // 1 is the max value of alpha
         {
             weaponDisplayTimer -= 1 * Time.deltaTime;
         }
@@ -180,7 +180,7 @@ public class LevelManager : MonoBehaviour
         popUp.SetUp(message, color);
     }
 
-    public void CreateInteractable(GameObject objectBecomingInteractable, Vector3 newPosition, bool floating, Color lightColour, Item itemType = null)
+    public GameObject CreateInteractable(GameObject objectBecomingInteractable, Vector3 newPosition, bool floating, Color lightColour, Item itemType = null)
     {
         GameObject interactableObject = new GameObject($"Interactable {objectBecomingInteractable.name}");
         Interactable interactableSetup = interactableObject.AddComponent(typeof(Interactable)) as Interactable;
@@ -199,11 +199,13 @@ public class LevelManager : MonoBehaviour
         // object insertion
         objectBecomingInteractable.transform.SetPositionAndRotation(Vector3.zero, Quaternion.LookRotation(Vector3.forward, Vector3.up));
         objectBecomingInteractable.transform.SetParent(interactableObject.transform);
-
-        // FIX PLAYER SCALE x2 reducing size to stop object doubling in size every unequip
-        objectBecomingInteractable.transform.localScale = Vector3.one;
+        
+        /*// FIX PLAYER SCALE x2 reducing size to stop object doubling in size every unequip
+        objectBecomingInteractable.transform.localScale = Vector3.one;*/
 
         interactableObject.transform.position = newPosition;
+
+        return interactableObject;
     } 
 
     //messages

@@ -147,8 +147,10 @@ public class PlayerStats : CharacterStats
     {
         if (currentWeaponType == null) return;
 
-        GameManager.manager.levelManager.CreateInteractable(weaponObject,
+        GameObject newInteractable = GameManager.manager.levelManager.CreateInteractable(weaponObject,
             transform.position, true, Color.red, CurrentWeaponType);
+
+        Physics.IgnoreCollision(this.transform.GetComponent<BoxCollider>(), newInteractable.GetComponent<BoxCollider>(), true);
     }
     #endregion
 
