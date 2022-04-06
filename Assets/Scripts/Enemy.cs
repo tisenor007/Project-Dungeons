@@ -12,6 +12,7 @@ public class Enemy : CharacterStats
         Chasing,
         Attacking,
         Stunned,
+        Hit,
         Dying
     }
 
@@ -36,8 +37,9 @@ public class Enemy : CharacterStats
     protected string audioGroup;
 
     protected float distanceFromPlayer;
-    protected float hitTimer;
+    protected float attackTimer;
     protected float stunnedTimer;
+    protected float hitTimer;
     protected float stunnedHitDuration;
     protected float dyingTimer;
 
@@ -84,15 +86,15 @@ public class Enemy : CharacterStats
                 break;
 
             case State.Attacking:
-                //PlayAudio(this);
-                //SwitchAnimation("Attacking Idle");
                 Attacking();
                 break;
 
             case State.Stunned:
-                //PlayAudio(this);
-                //SwitchAnimation("Stunned");
                 Stunned();
+                break;
+
+            case State.Hit:
+                Hit();
                 break;
 
             case State.Dying:
@@ -124,7 +126,7 @@ public class Enemy : CharacterStats
 
         if (distanceFromPlayer <= attackDistance)
         {
-            hitTimer = attackSpeed;
+            attackTimer = attackSpeed;
             SwitchState(State.Attacking);
         }
 
@@ -136,28 +138,27 @@ public class Enemy : CharacterStats
 
     void Attacking()
     {
-        //if (currentAnimationState != "Attacking Idle" && currentAnimationState != "Swinging" && currentAnimationState != "Stunned") { SwitchAnimation("Attacking Idle"); Debug.LogWarning("STATE CHANGED TO ATTACKIDLE"); }
-        hitTimer -= Time.deltaTime;
+        if (currentAnimationState != "Attacking Idle" && currentAnimationState != "Swinging") { SwitchAnimation("Attacking Idle"); Debug.LogWarning("STATE CHANGED TO ATTACKIDLE"); }
+        attackTimer -= Time.deltaTime;
 
-
-        if (hitTimer <= 0.0f)
+        if (attackTimer <= 0.0f)
         {
             SwitchAnimation("Swinging");
             animator.Play("Swinging");
 
             if (playerStats.shield.activeSelf == true) // attack is blocked
             {
-                stunnedTimer = 1.5f;
+                this.stunnedTimer = 1.5f;
                 playerStats.TakeDamage((int)(damage / 4), playerStats.GetComponent<Transform>());
                 SwitchState(State.Stunned);
             }
             else // attack hits
             {
                 
-                SwitchAnimation("Attacking Idle");
+                //SwitchAnimation("Attacking Idle");
                 //animator.SetFloat("AttackAnim", 0);
                 playerStats.TakeDamage(damage, playerStats.GetComponent<Transform>());
-                hitTimer = attackSpeed;
+                this.attackTimer = this.attackSpeed;
                 PlayAudio(this);
                 //animator.SetFloat("AttackAnim", 0.0f);
             }
@@ -176,10 +177,22 @@ public class Enemy : CharacterStats
         SwitchAnimation("Stunned");
         stunnedTimer -= Time.deltaTime;
 
-        if (stunnedTimer <= 0.0f)
+        if (this.stunnedTimer <= 0.0f)
         {
-            SwitchAnimation("Attacking Idle");
-            hitTimer = attackSpeed;
+            //SwitchAnimation("Attacking Idle");
+            attackTimer = attackSpeed;
+            SwitchState(State.Attacking);
+        }
+    }
+
+    void Hit()
+    {
+        if (animator.GetBool("Swinging") != true) SwitchAnimation("Hit");
+        hitTimer -= Time.deltaTime;
+        Debug.LogError(this.hitTimer);
+
+        if (this.hitTimer <= 0.0f)
+        {
             SwitchState(State.Attacking);
         }
     }
@@ -244,14 +257,15 @@ public class Enemy : CharacterStats
         healthBar.maxValue = maxHealth;
         stunnedHitDuration = attackSpeed * 1.5f;
 
-        animator = transform.GetChild(1).GetComponent<Animator>();
-        int numOfMaterials = this.transform.GetChild(1).GetChild(1).GetComponent<SkinnedMeshRenderer>().materials.Length;
-        enemyModel = new Material[numOfMaterials];
+        if (this.audioGroup == "Zombie") animator = transform.GetChild(1).GetComponent<Animator>();
+
+        //int numOfMaterials = this.transform.GetChild(1).GetChild(1).GetComponent<SkinnedMeshRenderer>().materials.Length;
+        /*enemyModel = new Material[numOfMaterials];
 
         for (int i = 0; i > numOfMaterials; i++)
         {
             enemyModel[i] = this.transform.GetChild(1).GetChild(1).GetComponent<SkinnedMeshRenderer>().materials[i];
-        }
+        }*/
 
         SetAnimations();
     }
@@ -264,6 +278,9 @@ public class Enemy : CharacterStats
         {
             Death();
         }
+
+        this.hitTimer = 0.5f;
+        SwitchState(State.Hit);
     }
 
     protected override void Death()
@@ -314,28 +331,33 @@ public class Enemy : CharacterStats
         animationStates[6] = "Swinging";
         animationStates[7] = "Dead";
 
-        AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
-
-        foreach (AnimationClip clip in clips)
+        if (this.animator != null)
         {
-            switch (clip.name)
+            AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
+
+            foreach (AnimationClip clip in clips)
             {
-                case "attackAnim":
-                    attackAnimTime = clip.length;
-                    break;
-                case "stunnedAnim":
-                    stunnedAnimTime = clip.length;
-                    break;
-                case "deathAnim":
-                    this.dyingAnimTime = clip.length;
-                    this.dyingTimer = dyingAnimTime;
-                    break;
+                switch (clip.name)
+                {
+                    case "attackAnim":
+                        attackAnimTime = clip.length;
+                        break;
+                    case "stunnedAnim":
+                        stunnedAnimTime = clip.length;
+                        break;
+                    case "deathAnim":
+                        this.dyingAnimTime = clip.length;
+                        this.dyingTimer = dyingAnimTime;
+                        break;
+                }
             }
         }
     }
 
     public void SwitchAnimation(string nextState)
     {
+        if (this.audioGroup != "Zombie") return;
+        
         if (animator.GetBool(nextState) == true) return;
 
         foreach (string state in animationStates)

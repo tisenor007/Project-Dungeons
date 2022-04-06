@@ -112,7 +112,7 @@ public class GhostEnemy : Enemy
         if (distanceFromPlayer <= attackDistance)
         {
             enemyNavMeshAgent.speed = speed;
-            hitTimer = attackSpeed;
+            attackTimer = attackSpeed;
             SwitchState(State.Attacking);
         }
 

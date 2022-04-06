@@ -57,7 +57,7 @@ public class ZombieEnemy : Enemy
 
         if (distanceFromPlayer <= attackDistance)
         {
-            hitTimer = attackSpeed;
+            attackTimer = attackSpeed;
             enemyNavMeshAgent.speed = speed;
             SwitchState(State.Attacking);
         }

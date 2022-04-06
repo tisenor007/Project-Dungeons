@@ -37,7 +37,7 @@ public class CharacterSelection : MonoBehaviour
         femaleDisplay.SetActive(!isMale);
         SetPlayerModel();
         SoundManager.PlaySound(SoundManager.Sound.Clang);
-        Debug.LogError("CLANG");
+        //Debug.LogError("CLANG");
     }
 
 

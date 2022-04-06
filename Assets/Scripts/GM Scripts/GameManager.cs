@@ -192,8 +192,8 @@ public class GameManager : MonoBehaviour
                     }
                     SoundManager.PlayMusic(SoundManager.Sound.CharacterSelectionMusic);
                     if (Time.timeScale ==  1) { Time.timeScale = 0; }
-                    Debug.LogError("TIME: " + Time.deltaTime);
-                    Debug.LogError("SCALE: " + Time.timeScale);
+                    //Debug.LogError("TIME: " + Time.deltaTime);
+                    //Debug.LogError("SCALE: " + Time.timeScale);
                     uiManager.LoadCharacterSelection();
                     characterSelection.ShowModels();
                     Cursor.visible = true;

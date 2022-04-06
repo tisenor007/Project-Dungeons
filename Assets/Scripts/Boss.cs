@@ -44,7 +44,7 @@ public class Boss : Enemy
 
         if (distanceFromPlayer <= attackDistance)
         {
-            hitTimer = attackSpeed;
+            attackTimer = attackSpeed;
             SwitchState(State.Attacking);
         }
 
