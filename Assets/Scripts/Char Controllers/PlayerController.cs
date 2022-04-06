@@ -67,7 +67,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 moveDirection;
     private float jumpTimeDuration = 1.34f;
     private float jumpTimer;
-    private float rayRange = 0.85f;
+    private float rayRange = 1f;
     private RaycastHit rayHit;
     private PlayerStats playerStats;
     Collider[] hitColInteraction;
@@ -90,7 +90,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         //player rotation
         if (moveDirection != Vector3.zero)

@@ -1,7 +1,7 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!136 &4444151207595732934
-CapsuleCollider:
+--- !u!65 &2819648187789074265
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -10,12 +10,11 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 3.29
-  m_Height: 25.74
-  m_Direction: 1
-  m_Center: {x: 0, y: 13.1, z: 0}
---- !u!136 &1079987164784081122
-CapsuleCollider:
+  serializedVersion: 2
+  m_Size: {x: 8, y: 26.14, z: 8}
+  m_Center: {x: 0, y: 13.16, z: 0}
+--- !u!65 &8689154364617940192
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -24,10 +23,9 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 3.29
-  m_Height: 25.74
-  m_Direction: 1
-  m_Center: {x: 0, y: 13.1, z: 0}
+  serializedVersion: 2
+  m_Size: {x: 8, y: 26.14, z: 8}
+  m_Center: {x: 0, y: 13.16, z: 0}
 --- !u!95 &6937200647671725983
 Animator:
   serializedVersion: 3
@@ -180,7 +178,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 112
-  m_CollisionDetection: 0
+  m_CollisionDetection: 2
 --- !u!114 &4775209107842619115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,7 +222,6 @@ MonoBehaviour:
   attackSpeed: 0.5
   currentWeaponType: {fileID: 0}
   defaultWeapon: {fileID: 11400000, guid: 6cb7b082fbbdf4849ba26a710522fb9e, type: 2}
-  shield: {fileID: 0}
   weaponHitAreaCollider: {fileID: 0}
   inWater: 0
   maleHand: {fileID: 3086477420834799052}
