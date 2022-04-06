@@ -89,9 +89,26 @@ public class PlayerController : MonoBehaviour
         canMove = true;
     }
 
+    private void Update()
+    {
+
+        //interact with object
+        if (Input.GetKeyDown(interactInput) && canMove)
+        {
+            Interact();
+        }
+        else if (Input.GetKeyDown(KeyCode.E) && !canMove)
+        {
+            canMove = true;
+            GameManager.manager.levelManager.StopReadingNote();
+        }
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
+        EnableInteractionFeedbackWithinRange();
+
         //player rotation
         if (moveDirection != Vector3.zero)
         {
@@ -142,8 +159,6 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
-
-        EnableInteractionFeedbackWithinRange();
     }
 
     private void OnDrawGizmosSelected()
@@ -187,23 +202,12 @@ public class PlayerController : MonoBehaviour
 
         //checking to be idle
         else if (IsMoving() == false) { moveDirection = Vector3.zero; movementMode = MovementMode.Idle; }
-
-        //interact with object
-        if (Input.GetKeyDown(interactInput) && canMove)
-        {
-            Interact();
-        }
-        else if (Input.GetKeyDown(KeyCode.E) && !canMove)
-        {
-            canMove = true;
-            GameManager.manager.levelManager.StopReadingNote();
-        }
     }
 
     private void UpdateWeaponAnimStates(string weaponName)
     {
         //tried to use switch statement here, was not allow due to emun.ToString() for some reason...... VVVV
-                                                                                                    /// strings arent inherently constant switch statements require cases to be constant, 
+                                                                                                    /// strings arent inherently constant switch statements require that cases are
         if (weaponName == PlayerWeaponIndex.Knuckles.ToString())
         { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Knuckles); attackAnimDuration = 0.34f; return; }
         else if (weaponName == PlayerWeaponIndex.Dagger.ToString())
@@ -286,7 +290,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else if (distance <= r && !interactable.FeedbackEnabled)
                 {
-                    Physics.IgnoreCollision(this.transform.GetChild(0).GetComponent<Collider>(), col, true);
+                    Physics.IgnoreCollision(this.transform.GetComponent<BoxCollider>(), col, true);
 
                     interactable.EnableFeedback();
                 }
