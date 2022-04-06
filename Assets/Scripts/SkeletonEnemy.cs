@@ -9,7 +9,7 @@ public class SkeletonEnemy : Enemy
     public float currentRotationDistance;
     private float rotationSpeed;
 
-    private const float caughtTimerConst = 3.0f;
+    private const float caughtTimerConst = 1.5f;
     private float caughtTimer;
 
     [SerializeField]
@@ -33,6 +33,8 @@ public class SkeletonEnemy : Enemy
         this.rotationSpeed = 100.0f;
         walkDistance = Random.Range(1, 3);
         currentRotationDistance = Random.Range(45, 135);
+
+        caughtTimer = caughtTimerConst;
 
         walkToLocation = transform.position + (transform.forward * walkDistance);
 
@@ -86,7 +88,7 @@ public class SkeletonEnemy : Enemy
             if (hitInfo.collider.tag == "Player")
             {
                 //Debug.Log("triggered!!!!");
-                caughtTimer = caughtTimerConst;
+                
                 SwitchState(State.Chasing);
             }
         }
@@ -94,17 +96,23 @@ public class SkeletonEnemy : Enemy
 
     public override void Chasing()
     {
-        //viewDistance = viewDistance * 2;
-        enemyNavMeshAgent.SetDestination(transform.position);
-        transform.LookAt(playerLocation);
 
-        caughtTimer -= Time.deltaTime;
-        //Debug.Log(caughtTimer);
+        if (caughtTimer > 0.0)
+        {
+            SwitchAnimation("Spotted");
+
+            //viewDistance = viewDistance * 2;
+            enemyNavMeshAgent.SetDestination(transform.position);
+            transform.LookAt(playerLocation);
+
+            caughtTimer -= Time.deltaTime;
+        }
 
         if (caughtTimer <= 0)
         {
             enemyNavMeshAgent.speed = speed * 2;
             enemyNavMeshAgent.SetDestination(playerLocation);
+            SwitchAnimation("Chasing");
         }
 
         if (distanceFromPlayer <= attackDistance)
@@ -118,7 +126,7 @@ public class SkeletonEnemy : Enemy
         {
             enemyNavMeshAgent.speed = speed;
             walkToLocation = transform.position;
-            caughtTimer = caughtTimerConst;
+            //caughtTimer = caughtTimerConst;
             SwitchState(State.Idle);
         }
     }

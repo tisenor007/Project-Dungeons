@@ -189,7 +189,7 @@ public class Enemy : CharacterStats
     {
         if (animator.GetBool("Swinging") != true) SwitchAnimation("Hit");
         hitTimer -= Time.deltaTime;
-        Debug.LogError(this.hitTimer);
+        //Debug.LogError(this.hitTimer);
 
         if (this.hitTimer <= 0.0f)
         {
@@ -257,7 +257,7 @@ public class Enemy : CharacterStats
         healthBar.maxValue = maxHealth;
         stunnedHitDuration = attackSpeed * 1.5f;
 
-        if (this.audioGroup == "Zombie") animator = transform.GetChild(1).GetComponent<Animator>();
+        if (this.audioGroup != "Ghost") animator = transform.GetChild(1).GetComponent<Animator>();
 
         //int numOfMaterials = this.transform.GetChild(1).GetChild(1).GetComponent<SkinnedMeshRenderer>().materials.Length;
         /*enemyModel = new Material[numOfMaterials];
@@ -320,7 +320,7 @@ public class Enemy : CharacterStats
 
     public void SetAnimations()
     {
-        animationStates = new string[8];
+        animationStates = new string[9];
 
         animationStates[0] = "Idle";
         animationStates[1] = "Chasing";
@@ -330,8 +330,9 @@ public class Enemy : CharacterStats
         animationStates[5] = "Dying";
         animationStates[6] = "Swinging";
         animationStates[7] = "Dead";
+        animationStates[8] = "Spotted";
 
-        if (this.animator != null)
+        /*if (this.animator != null)
         {
             AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
 
@@ -351,18 +352,23 @@ public class Enemy : CharacterStats
                         break;
                 }
             }
-        }
+        }*/
     }
 
     public void SwitchAnimation(string nextState)
     {
-        if (this.audioGroup != "Zombie") return;
+        if (this.audioGroup == "Ghost") return;
         
         if (animator.GetBool(nextState) == true) return;
 
-        foreach (string state in animationStates)
+        /*foreach (string state in animationStates)
         {
             animator.SetBool(state, false);
+        }*/
+
+        foreach (AnimatorControllerParameter parameter in animator.parameters)
+        {
+            if (parameter.type == AnimatorControllerParameterType.Bool) animator.SetBool(parameter.name, false);
         }
 
         animator.SetBool(nextState, true);
