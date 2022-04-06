@@ -10,9 +10,9 @@ public class LevelManager : MonoBehaviour
     public int activeScreen;
 
     [SerializeField] private GameObject popUpPrefab;
-    private static float creditsBottomPos = 2800;
-    private static float creditsTopPos = -1425;
-    private static float creditsBeginPos = -500;
+    private static float creditsBottomPos = 2825;
+    private static float creditsTopPos = -2125;
+    private static float creditsBeginPos = -750;
     private float creditsYPos = creditsBeginPos;
     private float creditsScrollRate = 100;
     private Canvas notePlain;
@@ -268,7 +268,7 @@ public class LevelManager : MonoBehaviour
 
     private void ScrollCredits()
     {
-        int childOrderNum = 0;
+        int childOrderNum = 2;
         GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position = new Vector3(GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.x, creditsYPos, GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.z);
 
         if (GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y >= creditsBottomPos) { creditsYPos = creditsTopPos; }
@@ -333,19 +333,27 @@ public class LevelManager : MonoBehaviour
         SwitchLevel(0);
         GameManager.manager.playerStats.EquipWeapon(GameManager.manager.playerStats.DefaultWeaponType, false);
     }
-
+    public float GetBrightnessSliderValue()
+    {
+        return GameManager.manager.uiManager.brightnessSlider.value;
+    }
 
     #endregion
 
     #region Options
-    public void BrightnessSlider()
+    public void SetBrightness(float brightnessValue)
     {
         // sets the alpha of an image to the value of a slider
         Color newAlpha = GameManager.manager.uiManager.brightnessImage.color;
-        newAlpha.a = GameManager.manager.uiManager.brightnessSlider.value / 100;
+        newAlpha.a = brightnessValue;
         GameManager.manager.uiManager.brightnessImage.color = newAlpha;
 
         //Debug.Log($"newAlpha: {newAlpha.a}, Image colour: {GameManager.manager.uiManager.brightnessImage.color}");
+    }
+
+    public void SetVolume(float volumeValue)
+    {
+        AudioListener.volume = volumeValue;
     }
     #endregion
 }

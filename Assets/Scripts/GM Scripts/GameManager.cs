@@ -86,11 +86,9 @@ public class GameManager : MonoBehaviour
         Controls();
 
         FadeText();
-
         levelManager.LoadButtonFade(File.Exists(Application.persistentDataPath + dataPathSaveLoadDIT));
         levelManager.NextLevelButtonFade(currentLevel);
         levelManager.UpdateDungeon();
-        AudioListener.volume = 0.25f;
 
         switch (gameState)
         {
@@ -287,6 +285,8 @@ public class GameManager : MonoBehaviour
         savedInfo.playerSpawnPosY = playerAndCamera.transform.GetChild(0).gameObject.transform.position.y;
         savedInfo.playerSpawnPosZ = playerAndCamera.transform.GetChild(0).gameObject.transform.position.z;
         savedInfo.SaveDungeon(levels[currentLevel].GetComponent<DungeonGenerator>().structures);
+        savedInfo.savedBrightness = levelManager.GetBrightnessSliderValue();
+        savedInfo.savedVolume = AudioListener.volume;
 
         saveText.CrossFadeAlpha(1, .1f, true);
         StartCoroutine(WaitToFadeText("save"));
@@ -319,6 +319,8 @@ public class GameManager : MonoBehaviour
             characterSelection.SetPlayerModel();
             JsonUtility.FromJsonOverwrite(loadedInfo.JsonWeapon, playerSavedWeapon);
             playerSavedWeapon.Equip(playerSavedWeapon.prefab, playerAndCamera.transform.GetChild(0).gameObject, false);
+            levelManager.SetBrightness(loadedInfo.savedBrightness);
+            levelManager.SetVolume(loadedInfo.savedVolume);
             loadText.CrossFadeAlpha(1, .1f, true);
             StartCoroutine(WaitToFadeText("load"));
         }
@@ -394,6 +396,8 @@ class SaveInfo
     public float playerSpawnPosX;
     public float playerSpawnPosY;
     public float playerSpawnPosZ;
+    public float savedBrightness;
+    public float savedVolume;
     public int savedLevel;
     public List<DungeonGenerator.StructureType> savedStructureTypes = new List<DungeonGenerator.StructureType>();
     public List<int> savedStructureVariations = new List<int>();

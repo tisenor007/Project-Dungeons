@@ -18,7 +18,6 @@ public class Enemy : CharacterStats
 
     protected State enemyState;
     protected NavMeshAgent enemyNavMeshAgent;
-    protected PlayerStats playerStats;
 
     protected float viewDistance;
     protected float hearingDistance;
@@ -53,7 +52,7 @@ public class Enemy : CharacterStats
 
         enemySight = new Ray(transform.position, transform.TransformDirection(Vector3.forward));
         enemyLocation = this.enemyNavMeshAgent.transform.position;
-        playerLocation = playerStats.gameObject.transform.position;
+        playerLocation = GameManager.manager.playerStats.gameObject.transform.position;
         distanceFromPlayer = Vector3.Distance(playerLocation, enemyLocation);
 
         //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * viewDistance, Color.white);
@@ -81,7 +80,7 @@ public class Enemy : CharacterStats
 
     public virtual void Idle()
     {
-        playerLocation = playerStats.gameObject.transform.position;
+        playerLocation = GameManager.manager.playerStats.gameObject.transform.position;
 
         if (Physics.Raycast(enemySight, out hitInfo, viewDistance))
         {
@@ -118,15 +117,15 @@ public class Enemy : CharacterStats
 
         if (hitTimer <= 0.0f)
         {
-            if (playerStats.shield.activeSelf == true)
+            if (GameManager.manager.playerController.IsBlocking())
             {
-                playerStats.TakeDamage((int)(damage / 4), playerStats.GetComponent<Transform>());
+                GameManager.manager.playerStats.TakeDamage((int)(damage / 4), GameManager.manager.playerStats.GetComponent<Transform>());
                 hitTimer = stunnedHitDuration; // <----- will be replaced by a possible stunned state
                 SoundManager.PlaySound(SoundManager.Sound.MetalClang, playerLocation);
             }
             else
             {
-                playerStats.TakeDamage(damage, playerStats.GetComponent<Transform>());
+                GameManager.manager.playerStats.TakeDamage(damage, GameManager.manager.playerStats.GetComponent<Transform>());
                 hitTimer = attackSpeed;
                 PlayAudio(this);
             }
@@ -170,7 +169,6 @@ public class Enemy : CharacterStats
         healthColour.color = new Color32(74, 227, 14, 255);
 
         cam = GameManager.manager.playerAndCamera.transform.GetChild(1);
-        playerStats = GameManager.manager.playerStats;
         enemyNavMeshAgent = GetComponent<NavMeshAgent>();
 
         maxHealth = Health;

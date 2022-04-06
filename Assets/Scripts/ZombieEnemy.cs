@@ -37,7 +37,7 @@ public class ZombieEnemy : Enemy
         }
 
         viewDistance = 10;
-        playerLocation = playerStats.gameObject.transform.position;
+        playerLocation = GameManager.manager.playerStats.gameObject.transform.position;
         enemyNavMeshAgent.speed = speed;
 
         if (distanceFromPlayer <= viewDistance)

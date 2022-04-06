@@ -7,7 +7,6 @@ public class PlayerStats : CharacterStats
 {
     //equiment
     private GameObject weaponObject;
-    public GameObject shield;
     public Collider weaponHitAreaCollider;
     [HideInInspector] public bool inWater = false;
 
@@ -55,32 +54,6 @@ public class PlayerStats : CharacterStats
         if (healing) { HealAtRestStation(); }
     }
 
-    public void Attack() 
-    { 
-        if (shield.activeSelf == true) { return; }
-        if (hitArea.activeSelf == true) { return; }
-        hitArea.SetActive(true); 
-    }
-
-    public void StopAttacking() 
-    {
-        if (hitArea == null) { return; }
-        if (hitArea.activeSelf == false) { return; }
-        hitArea.SetActive(false);
-    }
-
-    public void Block() 
-    { 
-        if (shield.activeSelf == true) { return; }
-        shield.SetActive(true);
-    }
-
-    public void StopBlocking() 
-    { 
-        if (shield.activeSelf == false) { return; }
-        shield.SetActive(false);
-    }
-
     #region Stat Modification
     public override void ResetStats()
     {
@@ -94,7 +67,6 @@ public class PlayerStats : CharacterStats
         transform.parent.localEulerAngles = Vector3.zero;
 
         playerController.StopAttacking();
-        playerController.StopBlocking();
         healing = false;
     }
 
@@ -157,7 +129,7 @@ public class PlayerStats : CharacterStats
 
         //set player hit area
         weaponHitAreaCollider = hitArea.gameObject.GetComponent<Collider>();
-        hitArea.SetupPlayerFields(this.gameObject);
+        //hitArea.SetupPlayerFields(this.gameObject);
 
         Debug.Log($"Set {gameObject.name}, damage = {damage}, speed = {attackSpeed}, type = {currentWeaponType}.");
     }

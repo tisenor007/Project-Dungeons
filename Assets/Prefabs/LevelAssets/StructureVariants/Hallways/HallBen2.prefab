@@ -954,12 +954,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4b9519d799719c40adf363b8131e1ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentStructureType: 0
+  doors: {fileID: 4166766339996389958}
+  currentStructureType: 1
   trapPlayer: 0
   currentVariation: 0
   lights:
   - {fileID: 3574322471769120154}
-  doors: {fileID: 4166766339996389958}
 --- !u!65 &4100015436569720817
 BoxCollider:
   m_ObjectHideFlags: 0
