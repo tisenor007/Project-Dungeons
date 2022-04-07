@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,11 +12,37 @@ public class UIManager : MonoBehaviour
     public Canvas pause;
     public Canvas options;
     public Canvas credits;
+    public Canvas characterSelection;
+    public Canvas saveOption;
+    public Canvas loadingScreen;
 
+    [Space(20)]
+
+    [Tooltip("any button that calls load")]
+    public Button[] allLoadButtons;
+    public Button[] allNextLevelButtons;
+
+    [Header("Player HUD")]
+    public Canvas weaponInfo;
+    public Canvas playerBlood;
+    public Canvas notePlain;
+
+    [Header("Options")]
+
+    [Tooltip("The Background Image in SystemContants")] 
+    public Image brightnessImage;
+    public Slider brightnessSlider;
 
     private void Awake()
     {
+        SoundManager.InitializeDictionary();
         LoadTitleMenu();
+    }
+
+    private void Start()
+    {
+        GameManager.manager.levelManager.JumpCanvasAlphaTo(0, playerBlood);
+        GameManager.manager.levelManager.JumpCanvasAlphaTo(0, weaponInfo);
     }
 
     private void Update()
@@ -32,6 +59,9 @@ public class UIManager : MonoBehaviour
         winDisplay.enabled = false;
         loseDisplay.enabled = false;
         pause.enabled = false;
+        characterSelection.enabled = false;
+        saveOption.enabled = false;
+        loadingScreen.enabled = false;
     }
 
     public void LoadTitleMenu()
@@ -73,4 +103,31 @@ public class UIManager : MonoBehaviour
         DisableAll();
         credits.enabled = true;
     }
+
+    public void LoadCharacterSelection()
+    {
+        DisableAll();
+        characterSelection.enabled = true;
+    }
+
+    public void LoadSaveOption()
+    {
+        DisableAll();
+        saveOption.enabled = true;
+    }
+
+    public void LoadLoadingScreen()
+    {
+        DisableAll();
+        loadingScreen.enabled = true;
+    }
+
+    IEnumerator Wait()
+    {
+        //yield on a new YieldInstruction that waits for 5 seconds.
+        yield return new WaitForSeconds(5);
+
+    }
 }
+
+
