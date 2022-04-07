@@ -72,7 +72,7 @@ public class SoundManager : MonoBehaviour
         SetDirectory(Sound.Cork, 0, 0, 1);
         SetDirectory(Sound.CreditMusic, 0, 0, 1);
         SetDirectory(Sound.CharacterSelectionMusic, 0, 0, 1);
-        SetDirectory(Sound.GameplayMusic, 0, 0, 1);
+        SetDirectory(Sound.GameplayMusic, 0, 0, 1f);
         SetDirectory(Sound.GhostAttack, 0, 0, 0.5f);
         SetDirectory(Sound.GhostChasing, 0, 0, 0.5f);
         SetDirectory(Sound.GhostDeath, 0, 0, 0.5f);
@@ -166,6 +166,7 @@ public class SoundManager : MonoBehaviour
 
     public static void PlayMusic(Sound sound)
     {
+        GetAudioClip(sound);
         if (CanPlaySound(sound))
         {
 
@@ -180,11 +181,11 @@ public class SoundManager : MonoBehaviour
             else
             {
                 oneShotMusicAudioSource.Stop();
-                soundLengthDictionary[previousMusic] = 0;
+                //soundLengthDictionary[previousMusic] = 0;
+                if (sound != previousMusic)
+                { soundLengthDictionary[previousMusic] = 0; previousMusic = sound; }
                 oneShotMusicAudioSource.PlayOneShot(GetAudioClip(sound), soundVolumeDictionary[sound]);
                 //oneShotMusicAudioSource.time = musicCutOffDictionary[sound];
-                previousMusic = sound;
-
             }
         }
     }
@@ -561,7 +562,6 @@ public class SoundManager : MonoBehaviour
                     {
                         soundLengthDictionary[sound] = currentArrayAudioClipLength;
                         //soundLengthDictionary[sound] = 0;
-                        //Debug.LogError("playing song");
                         soundTimeDictionary[sound] = Time.time;
                         return true;
                     }

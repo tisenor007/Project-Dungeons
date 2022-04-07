@@ -150,7 +150,7 @@ public class LevelManager : MonoBehaviour
         GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonPreGenerating = true;
         GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonIsGenerating = true;
         GameManager.manager.playerStats.ResetStats();
-        SoundManager.PlayMusic(SoundManager.Sound.GameplayMusic);
+        //SoundManager.PlayMusic(SoundManager.Sound.GameplayMusic);
     }
 
     public void UpdateDungeon()

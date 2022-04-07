@@ -27,6 +27,13 @@ public enum GameState
     LOADINGSCREEN
 }
 
+public enum GamePlayState
+{
+    Default,
+    FloodRoom,
+    BossRoom
+}
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager manager; //singleton inst
@@ -38,6 +45,7 @@ public class GameManager : MonoBehaviour
     public GameObject[] levels;
     public Weapon playerSavedWeapon;
     [HideInInspector] public GameState gameState;
+    [HideInInspector] public GamePlayState gamePlayState;
     [HideInInspector] public int currentLevel = 0;
     [HideInInspector] public GameObject currentPlayerModel;
     [HideInInspector] public PlayerController playerController;
@@ -122,9 +130,21 @@ public class GameManager : MonoBehaviour
                     UpdatePlayerVitalStatusAppearance(characterSelection.isMale, playerStats.IsAlive);
                     playerStats.UpdateWeaponHitArea(characterSelection.isMale);
                     Cursor.visible = false;
-
+                    
+                    switch (gamePlayState)
+                    {
+                        case GamePlayState.Default:
+                            SoundManager.PlayMusic(SoundManager.Sound.GameplayMusic);
+                            break;
+                        case GamePlayState.FloodRoom:
+                            SoundManager.PlayMusic(SoundManager.Sound.FloodTrapMusic);
+                            break;
+                        case GamePlayState.BossRoom:
+                            SoundManager.PlayMusic(SoundManager.Sound.BossMusic);
+                            break;
+                    }
                     SoundManager.PlaySound(SoundManager.Sound.CaveAmbience);
-                    SoundManager.PlayMusic(SoundManager.Sound.GameplayMusic);
+                    //SoundManager.PlayMusic(SoundManager.Sound.GameplayMusic);
                     SoundManager.PlaySound(SoundManager.Sound.WaterDripping);
                     //Debug.LogError("SOUND PLAYED");
                     return;
@@ -220,6 +240,7 @@ public class GameManager : MonoBehaviour
                     if (levels[currentLevel].activeSelf == true && levels[currentLevel].GetComponent<DungeonGenerator>().dungeonGenerated == true) 
                     {
                         levelManager.ChangeGameStateToGamePlay();
+                        gamePlayState = GamePlayState.Default;
                     }
                     return;
                 }

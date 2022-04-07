@@ -342,6 +342,7 @@ public class PlayerController : MonoBehaviour
 
     private void Sprint()
     {
+        if (!IsMoving()) { return; }
         if (movementMode == MovementMode.Jumping) { return; }
         if (isGrounded() == false) { return; }
         if (playerStats.Health <= playerStats.MaxHealth / 4) { movementMode = MovementMode.Running; return; }
