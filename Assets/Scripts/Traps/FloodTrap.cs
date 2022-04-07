@@ -8,6 +8,7 @@ public class FloodTrap : Trap
     [SerializeField] private GameObject breakableDoors;
     private float waterRiseRate = 0.1f;
     private float waterLevel = 0;
+    private bool floodSoundPlaying = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -24,14 +25,17 @@ public class FloodTrap : Trap
                 waterLevel = waterLevel += Time.deltaTime * waterRiseRate;
                 water.transform.position = new Vector3(water.transform.position.x, waterLevel, water.transform.position.z);
                 ReplaceOpenDoors();
-                if (water.transform.position.y >= 5) 
+                if (water.transform.position.y >= 5)
                 { GameManager.manager.playerStats.TakeDamage(GameManager.manager.playerStats.MaxHealth, GameManager.manager.playerStats.transform); }
                 GameManager.manager.playerStats.inWater = true;
+                if (!SoundManager.IsSoundPlaying(SoundManager.Sound.FloodTrapMusic))
+                { SoundManager.PlaySound(SoundManager.Sound.FloodTrapMusic); }
                 break;
             case false:
                 water.SetActive(false);
                 OpenAllBreakableDoors();
                 GameManager.manager.playerStats.inWater = false;
+                { SoundManager.StopOneShotSound(SoundManager.Sound.FloodTrapMusic); }
                 break;
         }
 

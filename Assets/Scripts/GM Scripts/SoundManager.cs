@@ -55,6 +55,9 @@ public class SoundManager : MonoBehaviour
         CreditMusic,
         Cork,
         PaperAway,
+        FloodTrapMusic,
+        SpikeWoodBreak,
+        BossMusic
     }
 
     public static void InitializeDictionary()
@@ -88,6 +91,9 @@ public class SoundManager : MonoBehaviour
         SetDirectory(Sound.ZombieChasing, 0, 0, 0.5f);
         SetDirectory(Sound.ZombieDeath, 0, 0, 0.5f);
         SetDirectory(Sound.ZombieIdle, 0, 0, 0.5f);
+        SetDirectory(Sound.FloodTrapMusic, 0, 0, 1f);
+        SetDirectory(Sound.SpikeWoodBreak, 0, 0, 1f);
+        SetDirectory(Sound.BossMusic, 0, 0, 1f);
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
     }
@@ -181,6 +187,18 @@ public class SoundManager : MonoBehaviour
 
             }
         }
+    }
+
+    public static void StopOneShotSound(Sound sound)
+    {
+        oneShotAudioSource.clip = GetAudioClip(sound);
+        oneShotAudioSource.Stop();
+    }
+    public static bool IsSoundPlaying(Sound sound)
+    {
+        oneShotAudioSource.clip = GetAudioClip(sound);
+        if (oneShotAudioSource.isPlaying) { return true; }
+        return false;
     }
 
     private static bool CanPlaySound(Sound sound)
@@ -533,6 +551,59 @@ public class SoundManager : MonoBehaviour
                 }
                 else { return true; }
 
+            case Sound.FloodTrapMusic:
+                if (soundTimeDictionary.ContainsKey(sound))
+                {
+                    if (gameManager.gameState != GameState.GAMEPLAY) { return false; }
+                    float lastTimePlayed = soundTimeDictionary[sound];
+                    float delayTimerMax = soundLengthDictionary[sound];
+                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    {
+                        soundLengthDictionary[sound] = currentArrayAudioClipLength;
+                        //soundLengthDictionary[sound] = 0;
+                        //Debug.LogError("playing song");
+                        soundTimeDictionary[sound] = Time.time;
+                        return true;
+                    }
+                    else { return false; }
+                }
+                else { return true; }
+
+            case Sound.SpikeWoodBreak:
+                if (soundTimeDictionary.ContainsKey(sound))
+                {
+                    if (gameManager.gameState != GameState.GAMEPLAY) { return false; }
+                    float lastTimePlayed = soundTimeDictionary[sound];
+                    float delayTimerMax = soundLengthDictionary[sound];
+                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    {
+                        soundLengthDictionary[sound] = currentArrayAudioClipLength;
+                        //soundLengthDictionary[sound] = 0;
+                        //Debug.LogError("playing song");
+                        soundTimeDictionary[sound] = Time.time;
+                        return true;
+                    }
+                    else { return false; }
+                }
+                else { return true; }
+
+            case Sound.BossMusic:
+                if (soundTimeDictionary.ContainsKey(sound))
+                {
+                    if (gameManager.gameState != GameState.GAMEPLAY) { return false; }
+                    float lastTimePlayed = soundTimeDictionary[sound];
+                    float delayTimerMax = soundLengthDictionary[sound];
+                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    {
+                        soundLengthDictionary[sound] = currentArrayAudioClipLength;
+                        //soundLengthDictionary[sound] = 0;
+                        //Debug.LogError("playing song");
+                        soundTimeDictionary[sound] = Time.time;
+                        return true;
+                    }
+                    else { return false; }
+                }
+                else { return true; }
 
         }
     }

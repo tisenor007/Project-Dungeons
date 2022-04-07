@@ -6,6 +6,7 @@ public class SpikeTrap : Trap
 {
     [SerializeField] private GameObject floor;
     [SerializeField] private GameObject planks;
+    private bool soundPlayed = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +21,8 @@ public class SpikeTrap : Trap
             case true:
                 floor.SetActive(false);
                 planks.SetActive(true);
+                if (soundPlayed == false)
+                { SoundManager.PlaySound(SoundManager.Sound.SpikeWoodBreak); soundPlayed = true; }
                 break;
             case false:
                 floor.SetActive(true);

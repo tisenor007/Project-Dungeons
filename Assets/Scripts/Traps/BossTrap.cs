@@ -14,6 +14,7 @@ public class BossTrap : Trap
             case true:
                 thisStructure.trapPlayer = true;
                 bossObj.SetActive(true);
+                SoundManager.PlayMusic(SoundManager.Sound.BossMusic);
                 break;
             case false:
                 thisStructure.trapPlayer = false;
