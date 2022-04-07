@@ -129,7 +129,7 @@ public class PlayerController : MonoBehaviour
 
         //animation movement controller
         {
-            CheckPlayerInputandPerformPlayerActions();
+            if (GameManager.manager.gameState == GameState.GAMEPLAY) { UpdatePlayerInput(); }
             if (Time.time > jumpTimer && isGrounded() == false) { movementMode = MovementMode.Falling; }
             animator.SetFloat("Velocity", moveIntensity);
             animator.SetLayerWeight(1, actionBlend);
@@ -177,7 +177,7 @@ public class PlayerController : MonoBehaviour
         playerStats = newplayerStats;
     }
 
-    private void CheckPlayerInputandPerformPlayerActions()
+    private void UpdatePlayerInput()
     {
         if (Input.GetKey(forwardInput) == true) { Move(MovementDirection.Forward); }
         if (Input.GetKey(backwardInput) == true) { Move(MovementDirection.Backward); }

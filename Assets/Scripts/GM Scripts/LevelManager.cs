@@ -80,7 +80,6 @@ public class LevelManager : MonoBehaviour
     public void ChangeGameStateToGamePlay()
     {
         GameManager.manager.ChangeState(GameState.GAMEPLAY);
-        SoundManager.PlayMusic(SoundManager.Sound.GameplayMusic);
     }
 
     public void ChangeGameStateToNewGame()
@@ -125,7 +124,7 @@ public class LevelManager : MonoBehaviour
 
     public void ChangeGameStateToCharacterSelection()
     {
-        StartCoroutine(LoadCharacterSelectioScreen());
+        StartCoroutine(LoadCharacterSelectionScreen());
     }
 
     public void ChangeGameStateToSaveOption()
@@ -151,6 +150,7 @@ public class LevelManager : MonoBehaviour
         GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonPreGenerating = true;
         GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonIsGenerating = true;
         GameManager.manager.playerStats.ResetStats();
+        SoundManager.PlayMusic(SoundManager.Sound.GameplayMusic);
     }
 
     public void UpdateDungeon()
@@ -315,7 +315,7 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    IEnumerator LoadCharacterSelectioScreen()
+    IEnumerator LoadCharacterSelectionScreen()
     {
         SoundManager.PlaySound(SoundManager.Sound.CannonShot);
         //Debug.LogError("sound started");

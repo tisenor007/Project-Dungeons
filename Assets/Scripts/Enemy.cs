@@ -199,11 +199,26 @@ public class Enemy : CharacterStats
 
     protected void DropItemOnDeath()
     {
+        int xDropOffset = 0;
+        int zDropOffset = 0;
+
+        //if no drops are available will not drop
         if (availableDrops.Length <=0) { return; }
+
+        //decides by chance if it will drop
         int dropDecision = ChooseNumbByChance(0, 1, itemDropChance);
         if (dropDecision == 1) { return; }
+
+        //decideds direction the item will drop
+        int dropDirection = UnityEngine.Random.Range(0, 3);
+        if (dropDirection <= 0) { xDropOffset = 1; zDropOffset = 0; }
+        else if(dropDirection == 1) { xDropOffset = -1; zDropOffset = 0; }
+        else if (dropDirection == 2) { xDropOffset = 0; zDropOffset = 1; }
+        else if (dropDirection >= 3) { xDropOffset = 0; zDropOffset = -1; }
+
+        //selects item from index and drops it
         int selectedItem = UnityEngine.Random.Range(0, availableDrops.Length);
-        Instantiate(availableDrops[selectedItem], new Vector3(transform.position.x, transform.position.y + 1, transform.position.z), Quaternion.identity);
+        Instantiate(availableDrops[selectedItem], new Vector3(transform.position.x + xDropOffset, transform.position.y + 1, transform.position.z + zDropOffset), Quaternion.identity);
     }
 
     public void PlayAudio(Enemy enemy)
