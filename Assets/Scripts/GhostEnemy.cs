@@ -24,7 +24,8 @@ public class GhostEnemy : Enemy
         ghostBody = transform.GetChild(1);
 
         this.viewDistance = 10;
-        this.Health = 50;
+        maxHealth = 25; 
+        this.health = maxHealth;
         this.attackSpeed = 1.0f;
         this.damage = 5;
         this.speed = 6.0f;
@@ -93,7 +94,7 @@ public class GhostEnemy : Enemy
     public override void Idle()
     {
         Bobbing();
-        playerLocation = playerStats.gameObject.transform.position;
+        playerLocation = GameManager.manager.playerStats.gameObject.transform.position;
         enemyNavMeshAgent.speed = speed;
         transform.Translate(Vector3.forward * Time.deltaTime * speed);
         Rotate();

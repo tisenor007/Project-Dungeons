@@ -21,8 +21,11 @@ public class UIManager : MonoBehaviour
     [Tooltip("any button that calls load")]
     public Button[] allLoadButtons;
     public Button[] allNextLevelButtons;
+
+    [Header("Player HUD")]
+    public Canvas weaponInfo;
+    public Canvas playerBlood;
     public Canvas notePlain;
-    public Image playerBleeding;
 
     [Header("Options")]
 
@@ -34,6 +37,12 @@ public class UIManager : MonoBehaviour
     {
         SoundManager.InitializeDictionary();
         LoadTitleMenu();
+    }
+
+    private void Start()
+    {
+        GameManager.manager.levelManager.JumpCanvasAlphaTo(0, playerBlood);
+        GameManager.manager.levelManager.JumpCanvasAlphaTo(0, weaponInfo);
     }
 
     private void Update()
@@ -121,9 +130,4 @@ public class UIManager : MonoBehaviour
     }
 }
 
-[System.Serializable]
-public class GUI
-{
-    
-}
 

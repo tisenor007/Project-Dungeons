@@ -6,9 +6,9 @@ using UnityEngine.UI;
 public class PlayerStats : CharacterStats
 {
     //equiment
-    public Collider weaponHitArea;
-    public GameObject shield;
     private GameObject weaponObject;
+    public Collider weaponHitAreaCollider;
+    [HideInInspector] public bool inWater = false;
 
     //initialization
     [SerializeField] private GameObject maleHand;
@@ -28,46 +28,30 @@ public class PlayerStats : CharacterStats
     private float restStationHealTimer = 0;
     private GameObject activePlayerHand;
 
+    private float damageValue = 0;
+    private int savedHealth;
+    
+
+    [SerializeField] private HitArea hA;
+
     public Vector3 RespawnPos { get { return respawnPos; } set { respawnPos = value; } }
     public GameObject WeaponObject { get { return weaponObject; } }
 
     private void Start()
     {
-        currentWeapon.StartSetStats(this);
+        maxHealth = 100;
+        //set up weapon
+        if (currentWeaponType == null) currentWeaponType = defaultWeapon;
+
+        damage = currentWeaponType.damage;
+        attackSpeed = currentWeaponType.attackSpeed;
     }
 
     private void Update()
     {
-        healthBar.value = Health;
-        healthText.text = "" + Health;
+        UpdateHud();
 
         if (healing) { HealAtRestStation(); }
-    }
-
-    public void Attack() 
-    { 
-        if (shield.activeSelf == true) { return; }
-        if (hitArea.activeSelf == true) { return; }
-        hitArea.SetActive(true); 
-    }
-
-    public void StopAttacking() 
-    {
-        if (hitArea == null) { return; }
-        if (hitArea.activeSelf == false) { return; }
-        hitArea.SetActive(false);
-    }
-
-    public void Block() 
-    { 
-        if (shield.activeSelf == true) { return; }
-        shield.SetActive(true);
-    }
-
-    public void StopBlocking() 
-    { 
-        if (shield.activeSelf == false) { return; }
-        shield.SetActive(false);
     }
 
     #region Stat Modification
@@ -83,15 +67,15 @@ public class PlayerStats : CharacterStats
         transform.parent.localEulerAngles = Vector3.zero;
 
         playerController.StopAttacking();
-        playerController.StopBlocking();
+        EquipWeapon(DefaultWeaponType, false);
         healing = false;
+        inWater = false;
     }
 
     public override void TakeDamage(int damage, Transform character)
     {
         base.TakeDamage(damage, character);
         DamageFeedback(character, "-" + damage, Color.red);
-        GameManager.manager.levelManager.FlashPlayerBleedingUI();
         if (health <= 0)
         {
             GameManager.manager.levelManager.ChangeGameStateToLose();
@@ -108,58 +92,95 @@ public class PlayerStats : CharacterStats
     #endregion
 
     #region Equip Modification
-    public void EquipWeapon(GameObject newWeaponObj, bool discardWeapon)
+    public void EquipWeapon(Weapon weaponType, bool discardWeapon)
     {
-        //get player hands
-        Transform playerHands = weaponObject.transform.parent;
-
+        //get hand pos from old weapon
+        Transform playerHand = weaponObject.transform.parent;
+        
+        //drop an interteractable?
         if (discardWeapon)
         {
             DiscardWeapon();
         }
-        else 
+        else
         {
             RemoveWeapon();
         }
 
-        weaponObject = Instantiate(newWeaponObj, playerHands);
+        //create Weapon in Players hand // replacing old weapon
+        weaponObject = Instantiate(weaponType.prefab, playerHand);
 
+        //get hit area of new weapon
+        HitArea hitArea = weaponObject.transform.GetChild(0).GetComponentInChildren<HitArea>();
+
+        //resize weapon accronding to size?
         weaponObject.transform.localScale = new Vector3
         (1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.x,
         1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.y,
         1 / GameManager.manager.playerAndCamera.transform.GetChild(0).transform.GetChild(0).localScale.z);
         
+        //set player stats
+        // damage
+        damage = weaponType.damage;
 
-        HitArea hitArea = weaponObject.transform.GetChild(0).GetComponentInChildren<HitArea>();
+        // attack speed
+        attackSpeed = weaponType.attackSpeed;
 
-        hitArea.PlayerStats = this;
-        hitArea.PlayerController = gameObject.GetComponent<PlayerController>();
-        weaponHitArea = hitArea.gameObject.GetComponent<Collider>();
+        // item type
+        currentWeaponType = weaponType;
 
-        weaponObject.transform.parent = activePlayerHand.transform;
+        //set player hit area
+        weaponHitAreaCollider = hitArea.gameObject.GetComponent<Collider>();
+        //hitArea.SetupPlayerFields(this.gameObject);
+
+        Debug.Log($"Set {gameObject.name}, damage = {damage}, speed = {attackSpeed}, type = {currentWeaponType}.");
     }
 
     private void RemoveWeapon()
     {
-        if (currentWeapon == null) return;
+        if (currentWeaponType == null) return;
 
         Destroy(weaponObject);
     }
 
     public void DiscardWeapon() // should be replaced by unequip if inventory is established
     {
-        if (currentWeapon == null) return;
+        if (currentWeaponType == null) return;
 
-        GameManager.manager.levelManager.CreateInteractable(weaponObject,
-            transform.position, true, Color.red, CurrentWeapon);
+        GameObject newInteractable = GameManager.manager.levelManager.CreateInteractable(weaponObject,
+            transform.position, true, Color.red, CurrentWeaponType);
+
+        Physics.IgnoreCollision(this.transform.GetComponent<BoxCollider>(), newInteractable.GetComponent<BoxCollider>(), true);
     }
     #endregion
 
     #region tools
     public void UpdateHud()
     {
-        healthBar.value = Health;
-        healthText.text = "" + Health;
+        //gets
+        LevelManager lM = GameManager.manager.levelManager;
+        UIManager uM = GameManager.manager.uiManager;
+
+        //update health
+        healthBar.value = health;
+        healthText.text = "" + health;
+
+        //meta feedback
+        if (health == savedHealth) return;
+
+        savedHealth = health;
+
+        int[] damageThresholds = { 75, 50, 25, 15}; // limits at which GUI reacts
+
+        //calc
+        if (health > damageThresholds[0]) damageValue = 0;
+        else if (health > damageThresholds[1]) damageValue = .20f;
+        else if (health > damageThresholds[2]) damageValue = .40f;
+        else if (health > damageThresholds[3]) damageValue = .60f;
+        else if (health < damageThresholds[3]) damageValue = .80f;
+
+        Debug.LogWarning($"updating meta UI health {health}, bar {healthBar}, text {healthText}, Damage Value {damageValue}");
+        lM.JumpCanvasAlphaTo(damageValue, uM.playerBlood);
     }
 
     public float GetHealthDividedMaxHealth()
@@ -172,27 +193,21 @@ public class PlayerStats : CharacterStats
         if (isMale)
         {
             activePlayerHand = maleHand;
-            maleHand.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Collider>().enabled = true;
-            femaleHand.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Collider>().enabled = false;
         }
         else if (!isMale)
         {
             activePlayerHand = femaleHand;
-            maleHand.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Collider>().enabled = false;
-            femaleHand.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Collider>().enabled = true;
         }
 
         if (activePlayerHand == null) { return; }
-        weaponHitArea = activePlayerHand.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Collider>();
 
-        if (weaponHitArea == null) { return; }
-        weaponObject = weaponHitArea.transform.parent.parent.gameObject; // parent.parent is to get: hitarea > handpos > weapon root
-    }
+        weaponHitAreaCollider = activePlayerHand.transform.GetChild(0).GetChild(0).GetChild(0).GetComponent<Collider>();
 
-    public void EquipDefaultWeapon(bool inGamePickup)
-    {
-        DefaultWeapon.Equip(DefaultWeapon.weaponObject, GameManager.manager.playerAndCamera.transform.GetChild(0).gameObject, inGamePickup);
+        if (weaponHitAreaCollider == null) { return; }
+        
+        weaponObject = weaponHitAreaCollider.transform.parent.parent.gameObject; // parent.parent is to get: hitarea > handpos > weapon root
     }
+    
     #endregion
 
     private void HealAtRestStation()

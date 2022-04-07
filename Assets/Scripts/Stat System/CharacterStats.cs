@@ -9,20 +9,20 @@ public abstract class CharacterStats : MonoBehaviour
     [SerializeField] protected float attackSpeed = 0.5f;
 
     [Header("Equipment")]
-    [SerializeField] protected Weapon currentWeapon;
+    [SerializeField] protected Weapon currentWeaponType;
     [SerializeField] protected Weapon defaultWeapon;
 
-    public int Health { get => health; set => health = value; }
+    public int Health { get => health;}
     public int MaxHealth { get { return maxHealth; } }
     public bool IsAlive { get => isAlive; }
-    public int Damage { get => damage; set => damage = value; }
-    public float AttackSpeed { get => attackSpeed; set => attackSpeed = value; }
-    public Weapon CurrentWeapon { get => currentWeapon; set => currentWeapon = value; }
-    public Weapon DefaultWeapon { get => defaultWeapon; set => defaultWeapon = value; }
+    public int Damage { get => damage;}
+    public float AttackSpeed { get => attackSpeed; }
+    public Weapon CurrentWeaponType { get => currentWeaponType; }
+    public Weapon DefaultWeaponType { get => defaultWeapon; }
 
     private void Start()
     {
-        defaultWeapon = currentWeapon;
+        defaultWeapon = currentWeaponType;
     }
 
     public virtual void ResetStats()
@@ -34,10 +34,10 @@ public abstract class CharacterStats : MonoBehaviour
 
     public void ResetWeapon()
     {
-        currentWeapon = defaultWeapon;
+        currentWeaponType = defaultWeapon;
     }
 
-    public virtual void TakeDamage(int damage, Transform character)
+    public virtual void TakeDamage(int damage, Transform character = null)
     {
         if (character.tag == "Enemy") { SoundManager.PlaySound(SoundManager.Sound.Punches, transform.position); }
 
@@ -64,7 +64,9 @@ public abstract class CharacterStats : MonoBehaviour
 
     protected virtual void DamageFeedback(Transform character, string message, Color color)
     {
-        GameManager.manager.levelManager.CreatePopUp(message, character.transform.position, color);
+        LevelManager lM = GameManager.manager.levelManager;
+
+        lM.CreatePopUp(message, character.position, color);
     }
 
     protected void HealFeedback(Transform character, string message, Color color)

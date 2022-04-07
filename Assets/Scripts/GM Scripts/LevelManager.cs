@@ -10,23 +10,46 @@ public class LevelManager : MonoBehaviour
     public int activeScreen;
 
     [SerializeField] private GameObject popUpPrefab;
-    private static float creditsBottomPos = 2800;
-    private static float creditsTopPos = -1425;
-    private static float creditsBeginPos = -500;
+    private static float creditsBottomPos = 2825;
+    private static float creditsTopPos = -2125;
+    private static float creditsBeginPos = -750;
     private float creditsYPos = creditsBeginPos;
     private float creditsScrollRate = 100;
     private Canvas notePlain;
     private Text noteWriting;
+    private Color weaponInfoControl = new Color();
+    private Color alphaValueColour;
+    [SerializeField] private float weaponDisplayTimer = 3;
+
+    private StoryManager story;
+
+    public StoryManager Story { get { return story; } }
+    public float WeaponDisplayTimer { set { weaponDisplayTimer = value; } }
 
     private void Start()
     {
+        //setting up Notes/story
         notePlain = GameManager.manager.uiManager.notePlain;
         noteWriting = notePlain.transform.GetChild(0).GetComponentInChildren<Text>();
-        GameManager.manager.uiManager.playerBleeding.color = new Color(100, 0, 0, 0);
+        story = transform.parent.GetComponentInChildren<StoryManager>();
     }
 
     public void Update()
     {
+        //ui
+        weaponInfoControl = GameManager.manager.uiManager.weaponInfo.transform.GetChild(0).GetComponent<Image>().color;
+
+        if (weaponInfoControl.a >= 1) // 1 is the max value of alpha
+        {
+            weaponDisplayTimer -= 1 * Time.deltaTime;
+        }
+        
+        if (weaponDisplayTimer <= 0)
+        { 
+            JumpCanvasAlphaTo(0, GameManager.manager.uiManager.weaponInfo);
+        }
+
+
         if (GameManager.manager.uiManager.credits.enabled == false && creditsYPos != creditsBeginPos)
         {
             creditsYPos = creditsBeginPos;
@@ -42,6 +65,7 @@ public class LevelManager : MonoBehaviour
     //buttons
     public void ButtonStartNewGame()
     {
+        SoundManager.PlaySound(SoundManager.Sound.CannonShot);
         ChangeGameStateToGamePlay();
         Debug.LogWarning("SetupGUI");
         //game set up goes here
@@ -58,13 +82,15 @@ public class LevelManager : MonoBehaviour
         GameManager.manager.ChangeState(GameState.GAMEPLAY);
     }
 
-    public void ChangeGameStateToNewGame(Button playButton)
+    public void ChangeGameStateToNewGame()
     {
-        StartCoroutine(LoadGameplay(playButton)); // run code in here in LoadGameplay()
+        StartCoroutine(LoadGameplay());
+        
     }
 
     public void ProgressLevel()
     {
+        GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
         if (GameManager.manager.currentLevel != GameManager.manager.levels.Length - 1)
         {
             SwitchLevel(GameManager.manager.currentLevel + 1);
@@ -96,9 +122,9 @@ public class LevelManager : MonoBehaviour
         GameManager.manager.ChangeState(GameState.CREDITS);
     }
 
-    public void ChangeGameStateToCharacterSelection(Button playButton)
+    public void ChangeGameStateToCharacterSelection()
     {
-        StartCoroutine(LoadCharacterSelectioScreen(playButton));
+        StartCoroutine(LoadCharacterSelectionScreen());
     }
 
     public void ChangeGameStateToSaveOption()
@@ -113,7 +139,6 @@ public class LevelManager : MonoBehaviour
 
     public void SwitchLevel(int desiredLevel)
     {
-        GameManager.manager.ChangeState(GameState.GAMEPLAY);
         GameManager.manager.ResetScene();
 
         foreach (GameObject level in GameManager.manager.levels)
@@ -122,8 +147,10 @@ public class LevelManager : MonoBehaviour
         }
 
         GameManager.manager.currentLevel = desiredLevel;
+        GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonPreGenerating = true;
         GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonIsGenerating = true;
-        GameManager.manager.playerAndCamera.transform.GetChild(0).GetComponent<PlayerStats>().ResetStats();
+        GameManager.manager.playerStats.ResetStats();
+        SoundManager.PlayMusic(SoundManager.Sound.GameplayMusic);
     }
 
     public void UpdateDungeon()
@@ -153,7 +180,7 @@ public class LevelManager : MonoBehaviour
         popUp.SetUp(message, color);
     }
 
-    public void CreateInteractable(GameObject objectBecomingInteractable, Vector3 newPosition, bool floating, Color lightColour, Item itemType = null)
+    public GameObject CreateInteractable(GameObject objectBecomingInteractable, Vector3 newPosition, bool floating, Color lightColour, Item itemType = null)
     {
         GameObject interactableObject = new GameObject($"Interactable {objectBecomingInteractable.name}");
         Interactable interactableSetup = interactableObject.AddComponent(typeof(Interactable)) as Interactable;
@@ -172,11 +199,13 @@ public class LevelManager : MonoBehaviour
         // object insertion
         objectBecomingInteractable.transform.SetPositionAndRotation(Vector3.zero, Quaternion.LookRotation(Vector3.forward, Vector3.up));
         objectBecomingInteractable.transform.SetParent(interactableObject.transform);
-
-        // FIX PLAYER SCALE x2 reducing size to stop object doubling in size every unequip
-        objectBecomingInteractable.transform.localScale = Vector3.one;
+        
+        /*// FIX PLAYER SCALE x2 reducing size to stop object doubling in size every unequip
+        objectBecomingInteractable.transform.localScale = Vector3.one;*/
 
         interactableObject.transform.position = newPosition;
+
+        return interactableObject;
     } 
 
     //messages
@@ -191,6 +220,7 @@ public class LevelManager : MonoBehaviour
     {
         notePlain.enabled = false;
         noteWriting.text = null;
+        SoundManager.PlaySound(SoundManager.Sound.PaperAway);
     }
 
     //misc commands
@@ -240,7 +270,7 @@ public class LevelManager : MonoBehaviour
 
     private void ScrollCredits()
     {
-        int childOrderNum = 0;
+        int childOrderNum = 2;
         GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position = new Vector3(GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.x, creditsYPos, GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.z);
 
         if (GameManager.manager.uiManager.credits.transform.GetChild(childOrderNum).transform.position.y >= creditsBottomPos) { creditsYPos = creditsTopPos; }
@@ -250,14 +280,43 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    public void FlashPlayerBleedingUI()
+    // depricated
+    /*public void FlashPlayerBleedingUI()
     {
-        GameManager.manager.uiManager.playerBleeding.color = new Color(100, 0, 0, 100);
+        GameManager.manager.uiManager.playerBleeding.color = new Color(0, 0, 0, 100); // setting alpha to visible
         StartCoroutine("WaitAndDisablePlayerBleeding");
-    }
-    IEnumerator LoadCharacterSelectioScreen(Button playButton)
+    }*/
+
+    public void JumpCanvasAlphaTo(float value, Canvas inputCanvas)
     {
-        playButton.interactable = false;
+        Image[] canvasImages = inputCanvas.gameObject.GetComponentsInChildren<Image>();
+        Text[] canvasText = inputCanvas.gameObject.GetComponentsInChildren<Text>();
+
+        if (canvasImages.Length >= 1)
+        {
+            for (int i = 0; i < canvasImages.Length; i++)
+            {
+                Image image = inputCanvas.gameObject.GetComponentsInChildren<Image>()[i];
+                alphaValueColour = new Color(image.color.r, image.color.g, image.color.b, value);
+                inputCanvas.gameObject.GetComponentsInChildren<Image>()[i].color = alphaValueColour;
+                Debug.LogWarning($"fading {image.gameObject.name} to {value}");
+            }
+        }
+
+        if (canvasText.Length >= 1)
+        {
+            for (int i = 0; i < canvasText.Length; i++)
+            {
+                Text text = inputCanvas.gameObject.GetComponentsInChildren<Text>()[i];
+                alphaValueColour = new Color(text.color.r, text.color.g, text.color.b, value);
+                inputCanvas.gameObject.GetComponentsInChildren<Text>()[i].color = alphaValueColour;
+                Debug.LogWarning($"fading {text.gameObject.name} to {value}");
+            }
+        }
+    }
+
+    IEnumerator LoadCharacterSelectionScreen()
+    {
         SoundManager.PlaySound(SoundManager.Sound.CannonShot);
         //Debug.LogError("sound started");
         yield return new WaitForSecondsRealtime(4.0f);
@@ -266,34 +325,36 @@ public class LevelManager : MonoBehaviour
         //SoundManager.PlayMusic(SoundManager.Sound.CharacterSelectionMusic);
     }
 
-    IEnumerator LoadGameplay(Button playButton)
+    IEnumerator LoadGameplay()
     {
-        playButton.interactable = false;
         SoundManager.PlaySound(SoundManager.Sound.CannonShot);
         //Debug.LogError("sound started");
         yield return new WaitForSecondsRealtime(4.0f);
         //Debug.LogError("sound over");
         GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
         SwitchLevel(0);
-        GameManager.manager.playerStats.EquipDefaultWeapon(false);
+    }
+    public float GetBrightnessSliderValue()
+    {
+        return GameManager.manager.uiManager.brightnessSlider.value;
     }
 
-    IEnumerator WaitAndDisablePlayerBleeding()
-    {
-        yield return new WaitForSeconds(.3f);
-        GameManager.manager.uiManager.playerBleeding.color = new Color (100,0,0,0);
-    }
     #endregion
 
     #region Options
-    public void BrightnessSlider()
+    public void SetBrightness(float brightnessValue)
     {
         // sets the alpha of an image to the value of a slider
         Color newAlpha = GameManager.manager.uiManager.brightnessImage.color;
-        newAlpha.a = GameManager.manager.uiManager.brightnessSlider.value / 100;
+        newAlpha.a = brightnessValue;
         GameManager.manager.uiManager.brightnessImage.color = newAlpha;
 
-        Debug.Log($"newAlpha: {newAlpha.a}, Image colour: {GameManager.manager.uiManager.brightnessImage.color}");
+        //Debug.Log($"newAlpha: {newAlpha.a}, Image colour: {GameManager.manager.uiManager.brightnessImage.color}");
+    }
+
+    public void SetVolume(float volumeValue)
+    {
+        AudioListener.volume = volumeValue;
     }
     #endregion
 }

@@ -42,6 +42,8 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public GameObject currentPlayerModel;
     [HideInInspector] public PlayerController playerController;
     private GameState savedScreenState;
+    private string dataPathSaveLoadDIT = "/savedInfo.dat";
+    
     // title acts as default state
     private bool gameplay;
     private bool paused;
@@ -52,6 +54,7 @@ public class GameManager : MonoBehaviour
     [Space]
     [SerializeField] private TextMeshProUGUI saveText;
     [SerializeField] private TextMeshProUGUI loadText;
+    
     //Create a new object within the player, one will be male, the other female
     [SerializeField] private GameObject malePlayer;
     [SerializeField] private GameObject femalePlayer;
@@ -83,11 +86,9 @@ public class GameManager : MonoBehaviour
         Controls();
 
         FadeText();
-
-        levelManager.LoadButtonFade(File.Exists(Application.persistentDataPath + "/savedInfo.dat"));
+        levelManager.LoadButtonFade(File.Exists(Application.persistentDataPath + dataPathSaveLoadDIT));
         levelManager.NextLevelButtonFade(currentLevel);
         levelManager.UpdateDungeon();
-        AudioListener.volume = 0.25f;
 
         switch (gameState)
         {
@@ -259,9 +260,11 @@ public class GameManager : MonoBehaviour
         if (gameState == GameState.WIN) { return; }
         if (gameState == GameState.SAVEOPTION) { return; }
         if (gameState == GameState.OPTIONS) { return; }
+        if (gameState == GameState.CHARACTERSELECTION) { return; }
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            if (gameState == GameState.PAUSE) { levelManager.ChangeGameStateToGamePlay(); return; }
             levelManager.ChangeGameStateToPause();
         }
         
@@ -270,19 +273,21 @@ public class GameManager : MonoBehaviour
     public void Save() // canned file save method
     {
         BinaryFormatter bf = new BinaryFormatter();
-        FileStream file = File.Create(Application.persistentDataPath + "/savedInfo.dat");
+        FileStream file = File.Create(Application.persistentDataPath + dataPathSaveLoadDIT);
 
         SaveInfo savedInfo = new SaveInfo();
         savedInfo.scene = SceneManager.GetActiveScene().buildIndex;
         savedInfo.activeScreen = levelManager.activeScreen;
         savedInfo.gameState = gameState;
         savedInfo.health = playerStats.Health;
-        savedInfo.JsonWeapon = JsonUtility.ToJson(playerStats.CurrentWeapon);
+        savedInfo.JsonWeapon = JsonUtility.ToJson(playerStats.CurrentWeaponType);
         savedInfo.genderStatus = characterSelection.isMale;
         savedInfo.playerSpawnPosX = playerAndCamera.transform.GetChild(0).gameObject.transform.position.x;
         savedInfo.playerSpawnPosY = playerAndCamera.transform.GetChild(0).gameObject.transform.position.y;
         savedInfo.playerSpawnPosZ = playerAndCamera.transform.GetChild(0).gameObject.transform.position.z;
         savedInfo.SaveDungeon(levels[currentLevel].GetComponent<DungeonGenerator>().structures);
+        savedInfo.savedBrightness = levelManager.GetBrightnessSliderValue();
+        savedInfo.savedVolume = AudioListener.volume;
 
         saveText.CrossFadeAlpha(1, .1f, true);
         StartCoroutine(WaitToFadeText("save"));
@@ -297,7 +302,7 @@ public class GameManager : MonoBehaviour
         if (File.Exists(Application.persistentDataPath + "/savedInfo.dat"))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            FileStream file = File.Open(Application.persistentDataPath + "/savedInfo.dat", FileMode.Open);
+            FileStream file = File.Open(Application.persistentDataPath + dataPathSaveLoadDIT, FileMode.Open);
             SaveInfo loadedInfo = (SaveInfo)bf.Deserialize(file);
             file.Close();
 
@@ -307,15 +312,16 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(loadedInfo.scene);
             loadedInfo.LoadSavedDungeon(ref currentLevel, levels);
             levelManager.activeScreen = loadedInfo.activeScreen;
-            //gameState = loadedInfo.gameState;
-            levelManager.ChangeGameStateToLoadingScreen();
-            playerStats.Health = loadedInfo.health;
+            levelManager.ChangeGameStateToLoadingScreen(); // load scene
+            playerStats.TakeDamage(playerStats.MaxHealth - loadedInfo.health, playerStats.transform); // load player health (player should start at max)
             characterSelection.isMale = loadedInfo.genderStatus;
             playerStats.RespawnPos = new Vector3(loadedInfo.playerSpawnPosX, loadedInfo.playerSpawnPosY, loadedInfo.playerSpawnPosZ);
             playerAndCamera.transform.GetChild(0).position = playerStats.RespawnPos;
             characterSelection.SetPlayerModel();
             JsonUtility.FromJsonOverwrite(loadedInfo.JsonWeapon, playerSavedWeapon);
-            playerSavedWeapon.Equip(playerSavedWeapon.weaponObject, playerAndCamera.transform.GetChild(0).gameObject, false);
+            playerSavedWeapon.Equip(playerSavedWeapon.prefab, playerAndCamera.transform.GetChild(0).gameObject, false);
+            levelManager.SetBrightness(loadedInfo.savedBrightness);
+            levelManager.SetVolume(loadedInfo.savedVolume);
             loadText.CrossFadeAlpha(1, .1f, true);
             StartCoroutine(WaitToFadeText("load"));
         }
@@ -340,7 +346,6 @@ public class GameManager : MonoBehaviour
 
     public void ResetScene()
     {
-        playerStats.EquipDefaultWeapon(false);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
 
@@ -392,6 +397,8 @@ class SaveInfo
     public float playerSpawnPosX;
     public float playerSpawnPosY;
     public float playerSpawnPosZ;
+    public float savedBrightness;
+    public float savedVolume;
     public int savedLevel;
     public List<DungeonGenerator.StructureType> savedStructureTypes = new List<DungeonGenerator.StructureType>();
     public List<int> savedStructureVariations = new List<int>();

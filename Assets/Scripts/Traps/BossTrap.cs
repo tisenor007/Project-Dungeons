@@ -9,14 +9,26 @@ public class BossTrap : Trap
     // Update is called once per frame
     void Update()
     {
-        if (bossObj.GetComponent<Boss>().IsAlive == false) { thisStructure.trapPlayer = false; }
+        switch (trapTriggered)
+        {
+            case true:
+                thisStructure.trapPlayer = true;
+                bossObj.SetActive(true);
+                SoundManager.PlayMusic(SoundManager.Sound.BossMusic);
+                break;
+            case false:
+                thisStructure.trapPlayer = false;
+                bossObj.SetActive(false);
+                break;
+        }
+        if (bossObj.GetComponent<Boss>().IsAlive == false) { trapTriggered = false; }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
-            if (bossObj.GetComponent<Boss>().IsAlive == true) { thisStructure.trapPlayer = true; bossObj.SetActive(true); }
+            if (bossObj.GetComponent<Boss>().IsAlive == true) { trapTriggered = true; }
         }
     }
 }

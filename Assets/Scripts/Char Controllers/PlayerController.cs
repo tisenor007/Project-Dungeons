@@ -26,11 +26,20 @@ public class PlayerController : MonoBehaviour
         Jumping,
         Falling
     }
+
     private enum BlendState
     {
         Idle_Running_Sprinting,
         Jumping,
         Falling
+    }
+
+    private enum PlayerWeaponIndex
+    {
+        Knuckles,
+        Dagger,
+        Cutlass,
+        Club
     }
 
     [Header("Interaction")]
@@ -51,18 +60,24 @@ public class PlayerController : MonoBehaviour
     private KeyCode jumpInput = KeyCode.Space;
     private KeyCode sprintInput = KeyCode.LeftShift;
     private KeyCode interactInput = KeyCode.E;
-    private float attackBlend;
-    private float attackBlendAcceleration = 10.0f;
-    private float attackBlendDeceleration = 3.5f;
-    private float attackTimer;
+    private float actionBlend;
+    private float actionBlendAcceleration = 10.0f;
+    private float actionBlendDeceleration = 3.5f;
+    private float animationAttackTiming;
     private Vector3 moveDirection;
     private float jumpTimeDuration = 1.34f;
     private float jumpTimer;
-    private float rayRange = 0.85f;
+    private float rayRange = 1f;
     private RaycastHit rayHit;
     private PlayerStats playerStats;
     Collider[] hitColInteraction;
     private bool canMove;
+    private Vector3 cameraDestination;
+    private float cameraCatchUpSpeed = 0.0525f;
+    [SerializeField] private float attackTimer;
+    private float attackAnimDuration;
+    private static int attackButton = 0;
+    private static int blockButton = 1;
 
     public bool CanMove { set{ canMove = value; } } 
 
@@ -74,9 +89,26 @@ public class PlayerController : MonoBehaviour
         canMove = true;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
+
+        //interact with object
+        if (Input.GetKeyDown(interactInput) && canMove)
+        {
+            Interact();
+        }
+        else if (Input.GetKeyDown(KeyCode.E) && !canMove)
+        {
+            canMove = true;
+            GameManager.manager.levelManager.StopReadingNote();
+        }
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        EnableInteractionFeedbackWithinRange();
+
         //player rotation
         if (moveDirection != Vector3.zero)
         {
@@ -85,15 +117,23 @@ public class PlayerController : MonoBehaviour
         }
 
         //Cam movement/placement
-        gameCamera.transform.localEulerAngles = new Vector3(50, -45, 0);
-        gameCamera.transform.position = new Vector3(transform.position.x + 8, transform.position.y + 15, transform.position.z - 8);
+        gameCamera.transform.localEulerAngles = new Vector3(65, -45, 0);
+        cameraDestination = new Vector3(transform.position.x + 7, transform.position.y + 18, transform.position.z - 7);
+        gameCamera.transform.position = Vector3.Lerp(gameCamera.transform.position, cameraDestination, cameraCatchUpSpeed);
+
+        //attack countdown
+        if (attackTimer > 0)
+        {
+            attackTimer -= Time.deltaTime; 
+        }
 
         //animation movement controller
         {
-            CheckPlayerInputandPerformPlayerActions();
+            if (GameManager.manager.gameState == GameState.GAMEPLAY) { UpdatePlayerInput(); }
             if (Time.time > jumpTimer && isGrounded() == false) { movementMode = MovementMode.Falling; }
             animator.SetFloat("Velocity", moveIntensity);
-            animator.SetLayerWeight(1, attackBlend);
+            animator.SetLayerWeight(1, actionBlend);
+            UpdateWeaponAnimStates(playerStats.CurrentWeaponType.nameOfItem);
 
             switch (movementMode)
             {
@@ -119,8 +159,6 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
-
-        EnableInteractionFeedbackWithinRange();
     }
 
     private void OnDrawGizmosSelected()
@@ -139,7 +177,7 @@ public class PlayerController : MonoBehaviour
         playerStats = newplayerStats;
     }
 
-    private void CheckPlayerInputandPerformPlayerActions()
+    private void UpdatePlayerInput()
     {
         if (Input.GetKey(forwardInput) == true) { Move(MovementDirection.Forward); }
         if (Input.GetKey(backwardInput) == true) { Move(MovementDirection.Backward); }
@@ -148,13 +186,13 @@ public class PlayerController : MonoBehaviour
         moveDirection.Normalize();
         transform.Translate(moveDirection * moveIntensity * Time.deltaTime, Space.World);
 
-        //attacking
-        if (Input.GetMouseButton(0)){ ActivateAttack(); }
-        if(!IsAttacking()) { attackBlend -= Time.deltaTime * attackBlendDeceleration; StopAttacking(); }
-
         //blocking
-        if (Input.GetMouseButton(1)) { ActivateBlock(); }
-        if (IsBlocking() == false) { StopBlocking(); }
+        if (Input.GetMouseButton(blockButton) == true) { ActivateBlock(); }
+        if (!IsBlocking()) { StopBlocking(); }
+
+        //attacking
+        if (Input.GetMouseButton(attackButton)){ ActivateAttack(); }
+        if(!IsAttacking()) {StopAttacking(); }
 
         //movemonet/sprinting
         if (Input.GetKey(sprintInput)) { Sprint(); }
@@ -164,17 +202,22 @@ public class PlayerController : MonoBehaviour
 
         //checking to be idle
         else if (IsMoving() == false) { moveDirection = Vector3.zero; movementMode = MovementMode.Idle; }
+    }
 
-        //interact with object
-        if (Input.GetKeyDown(interactInput) && canMove)
-        {
-            Interact();
-        }
-        else if (Input.GetKeyDown(KeyCode.E) && !canMove)
-        {
-            canMove = true;
-            GameManager.manager.levelManager.StopReadingNote();
-        }
+    private void UpdateWeaponAnimStates(string weaponName)
+    {
+        //tried to use switch statement here, was not allow due to emun.ToString() for some reason...... VVVV
+                                                                                                    /// strings arent inherently constant switch statements require that cases are
+        if (weaponName == PlayerWeaponIndex.Knuckles.ToString())
+        { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Knuckles); attackAnimDuration = 0.34f; return; }
+        else if (weaponName == PlayerWeaponIndex.Dagger.ToString())
+        { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Dagger); attackAnimDuration = 0.34f; return; }
+        else if (weaponName == PlayerWeaponIndex.Cutlass.ToString())
+        { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Cutlass); attackAnimDuration = 0.34f; return; }
+        else if (weaponName == PlayerWeaponIndex.Club.ToString())
+        { animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Club); attackAnimDuration = 0.8f; return; }
+        animator.SetFloat("WeaponAnimState", (int)PlayerWeaponIndex.Dagger);
+        attackAnimDuration = 0.34f;
     }
 
     public void Interact()
@@ -231,31 +274,29 @@ public class PlayerController : MonoBehaviour
         if (hitColInteraction.Length == 0) { return; }
         
         float r = interactionRadius - .1f; // MN#: -.1 due to radius encompasing hitColInteraction enough to not miss turning off the light
-        
-            foreach (Collider col in hitColInteraction)
+
+        foreach (Collider col in hitColInteraction)
+        {
+            float distance = Vector3.Distance(transform.position, col.transform.position);
+            //Debug.LogError($"hit {col.gameObject.name}");
+
+            if (col.gameObject.GetComponent<Interactable>() != null)
             {
+                Interactable interactable = col.gameObject.GetComponent<Interactable>();
 
-                float distance = Vector3.Distance(transform.position, col.transform.position);
-                //Debug.LogError($"hit {col.gameObject.name}");
-
-                if (col.gameObject.GetComponent<Interactable>() != null)
+                if (distance >= r && interactable.FeedbackEnabled)
                 {
-                    Interactable interactable = col.gameObject.GetComponent<Interactable>();
-
-                    if (distance >= r && interactable.FeedbackEnabled)
-                    {
-                        interactable.DisableFeedback();
-                    }
-                    else if (distance <= r && !interactable.FeedbackEnabled)
-                    {
-                        Physics.IgnoreCollision(this.transform.GetChild(0).GetComponent<Collider>(), col, true);
-
-                        interactable.EnableFeedback();
-                    }
+                    interactable.DisableFeedback();
                 }
-                else { Debug.LogError("INTERACTABLE LAYER BEING USED BY NON-INTERACTABLE, CHECK \"Debug.LogError(hit { col.gameObject.name} );\""); }
+                else if (distance <= r && !interactable.FeedbackEnabled)
+                {
+                    Physics.IgnoreCollision(this.transform.GetComponent<BoxCollider>(), col, true);
+
+                    interactable.EnableFeedback();
+                }
             }
-        
+            else { Debug.LogError("INTERACTABLE LAYER BEING USED BY NON-INTERACTABLE, CHECK \"Debug.LogError(hit { col.gameObject.name} );\""); }
+        }
     }
 
     private void UpdateMoveIntensity(MovementMode movementMode)
@@ -304,6 +345,8 @@ public class PlayerController : MonoBehaviour
         if (movementMode == MovementMode.Jumping) { return; }
         if (isGrounded() == false) { return; }
         if (playerStats.Health <= playerStats.MaxHealth / 4) { movementMode = MovementMode.Running; return; }
+        if (IsBlocking()) { movementMode = MovementMode.Running; return; }
+        if (playerStats.inWater) { movementMode = MovementMode.Running; return; }
 
         movementMode = MovementMode.Sprinting;
     }
@@ -320,62 +363,60 @@ public class PlayerController : MonoBehaviour
 
     private void ActivateAttack()
     {
-        if (attackBlend >= 1) { return; }
-        if (Time.time <= attackTimer) { return; }
+        if (actionBlend >= 1) { return; }
+        if (Time.time <= animationAttackTiming) { return; }
         if (movementMode == MovementMode.Sprinting) { return; }
         if (movementMode == MovementMode.Falling) { return; }
         if (movementMode == MovementMode.Jumping) { return; }
-        if (Input.GetMouseButton(1) == true) { return; }
+        if (IsBlocking()) { return; }
+        if (attackTimer > 0) { return; }
 
-        attackBlend = 1;
-        attackTimer = Time.time + playerStats.AttackSpeed;
+        attackTimer = playerStats.AttackSpeed;
+        actionBlend = 1;
+        animationAttackTiming = Time.time + attackAnimDuration; // fix animations ?
         Attack();
     }
 
     public void Attack() 
     {
-        if (playerStats.shield.activeSelf == false && playerStats.weaponHitArea.enabled == false) 
-        { playerStats.weaponHitArea.enabled = true; } 
+        if (IsBlocking()) { return; }
+        if (playerStats.weaponHitAreaCollider.enabled == true) { return; } 
+        playerStats.weaponHitAreaCollider.enabled = true;
     }
 
     public void StopAttacking() 
     {
-        if (playerStats.weaponHitArea == null) { return; }
-        if (playerStats.weaponHitArea.enabled == true) { playerStats.weaponHitArea.enabled = false; } 
+        if (playerStats.weaponHitAreaCollider == null) { return; }
+        if (playerStats.weaponHitAreaCollider.enabled == false) { return; }
+        actionBlend -= Time.deltaTime * actionBlendDeceleration;
+        playerStats.weaponHitAreaCollider.enabled = false;
     }
 
     public bool IsAttacking()
     {
-        if (Time.time <= attackTimer) { return true; }
+        if (Time.time <= animationAttackTiming) { return true; }
         //if (attackBlend > 0) { return true; }
 
         return false;
     }
 
-    private void ActivateBlock()
+    public void ActivateBlock()
     {
-        if (Time.time <= attackTimer) { return; }
-        if (movementMode == MovementMode.Sprinting) { return; }
-        if (movementMode == MovementMode.Falling) { return; }
-
-        Block();
+        if (IsAttacking()) { return; }
+        actionBlend = 1;
+        animator.SetBool("Blocking", true);
     }
 
-    public void Block() 
-    { 
-        if (playerStats.shield.activeSelf == false) 
-        { playerStats.shield.SetActive(true); } 
-    }
-
-    public void StopBlocking() 
-    { 
-        if (playerStats.shield.activeSelf == true) 
-        { playerStats.shield.SetActive(false); } 
+    public void StopBlocking()
+    {
+        if (IsAttacking()) { return; }
+        actionBlend -= Time.deltaTime * actionBlendDeceleration;
+        animator.SetBool("Blocking", false);
     }
     
-    private bool IsBlocking()
+    public bool IsBlocking()
     {
-        if (Input.GetMouseButton(1) == true) { return true; }
+        if (Input.GetMouseButton(blockButton) == true) { return true; }
 
         return false;
     }

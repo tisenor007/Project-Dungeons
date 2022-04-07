@@ -19,6 +19,7 @@ public class Enemy : CharacterStats
     protected State enemyState;
     protected string[] animationStates;
     protected NavMeshAgent enemyNavMeshAgent;
+
     protected PlayerStats playerStats;
     protected Animator animator;
     protected AnimationClip clip;
@@ -66,7 +67,7 @@ public class Enemy : CharacterStats
 
         enemySight = new Ray(transform.position, transform.TransformDirection(Vector3.forward));
         enemyLocation = this.enemyNavMeshAgent.transform.position;
-        playerLocation = playerStats.gameObject.transform.position;
+        playerLocation = GameManager.manager.playerStats.gameObject.transform.position;
         distanceFromPlayer = Vector3.Distance(playerLocation, enemyLocation);
 
         //Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * viewDistance, Color.white);
@@ -107,7 +108,7 @@ public class Enemy : CharacterStats
 
     public virtual void Idle()
     {
-        playerLocation = playerStats.gameObject.transform.position;
+        playerLocation = GameManager.manager.playerStats.gameObject.transform.position;
 
         if (Physics.Raycast(enemySight, out hitInfo, viewDistance))
         {
@@ -146,21 +147,18 @@ public class Enemy : CharacterStats
             SwitchAnimation("Swinging");
             animator.Play("Swinging");
 
-            if (playerStats.shield.activeSelf == true) // attack is blocked
+            if (GameManager.manager.playerController.IsBlocking())
             {
                 this.stunnedTimer = 1.5f;
-                playerStats.TakeDamage((int)(damage / 4), playerStats.GetComponent<Transform>());
+                GameManager.manager.playerStats.TakeDamage((int)(damage / 4), GameManager.manager.playerStats.GetComponent<Transform>());
+                SoundManager.PlaySound(SoundManager.Sound.MetalClang, playerLocation);
                 SwitchState(State.Stunned);
             }
             else // attack hits
             {
-                
-                //SwitchAnimation("Attacking Idle");
-                //animator.SetFloat("AttackAnim", 0);
-                playerStats.TakeDamage(damage, playerStats.GetComponent<Transform>());
+                GameManager.manager.playerStats.TakeDamage(damage, GameManager.manager.playerStats.GetComponent<Transform>());
                 this.attackTimer = this.attackSpeed;
                 PlayAudio(this);
-                //animator.SetFloat("AttackAnim", 0.0f);
             }
 
             SwitchAnimation("Attacking Idle");
@@ -250,7 +248,6 @@ public class Enemy : CharacterStats
 
         // references
         cam = GameManager.manager.playerAndCamera.transform.GetChild(1);
-        playerStats = GameManager.manager.playerStats;
         enemyNavMeshAgent = GetComponent<NavMeshAgent>();
 
         maxHealth = Health;
@@ -301,11 +298,26 @@ public class Enemy : CharacterStats
 
     protected void DropItemOnDeath()
     {
+        int xDropOffset = 0;
+        int zDropOffset = 0;
+
+        //if no drops are available will not drop
         if (availableDrops.Length <=0) { return; }
+
+        //decides by chance if it will drop
         int dropDecision = ChooseNumbByChance(0, 1, itemDropChance);
         if (dropDecision == 1) { return; }
+
+        //decideds direction the item will drop
+        int dropDirection = UnityEngine.Random.Range(0, 3);
+        if (dropDirection <= 0) { xDropOffset = 1; zDropOffset = 0; }
+        else if(dropDirection == 1) { xDropOffset = -1; zDropOffset = 0; }
+        else if (dropDirection == 2) { xDropOffset = 0; zDropOffset = 1; }
+        else if (dropDirection >= 3) { xDropOffset = 0; zDropOffset = -1; }
+
+        //selects item from index and drops it
         int selectedItem = UnityEngine.Random.Range(0, availableDrops.Length);
-        Instantiate(availableDrops[selectedItem], transform.position, Quaternion.identity);
+        Instantiate(availableDrops[selectedItem], new Vector3(transform.position.x + xDropOffset, transform.position.y + 1, transform.position.z + zDropOffset), Quaternion.identity);
     }
 
     public void PlayAudio(Enemy enemy)
