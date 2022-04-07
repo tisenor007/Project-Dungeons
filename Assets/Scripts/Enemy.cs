@@ -189,7 +189,7 @@ public class Enemy : CharacterStats
     {
         if (animator.GetBool("Swinging") != true) SwitchAnimation("Hit");
         hitTimer -= Time.deltaTime;
-        //Debug.LogError(this.hitTimer);
+        Debug.LogError(this.hitTimer);
 
         if (this.hitTimer <= 0.0f)
         {
@@ -219,7 +219,7 @@ public class Enemy : CharacterStats
         if (currentAnimationState == "Dying") { return; }
 
         enemyState = newState;
-        Debug.LogWarning("CURRENT STATE: " + newState);
+        if (this.audioGroup == "Skeleton") Debug.LogWarning("SKELETON STATE: " + newState);
     }
 
     public void UpdateHealth()
@@ -267,7 +267,7 @@ public class Enemy : CharacterStats
             enemyModel[i] = this.transform.GetChild(1).GetChild(1).GetComponent<SkinnedMeshRenderer>().materials[i];
         }*/
 
-        SetAnimations();
+        //SetAnimations();
     }
 
     public override void TakeDamage(int damage, Transform character)
@@ -366,14 +366,14 @@ public class Enemy : CharacterStats
             animator.SetBool(state, false);
         }*/
 
-        foreach (AnimatorControllerParameter parameter in animator.parameters)
+        foreach (AnimatorControllerParameter parameter in this.animator.parameters)
         {
-            if (parameter.type == AnimatorControllerParameterType.Bool) animator.SetBool(parameter.name, false);
+            if (parameter.type == AnimatorControllerParameterType.Bool) this.animator.SetBool(parameter.name, false);
         }
 
         animator.SetBool(nextState, true);
         currentAnimationState = nextState;
-        Debug.LogWarning("NEW ANIMATION STATE: " + nextState);
+        //Debug.LogWarning("NEW ANIMATION STATE: " + nextState);
     }
 
     private int ChooseNumbByChance(int output1, int output2, int chanceNum)

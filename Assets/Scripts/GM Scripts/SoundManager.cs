@@ -116,7 +116,7 @@ public class SoundManager : MonoBehaviour
 
     public static void PlaySound(Sound sound, Vector3 position)
     {
-        //GetAudioClip(sound);
+        GetAudioClip(sound);
 
         if (CanPlaySound(sound))
         {
@@ -136,8 +136,7 @@ public class SoundManager : MonoBehaviour
 
     public static void PlaySound(Sound sound)
     {
-        //Debug.Log("SOUND DELAY TIMER: " + soundTimerDictionary[sound]);
-        //
+        GetAudioClip(sound);
 
         if (CanPlaySound(sound))
         {
@@ -160,6 +159,7 @@ public class SoundManager : MonoBehaviour
 
     public static void PlayMusic(Sound sound)
     {
+        //GetAudioClip(sound);
         if (CanPlaySound(sound))
         {
 
@@ -174,9 +174,9 @@ public class SoundManager : MonoBehaviour
             else
             {
                 oneShotMusicAudioSource.Stop();
-                soundLengthDictionary[previousMusic] = 0;
                 //oneShotMusicAudioSource.time = musicCutOffDictionary[sound];
                 oneShotMusicAudioSource.PlayOneShot(GetAudioClip(sound), soundVolumeDictionary[sound]);
+                soundLengthDictionary[previousMusic] = 0;
                 previousMusic = sound;
 
             }
