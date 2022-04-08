@@ -285,7 +285,7 @@ public class Enemy : CharacterStats
         healthBar.maxValue = maxHealth;
         stunnedHitDuration = attackSpeed * 1.5f;
 
-        if (this.audioGroup != "Ghost") animator = transform.GetChild(1).GetComponent<Animator>();
+        animator = transform.GetChild(1).GetComponent<Animator>();
     }
 
     public override void TakeDamage(int damage, Transform character)
@@ -352,7 +352,7 @@ public class Enemy : CharacterStats
 
     public void SwitchAnimation(string nextState)
     {
-        if (this.audioGroup == "Ghost") return;
+        //if (this.audioGroup == "Ghost") return;
         
         if (animator.GetBool(nextState) == true) return;
 
@@ -363,7 +363,7 @@ public class Enemy : CharacterStats
 
         animator.SetBool(nextState, true);
         currentAnimationState = nextState;
-        if (this.audioGroup == "Zombie") Debug.LogError("Zombie ANIMATION STATE: " + nextState);
+        //if (this.audioGroup == "Zombie") Debug.LogError("Zombie ANIMATION STATE: " + nextState);
     }
 
     private int ChooseNumbByChance(int output1, int output2, int chanceNum)

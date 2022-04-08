@@ -76,7 +76,7 @@ public class LevelManager : MonoBehaviour
     {
         GameManager.manager.gameStarting = false;
         GameManager.manager.uiManager.startButton.interactable = true;
-        //GameManager.manager.loadButton.interactable = true;
+        GameManager.manager.uiManager.playButton.interactable = true;
         GameManager.manager.ChangeState(GameState.TITLEMENU);
     }
     
@@ -129,6 +129,7 @@ public class LevelManager : MonoBehaviour
     {
         GameManager.manager.gameStarting = true;
         GameManager.manager.uiManager.startButton.interactable = false;
+        GameManager.manager.uiManager.playButton.interactable = true;
         //GameManager.manager.loadButton.interactable = false;
         StartCoroutine(LoadCharacterSelectionScreen());
     }
@@ -254,7 +255,7 @@ public class LevelManager : MonoBehaviour
         else
         {
             foreach(Button button in GameManager.manager.uiManager.allNextLevelButtons)
-            { button.interactable = false; }
+            { button.interactable = true; }
         }
     }
 
@@ -335,6 +336,7 @@ public class LevelManager : MonoBehaviour
     {
         SoundManager.PlaySound(SoundManager.Sound.CannonShot);
         //Debug.LogError("sound started");
+        GameManager.manager.uiManager.playButton.interactable = false;
         yield return new WaitForSecondsRealtime(4.0f);
         //Debug.LogError("sound over");
         GameManager.manager.ChangeState(GameState.LOADINGSCREEN);
