@@ -31,7 +31,8 @@ public enum GamePlayState
 {
     Default,
     FloodRoom,
-    BossRoom
+    BossRoom,
+    NonGamePlayMusic
 }
 
 public class GameManager : MonoBehaviour
@@ -151,6 +152,7 @@ public class GameManager : MonoBehaviour
                 }
             case GameState.WIN:
                 {
+                    SoundManager.PlayMusic(SoundManager.Sound.WinMusic);
                     uiManager.LoadWinScreen();
                     characterSelection.HideModels();
                     if (Time.timeScale == 1) { Time.timeScale = 0; }
@@ -159,6 +161,7 @@ public class GameManager : MonoBehaviour
                 }
             case GameState.LOSE:
                 {
+                    SoundManager.PlayMusic(SoundManager.Sound.LossMusic);
                     uiManager.LoadLoseScreen();
                     characterSelection.HideModels();
                     if (Time.timeScale == 1) { Time.timeScale = 0; }

@@ -28,7 +28,7 @@ public class FloodTrap : Trap
                 { GameManager.manager.playerStats.TakeDamage(GameManager.manager.playerStats.MaxHealth, GameManager.manager.playerStats.transform); }
                 GameManager.manager.playerStats.inWater = true;
                 if (!soundPlaying)
-                { GameManager.manager.gamePlayState = GamePlayState.FloodRoom; soundPlaying = true; }
+                { GameManager.manager.gamePlayState = GamePlayState.FloodRoom; SoundManager.PlaySound(SoundManager.Sound.RockCollapsing); soundPlaying = true; }
                 break;
             case false:
                 water.SetActive(false);

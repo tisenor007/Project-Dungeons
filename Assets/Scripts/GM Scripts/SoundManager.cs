@@ -57,7 +57,10 @@ public class SoundManager : MonoBehaviour
         PaperAway,
         FloodTrapMusic,
         SpikeWoodBreak,
-        BossMusic
+        BossMusic,
+        RockCollapsing,
+        WinMusic,
+        LossMusic
     }
 
     public static void InitializeDictionary()
@@ -94,6 +97,9 @@ public class SoundManager : MonoBehaviour
         SetDirectory(Sound.FloodTrapMusic, 0, 0, 1f);
         SetDirectory(Sound.SpikeWoodBreak, 0, 0, 1f);
         SetDirectory(Sound.BossMusic, 0, 0, 1f);
+        SetDirectory(Sound.RockCollapsing, 0, 0, 3f);
+        SetDirectory(Sound.WinMusic, 0, 0, 1f);
+        SetDirectory(Sound.LossMusic, 0, 0, 1f);
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
 
     }
@@ -605,6 +611,53 @@ public class SoundManager : MonoBehaviour
                 }
                 else { return true; }
 
+            case Sound.RockCollapsing:
+                if (soundTimeDictionary.ContainsKey(sound))
+                {
+                    if (gameManager.gameState != GameState.GAMEPLAY) { return false; }
+                    float lastTimePlayed = soundTimeDictionary[sound];
+                    float delayTimerMax = soundLengthDictionary[sound];
+                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    {
+                        soundLengthDictionary[sound] = 0;
+                        soundTimeDictionary[sound] = Time.time;
+                        return true;
+                    }
+                    else { return false; }
+                }
+                else { return true; }
+
+            case Sound.WinMusic:
+                if(soundTimeDictionary.ContainsKey(sound))
+                {
+                    if (gameManager.gameState != GameState.WIN) { return false; }
+                    float lastTimePlayed = soundTimeDictionary[sound];
+                    float delayTimerMax = soundLengthDictionary[sound];
+                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    {
+                        soundLengthDictionary[sound] = currentArrayAudioClipLength;
+
+                        return true;
+                    }
+                    else { return false; }
+                }
+                else { return true; }
+
+            case Sound.LossMusic:
+                if(soundTimeDictionary.ContainsKey(sound))
+                {
+                    if (gameManager.gameState != GameState.LOSE) { return false; }
+                    float lastTimePlayed = soundTimeDictionary[sound];
+                    float delayTimerMax = soundLengthDictionary[sound];
+                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    {
+                        soundLengthDictionary[sound] = currentArrayAudioClipLength;
+
+                        return true;
+                    }
+                    else { return false; }
+                }
+                else { return true; }
         }
     }
 
