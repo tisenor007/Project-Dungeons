@@ -254,7 +254,7 @@ public class LevelManager : MonoBehaviour
         else
         {
             foreach(Button button in GameManager.manager.uiManager.allNextLevelButtons)
-            { button.interactable = false; }
+            { button.interactable = true; }
         }
     }
 

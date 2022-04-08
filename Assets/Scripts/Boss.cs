@@ -19,6 +19,7 @@ public class Boss : Enemy
         this.speed = 5.0f;
         this.attackDistance = 3;
 
+        this.enemyType = "Boss";
         this.attackSound = SoundManager.Sound.ZombieAttack;
         this.chasingSound = SoundManager.Sound.ZombieChasing;
         this.deathSound = SoundManager.Sound.ZombieDeath;
@@ -30,6 +31,11 @@ public class Boss : Enemy
     public override void Idle()
     {
         staminaTimer = Time.time + stamina;
+        if (Time.time >= recoverTimer && distanceFromPlayer <= attackDistance)
+        {
+            attackTimer = attackSpeed;
+            SwitchState(State.Attacking);
+        }
         if (Time.time >= recoverTimer)
         {
             SwitchState(State.Chasing);

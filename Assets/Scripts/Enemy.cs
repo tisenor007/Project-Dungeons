@@ -32,7 +32,7 @@ public class Enemy : CharacterStats
     protected float hearingDistance;
     protected float attackDistance;
     protected float speed;
-    protected string audioGroup;
+    protected string enemyType;
 
     protected float distanceFromPlayer;
     protected float attackTimer;
@@ -147,10 +147,12 @@ public class Enemy : CharacterStats
         {
             SwitchState(State.Chasing);
         }
-
-        this.transform.LookAt(new Vector3(GameManager.manager.playerStats.gameObject.transform.position.x,
-            this.transform.position.y,
-            GameManager.manager.playerStats.gameObject.transform.position.z));
+        if (enemyType != "Boss")
+        {
+            this.transform.LookAt(new Vector3(GameManager.manager.playerStats.gameObject.transform.position.x,
+                this.transform.position.y,
+                GameManager.manager.playerStats.gameObject.transform.position.z));
+        }
 
         SwitchAnimation("Attacking Idle");
 
@@ -216,11 +218,13 @@ public class Enemy : CharacterStats
         if (animator.GetBool("Swinging") != true) SwitchAnimation("Hit");
         hitTimer -= Time.deltaTime;
         attackTimer -= Time.deltaTime;
+        if (enemyType != "Boss") { attackTimer -= Time.deltaTime; }
 
         if (this.hitTimer <= 0.0f)
         {
             //attackTimer = 0;
             SwitchState(State.Attacking);
+            if (enemyType != "Boss") { SwitchState(State.Attacking); }
         }
     }
 
@@ -248,7 +252,7 @@ public class Enemy : CharacterStats
         if (currentAnimationState == "Dying") { return; }
 
         enemyState = newState;
-        if (this.audioGroup == "Zombie") Debug.LogError("Zombie STATE: " + newState);
+        if (this.enemyType == "Boss") Debug.LogError("boss STATE: " + newState);
     }
 
     public void UpdateHealth()
@@ -285,7 +289,7 @@ public class Enemy : CharacterStats
         healthBar.maxValue = maxHealth;
         stunnedHitDuration = attackSpeed * 1.5f;
 
-        if (this.audioGroup != "Ghost") animator = transform.GetChild(1).GetComponent<Animator>();
+        if (this.enemyType != "Ghost") animator = transform.GetChild(1).GetComponent<Animator>();
     }
 
     public override void TakeDamage(int damage, Transform character)
@@ -352,7 +356,7 @@ public class Enemy : CharacterStats
 
     public void SwitchAnimation(string nextState)
     {
-        if (this.audioGroup == "Ghost") return;
+        if (this.enemyType == "Ghost") return;
         
         if (animator.GetBool(nextState) == true) return;
 
@@ -363,7 +367,7 @@ public class Enemy : CharacterStats
 
         animator.SetBool(nextState, true);
         currentAnimationState = nextState;
-        if (this.audioGroup == "Zombie") Debug.LogError("Zombie ANIMATION STATE: " + nextState);
+        if (this.enemyType == "Zombie") Debug.LogError("Zombie ANIMATION STATE: " + nextState);
     }
 
     private int ChooseNumbByChance(int output1, int output2, int chanceNum)
