@@ -74,7 +74,9 @@ public class LevelManager : MonoBehaviour
 
     public void ChangeGameStateToTitleMenu()
     {
-        
+        GameManager.manager.gameStarting = false;
+        GameManager.manager.uiManager.startButton.interactable = true;
+        GameManager.manager.uiManager.playButton.interactable = true;
         GameManager.manager.ChangeState(GameState.TITLEMENU);
     }
     
@@ -125,6 +127,10 @@ public class LevelManager : MonoBehaviour
 
     public void ChangeGameStateToCharacterSelection()
     {
+        GameManager.manager.gameStarting = true;
+        GameManager.manager.uiManager.startButton.interactable = false;
+        GameManager.manager.uiManager.playButton.interactable = true;
+        //GameManager.manager.loadButton.interactable = false;
         StartCoroutine(LoadCharacterSelectionScreen());
     }
 
@@ -151,7 +157,7 @@ public class LevelManager : MonoBehaviour
         GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonPreGenerating = true;
         GameManager.manager.levels[GameManager.manager.currentLevel].GetComponent<DungeonGenerator>().dungeonIsGenerating = true;
         GameManager.manager.playerStats.ResetStats();
-        //SoundManager.PlayMusic(SoundManager.Sound.GameplayMusic);
+        SoundManager.PlayMusic(SoundManager.Sound.GameplayMusic);
     }
 
     public void UpdateDungeon()
@@ -227,7 +233,7 @@ public class LevelManager : MonoBehaviour
     //misc commands
     public void LoadButtonFade(bool fileExists)
     {
-        if (!fileExists)
+        if (!fileExists || GameManager.manager.gameStarting)
         {
             foreach (Button button in GameManager.manager.uiManager.allLoadButtons)
                 button.interactable = false;
@@ -323,7 +329,6 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(4.0f);
         //Debug.LogError("sound over");
         GameManager.manager.ChangeState(GameState.CHARACTERSELECTION);
-        
         //SoundManager.PlayMusic(SoundManager.Sound.CharacterSelectionMusic);
     }
 
@@ -331,6 +336,7 @@ public class LevelManager : MonoBehaviour
     {
         SoundManager.PlaySound(SoundManager.Sound.CannonShot);
         //Debug.LogError("sound started");
+        GameManager.manager.uiManager.playButton.interactable = false;
         yield return new WaitForSecondsRealtime(4.0f);
         //Debug.LogError("sound over");
         GameManager.manager.ChangeState(GameState.LOADINGSCREEN);

@@ -19,7 +19,7 @@ public class BossTrap : Trap
                 break;
             case false:
                 thisStructure.trapPlayer = false;
-                bossObj.SetActive(false);
+                //bossObj.SetActive(false);
                 if (soundPlaying) 
                 { GameManager.manager.ChangeGamePlayState(GamePlayState.Default); soundPlaying = false; }
                 break;

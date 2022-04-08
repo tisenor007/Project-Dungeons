@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
     private bool fadeSave;
     private bool fadeLoad;
     private float textFadeWaitTime = 1.5f;
+    public bool gameStarting = false;
 
     [Space]
     [SerializeField] private TextMeshProUGUI saveText;
@@ -67,6 +68,7 @@ public class GameManager : MonoBehaviour
     //Create a new object within the player, one will be male, the other female
     [SerializeField] private GameObject malePlayer;
     [SerializeField] private GameObject femalePlayer;
+
 
     void Awake()
     {

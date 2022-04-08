@@ -24,7 +24,7 @@ public class MetaHealthBar : MonoBehaviour
     void Update()
     {
         UpdateHealth();
-        transform.GetChild(0).LookAt(transform.position + cam.forward);
+        //this.transform.GetChild(0).LookAt(transform.position + cam.forward);
     }
 
     void UpdateHealth()
