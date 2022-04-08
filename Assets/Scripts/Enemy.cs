@@ -17,6 +17,15 @@ public class Enemy : CharacterStats
         Swining
     }
 
+    protected enum EnemyType
+    {
+        Ghost,
+        Zombie,
+        Skeleton,
+        Boss
+    }
+
+    protected EnemyType enemyType;
     protected State enemyState;
     protected string[] animationStates;
     protected NavMeshAgent enemyNavMeshAgent;
@@ -32,7 +41,6 @@ public class Enemy : CharacterStats
     protected float hearingDistance;
     protected float attackDistance;
     protected float speed;
-    protected string enemyType;
 
     protected float distanceFromPlayer;
     protected float attackTimer;
@@ -305,6 +313,8 @@ public class Enemy : CharacterStats
     {
         SoundManager.PlaySound(this.deathSound, enemyLocation); 
         base.Death();
+
+        if (enemyType == EnemyType.Ghost) { transform.gameObject.SetActive(false); }
 
         // ENTER CODE FOR DEATH ANIMATIONS, ETC
         //this.gameObject.SetActive(false);

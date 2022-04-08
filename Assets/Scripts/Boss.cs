@@ -19,7 +19,7 @@ public class Boss : Enemy
         this.speed = 5.0f;
         this.attackDistance = 3;
 
-        this.enemyType = "Boss";
+        this.enemyType = EnemyType.Boss;
         this.attackSound = SoundManager.Sound.BossAttack;
         this.chasingSound = SoundManager.Sound.BossChasing;
         this.deathSound = SoundManager.Sound.BossDeath;

@@ -27,7 +27,7 @@ public class SkeletonEnemy : Enemy
         this.damage = 15;
         this.speed = 5.0f;
         this.attackDistance = 3;
-        this.enemyType = "Skeleton";
+        this.enemyType = EnemyType.Skeleton;
         this.hitTimer = 1.5f;
 
         this.attackSound = SoundManager.Sound.SkeletonAttack;
