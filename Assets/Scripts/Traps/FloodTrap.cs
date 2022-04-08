@@ -28,14 +28,14 @@ public class FloodTrap : Trap
                 { GameManager.manager.playerStats.TakeDamage(GameManager.manager.playerStats.MaxHealth, GameManager.manager.playerStats.transform); }
                 GameManager.manager.playerStats.inWater = true;
                 if (!soundPlaying)
-                { GameManager.manager.gamePlayState = GamePlayState.FloodRoom; SoundManager.PlaySound(SoundManager.Sound.RockCollapsing); soundPlaying = true; }
+                { GameManager.manager.ChangeGamePlayState(GamePlayState.FloodRoom); SoundManager.PlaySound(SoundManager.Sound.RockCollapsing); soundPlaying = true; }
                 break;
             case false:
                 water.SetActive(false);
                 OpenAllBreakableDoors();
                 GameManager.manager.playerStats.inWater = false;
                 if (soundPlaying)
-                { GameManager.manager.gamePlayState = GamePlayState.Default; soundPlaying = false; }
+                { GameManager.manager.ChangeGamePlayState(GamePlayState.Default); soundPlaying = false; }
                 break;
         }
 

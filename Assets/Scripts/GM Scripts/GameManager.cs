@@ -131,7 +131,11 @@ public class GameManager : MonoBehaviour
                     UpdatePlayerVitalStatusAppearance(characterSelection.isMale, playerStats.IsAlive);
                     playerStats.UpdateWeaponHitArea(characterSelection.isMale);
                     Cursor.visible = false;
-                    
+
+                    SoundManager.PlaySound(SoundManager.Sound.CaveAmbience);
+                    //SoundManager.PlayMusic(SoundManager.Sound.GameplayMusic);
+                    SoundManager.PlaySound(SoundManager.Sound.WaterDripping);
+                    //Debug.LogError("SOUND PLAYED");
                     switch (gamePlayState)
                     {
                         case GamePlayState.Default:
@@ -144,10 +148,6 @@ public class GameManager : MonoBehaviour
                             SoundManager.PlayMusic(SoundManager.Sound.BossMusic);
                             break;
                     }
-                    SoundManager.PlaySound(SoundManager.Sound.CaveAmbience);
-                    //SoundManager.PlayMusic(SoundManager.Sound.GameplayMusic);
-                    SoundManager.PlaySound(SoundManager.Sound.WaterDripping);
-                    //Debug.LogError("SOUND PLAYED");
                     return;
                 }
             case GameState.WIN:
@@ -253,6 +253,13 @@ public class GameManager : MonoBehaviour
     public void ChangeState(GameState targetState)
     {
         gameState = targetState;
+        SoundManager.canMusicPlay = true;
+    }
+
+    public void ChangeGamePlayState(GamePlayState targetState)
+    {
+        gamePlayState = targetState;
+        SoundManager.canMusicPlay = true;
     }
 
     public void SaveScreenState()

@@ -74,6 +74,7 @@ public class LevelManager : MonoBehaviour
 
     public void ChangeGameStateToTitleMenu()
     {
+        
         GameManager.manager.ChangeState(GameState.TITLEMENU);
     }
     
@@ -322,6 +323,7 @@ public class LevelManager : MonoBehaviour
         yield return new WaitForSecondsRealtime(4.0f);
         //Debug.LogError("sound over");
         GameManager.manager.ChangeState(GameState.CHARACTERSELECTION);
+        
         //SoundManager.PlayMusic(SoundManager.Sound.CharacterSelectionMusic);
     }
 

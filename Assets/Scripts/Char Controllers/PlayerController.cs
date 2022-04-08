@@ -236,7 +236,6 @@ public class PlayerController : MonoBehaviour
             if (interactable.InteractableEnabled == true)
             {
                 interactable.Interact(this.gameObject);
-                SoundManager.PlaySound(SoundManager.Sound.Cork);
                 //Debug.LogWarning($"{gameObject.name} interacting with {interactable.gameObject.name}");
             }
         }

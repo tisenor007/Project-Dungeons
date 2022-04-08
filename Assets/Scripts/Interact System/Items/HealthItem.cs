@@ -15,5 +15,6 @@ public class HealthItem : Item
 
         interactable.GetComponent<Interactable>().RemoveGameObjectWFeedback();
         interactee.GetComponent<PlayerStats>().Heal(healValue);
+        SoundManager.PlaySound(SoundManager.Sound.EatingSFX);
     }
 }

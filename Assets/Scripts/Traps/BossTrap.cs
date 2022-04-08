@@ -15,13 +15,13 @@ public class BossTrap : Trap
                 thisStructure.trapPlayer = true;
                 bossObj.SetActive(true);
                 if (!soundPlaying)
-                { GameManager.manager.gamePlayState = GamePlayState.BossRoom; soundPlaying = true; }
+                { GameManager.manager.ChangeGamePlayState(GamePlayState.BossRoom); soundPlaying = true; }
                 break;
             case false:
                 thisStructure.trapPlayer = false;
                 bossObj.SetActive(false);
                 if (soundPlaying) 
-                { GameManager.manager.gamePlayState = GamePlayState.Default; soundPlaying = false; }
+                { GameManager.manager.ChangeGamePlayState(GamePlayState.Default); soundPlaying = false; }
                 break;
         }
         if (bossObj.GetComponent<Boss>().IsAlive == false) { trapTriggered = false; }

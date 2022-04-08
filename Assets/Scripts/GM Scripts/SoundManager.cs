@@ -6,10 +6,11 @@ public class SoundManager : MonoBehaviour
 {
     [SerializeField]
     public static GameManager gameManager;
+    public static GameObject soundManager;
 
     private static GameObject oneShotGameObject;
     private static AudioSource oneShotAudioSource;
-    private static GameObject oneShotMusicGameObject;
+    public static GameObject oneShotMusicGameObject;
     private static AudioSource oneShotMusicAudioSource;
 
     private static Sound currentMusic;
@@ -22,9 +23,15 @@ public class SoundManager : MonoBehaviour
     private static SoundAssets.SoundAudioClip currentSoundAudioClip;
     private static float currentArrayAudioClipLength;
 
-    private static bool menuMusicLooping = true;
-    private static bool characterSelectionMusicLooping = true;
-    private static int characterSelectionMusicLoop = 0;
+    [HideInInspector] public static bool canMusicPlay = true;
+
+    private void Start()
+    {
+        oneShotMusicGameObject = new GameObject("One Shot Music Sound");
+        oneShotMusicAudioSource = oneShotMusicGameObject.AddComponent<AudioSource>();
+        oneShotMusicGameObject.transform.parent = GameObject.Find("SoundManager").transform;
+        //if (oneShotMusicGameObject != null) { oneShotAudioSource = oneShotMusicGameObject.GetComponent<AudioSource>(); }
+    }
 
     public enum Sound
     {
@@ -60,7 +67,12 @@ public class SoundManager : MonoBehaviour
         BossMusic,
         RockCollapsing,
         WinMusic,
-        LossMusic
+        LossMusic,
+        EatingSFX,
+        BossIdleRest,
+        BossChasing,
+        BossAttack,
+        BossDeath
     }
 
     public static void InitializeDictionary()
@@ -100,8 +112,12 @@ public class SoundManager : MonoBehaviour
         SetDirectory(Sound.RockCollapsing, 0, 0, 3f);
         SetDirectory(Sound.WinMusic, 0, 0, 1f);
         SetDirectory(Sound.LossMusic, 0, 0, 1f);
+        SetDirectory(Sound.EatingSFX, 0, 0, 1f);
+        SetDirectory(Sound.BossIdleRest, 0, 0, 1f);
+        SetDirectory(Sound.BossChasing, 0, 0, 1f);
+        SetDirectory(Sound.BossAttack, 0, 0, 1f);
+        SetDirectory(Sound.BossDeath, 0, 0, 1f);
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
-
     }
 
     private static void SetDirectory(Sound sound, float length, float delay, float volume)
@@ -176,23 +192,23 @@ public class SoundManager : MonoBehaviour
         if (CanPlaySound(sound))
         {
 
-            if (oneShotMusicGameObject == null)
-            {
-                oneShotMusicGameObject = new GameObject("One Shot Music Sound");
-                oneShotMusicAudioSource = oneShotMusicGameObject.AddComponent<AudioSource>();
-                oneShotMusicAudioSource.PlayOneShot(GetAudioClip(sound), soundVolumeDictionary[sound]);
-                previousMusic = sound;
+            //if (oneShotMusicGameObject == null)
+            //{
+            //    oneShotMusicGameObject = new GameObject("One Shot Music Sound");
+            //    oneShotMusicAudioSource = oneShotMusicGameObject.AddComponent<AudioSource>();
+            //    oneShotMusicAudioSource.PlayOneShot(GetAudioClip(sound), soundVolumeDictionary[sound]);
+            //    previousMusic = sound;
 
-            }
-            else
-            {
+            //}
+            //else
+            //{
                 oneShotMusicAudioSource.Stop();
                 //soundLengthDictionary[previousMusic] = 0;
                 if (sound != previousMusic)
                 { soundLengthDictionary[previousMusic] = 0; previousMusic = sound; }
                 oneShotMusicAudioSource.PlayOneShot(GetAudioClip(sound), soundVolumeDictionary[sound]);
                 //oneShotMusicAudioSource.time = musicCutOffDictionary[sound];
-            }
+            //}
         }
     }
 
@@ -233,19 +249,14 @@ public class SoundManager : MonoBehaviour
             case Sound.CharacterSelectionMusic:
                 if (soundTimeDictionary.ContainsKey(sound))
                 {
-                    if (gameManager.gameState != GameState.CHARACTERSELECTION || characterSelectionMusicLoop == 1) { return false; }
-                    if (characterSelectionMusicLooping)
+                    if (gameManager.gameState != GameState.CHARACTERSELECTION) { return false; }
+                    if (!oneShotMusicAudioSource.isPlaying) { canMusicPlay = true; }
+                    if (canMusicPlay)
                     {
-                        
-                        characterSelectionMusicLoop = 1;
-                        //Debug.LogError("TRUE");
+                        canMusicPlay = false;
                         return true;
                     }
-                    else
-                    {
-                        //Debug.LogError("FALSE");
-                        return false;
-                    }
+                    else { return false; }
                 }
                 else { return true; }
 
@@ -267,14 +278,10 @@ public class SoundManager : MonoBehaviour
                 if (soundTimeDictionary.ContainsKey(sound))
                 {
                     if (gameManager.gameState != GameState.CREDITS) { return false; }
-                    float lastTimePlayed = soundTimeDictionary[sound];
-                    float delayTimerMax = soundLengthDictionary[sound];
-                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    if (!oneShotMusicAudioSource.isPlaying) { canMusicPlay = true; }
+                    if (canMusicPlay)
                     {
-                        soundLengthDictionary[sound] = currentArrayAudioClipLength;
-                        //soundLengthDictionary[sound] = 0;
-                        //Debug.LogError("playing song");
-                        soundTimeDictionary[sound] = Time.time;
+                        canMusicPlay = false;
                         return true;
                     }
                     else { return false; }
@@ -285,14 +292,10 @@ public class SoundManager : MonoBehaviour
                 if (soundTimeDictionary.ContainsKey(sound))
                 {
                     if (gameManager.gameState != GameState.GAMEPLAY) { return false; }
-                    float lastTimePlayed = soundTimeDictionary[sound];
-                    float delayTimerMax = soundLengthDictionary[sound];
-                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    if (!oneShotMusicAudioSource.isPlaying) { canMusicPlay = true; }
+                    if (canMusicPlay)
                     {
-                        soundLengthDictionary[sound] = currentArrayAudioClipLength;
-                        //soundLengthDictionary[sound] = 0;
-                        //Debug.LogError("playing song");
-                        soundTimeDictionary[sound] = Time.time;
+                        canMusicPlay = false;
                         return true;
                     }
                     else { return false; }
@@ -367,9 +370,10 @@ public class SoundManager : MonoBehaviour
                 if (soundTimeDictionary.ContainsKey(sound))
                 {
                     if (gameManager.gameState != GameState.TITLEMENU) { return false; }
-                    if (menuMusicLooping)
+                    if (!oneShotMusicAudioSource.isPlaying) { canMusicPlay = true; }
+                    if (canMusicPlay)
                     {
-                        menuMusicLooping = false;
+                        canMusicPlay = false;
                         return true;
                     }
                     else { return false; }
@@ -395,12 +399,10 @@ public class SoundManager : MonoBehaviour
                 if (soundTimeDictionary.ContainsKey(sound))
                 {
                     if (gameManager.gameState != GameState.PAUSE) { return false; }
-                    float lastTimePlayed = soundTimeDictionary[sound];
-                    float delayTimerMax = soundLengthDictionary[sound];
-                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    if (!oneShotMusicAudioSource.isPlaying) { canMusicPlay = true; }
+                    if (canMusicPlay)
                     {
-                        soundLengthDictionary[sound] = currentArrayAudioClipLength;
-                        
+                        canMusicPlay = false;
                         return true;
                     }
                     else { return false; }
@@ -562,13 +564,10 @@ public class SoundManager : MonoBehaviour
                 if (soundTimeDictionary.ContainsKey(sound))
                 {
                     if (gameManager.gameState != GameState.GAMEPLAY) { return false; }
-                    float lastTimePlayed = soundTimeDictionary[sound];
-                    float delayTimerMax = soundLengthDictionary[sound];
-                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    if (!oneShotMusicAudioSource.isPlaying) { canMusicPlay = true; }
+                    if (canMusicPlay)
                     {
-                        soundLengthDictionary[sound] = currentArrayAudioClipLength;
-                        //soundLengthDictionary[sound] = 0;
-                        soundTimeDictionary[sound] = Time.time;
+                        canMusicPlay = false;
                         return true;
                     }
                     else { return false; }
@@ -579,14 +578,10 @@ public class SoundManager : MonoBehaviour
                 if (soundTimeDictionary.ContainsKey(sound))
                 {
                     if (gameManager.gameState != GameState.GAMEPLAY) { return false; }
-                    float lastTimePlayed = soundTimeDictionary[sound];
-                    float delayTimerMax = soundLengthDictionary[sound];
-                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    if (!oneShotMusicAudioSource.isPlaying) { canMusicPlay = true; }
+                    if (canMusicPlay)
                     {
-                        soundLengthDictionary[sound] = currentArrayAudioClipLength;
-                        //soundLengthDictionary[sound] = 0;
-                        //Debug.LogError("playing song");
-                        soundTimeDictionary[sound] = Time.time;
+                        canMusicPlay = false;
                         return true;
                     }
                     else { return false; }
@@ -597,14 +592,10 @@ public class SoundManager : MonoBehaviour
                 if (soundTimeDictionary.ContainsKey(sound))
                 {
                     if (gameManager.gameState != GameState.GAMEPLAY) { return false; }
-                    float lastTimePlayed = soundTimeDictionary[sound];
-                    float delayTimerMax = soundLengthDictionary[sound];
-                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    if (!oneShotMusicAudioSource.isPlaying) { canMusicPlay = true; }
+                    if (canMusicPlay)
                     {
-                        soundLengthDictionary[sound] = currentArrayAudioClipLength;
-                        //soundLengthDictionary[sound] = 0;
-                        //Debug.LogError("playing song");
-                        soundTimeDictionary[sound] = Time.time;
+                        canMusicPlay = false;
                         return true;
                     }
                     else { return false; }
@@ -628,15 +619,13 @@ public class SoundManager : MonoBehaviour
                 else { return true; }
 
             case Sound.WinMusic:
-                if(soundTimeDictionary.ContainsKey(sound))
+                if (soundTimeDictionary.ContainsKey(sound))
                 {
                     if (gameManager.gameState != GameState.WIN) { return false; }
-                    float lastTimePlayed = soundTimeDictionary[sound];
-                    float delayTimerMax = soundLengthDictionary[sound];
-                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    if (!oneShotMusicAudioSource.isPlaying) { canMusicPlay = true; }
+                    if (canMusicPlay)
                     {
-                        soundLengthDictionary[sound] = currentArrayAudioClipLength;
-
+                        canMusicPlay = false;
                         return true;
                     }
                     else { return false; }
@@ -644,15 +633,84 @@ public class SoundManager : MonoBehaviour
                 else { return true; }
 
             case Sound.LossMusic:
-                if(soundTimeDictionary.ContainsKey(sound))
+                if (soundTimeDictionary.ContainsKey(sound))
                 {
                     if (gameManager.gameState != GameState.LOSE) { return false; }
+                    if (!oneShotMusicAudioSource.isPlaying) { canMusicPlay = true; }
+                    if (canMusicPlay)
+                    {
+                        canMusicPlay = false;
+                        return true;
+                    }
+                    else { return false; }
+                }
+                else { return true; }
+
+            case Sound.EatingSFX:
+                if (soundTimeDictionary.ContainsKey(sound))
+                {
+                    return true;
+                }
+                else { return true; }
+
+            case Sound.BossAttack:
+                if (soundTimeDictionary.ContainsKey(sound))
+                {
+                    if (gameManager.gameState != GameState.GAMEPLAY) { return false; }
+                    float lastTimePlayed = soundTimeDictionary[sound];
+                    float delayTimerMax = soundLengthDictionary[sound];
+                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    {
+                        soundLengthDictionary[sound] = 0;
+                        soundTimeDictionary[sound] = Time.time;
+                        return true;
+                    }
+                    else { return false; }
+                }
+                else { return true; }
+
+            case Sound.BossChasing:
+                if (soundTimeDictionary.ContainsKey(sound))
+                {
+                    if (gameManager.gameState != GameState.GAMEPLAY) { return false; }
                     float lastTimePlayed = soundTimeDictionary[sound];
                     float delayTimerMax = soundLengthDictionary[sound];
                     if (lastTimePlayed + delayTimerMax < Time.time)
                     {
                         soundLengthDictionary[sound] = currentArrayAudioClipLength;
+                        soundTimeDictionary[sound] = Time.time;
+                        return true;
+                    }
+                    else { return false; }
+                }
+                else { return true; }
 
+            case Sound.BossDeath:
+                if (soundTimeDictionary.ContainsKey(sound))
+                {
+                    if (gameManager.gameState != GameState.GAMEPLAY) { return false; }
+                    float lastTimePlayed = soundTimeDictionary[sound];
+                    float delayTimerMax = soundLengthDictionary[sound];
+                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    {
+                        soundLengthDictionary[sound] = Time.time;
+                        soundTimeDictionary[sound] = Time.time;
+                        return false;
+                    }
+                    else { return false; }
+                }
+                else { return true; }
+
+            case Sound.BossIdleRest:
+                if (soundTimeDictionary.ContainsKey(sound))
+                {
+                    if (gameManager.gameState != GameState.GAMEPLAY) { return false; }
+                    float lastTimePlayed = soundTimeDictionary[sound];
+                    float delayTimerMax = soundLengthDictionary[sound];
+                    if (lastTimePlayed + delayTimerMax < Time.time)
+                    {
+                        soundLengthDictionary[sound] = currentArrayAudioClipLength + Random.Range(5.0f, 8.0f);
+                        soundTimeDictionary[sound] = Time.time;
                         return true;
                     }
                     else { return false; }

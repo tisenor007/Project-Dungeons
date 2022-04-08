@@ -20,6 +20,7 @@ public class NoteItem : Item
         base.OnPickup(interactable, interactor);
 
         interactor.GetComponent<PlayerController>().CanMove = false;
+        SoundManager.PlaySound(SoundManager.Sound.Cork);
 
         if (!loadStory)
         {

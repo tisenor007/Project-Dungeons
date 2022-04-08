@@ -19,10 +19,10 @@ public class Boss : Enemy
         this.speed = 5.0f;
         this.attackDistance = 5;
 
-        this.attackSound = SoundManager.Sound.ZombieAttack;
-        this.chasingSound = SoundManager.Sound.ZombieChasing;
-        this.deathSound = SoundManager.Sound.ZombieDeath;
-        this.idleSound = SoundManager.Sound.ZombieIdle;
+        this.attackSound = SoundManager.Sound.BossAttack;
+        this.chasingSound = SoundManager.Sound.BossChasing;
+        this.deathSound = SoundManager.Sound.BossDeath;
+        this.idleSound = SoundManager.Sound.BossIdleRest;
 
         InitEnemy();
     }
