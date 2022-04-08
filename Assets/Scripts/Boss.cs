@@ -17,7 +17,7 @@ public class Boss : Enemy
         this.attackSpeed = 4f;
         this.damage = 30;
         this.speed = 5.0f;
-        this.attackDistance = 5;
+        this.attackDistance = 3;
 
         this.attackSound = SoundManager.Sound.ZombieAttack;
         this.chasingSound = SoundManager.Sound.ZombieChasing;
@@ -47,7 +47,7 @@ public class Boss : Enemy
             SwitchState(State.Attacking);
         }
 
-        if (distanceFromPlayer >= viewDistance)
+        if (distanceFromPlayer >= attackDistance)
         {
             SwitchState(State.Chasing);
         }

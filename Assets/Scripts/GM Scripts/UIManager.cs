@@ -33,6 +33,8 @@ public class UIManager : MonoBehaviour
     public Image brightnessImage;
     public Slider brightnessSlider;
 
+    [SerializeField] public Button startButton;
+
     private void Awake()
     {
         SoundManager.InitializeDictionary();

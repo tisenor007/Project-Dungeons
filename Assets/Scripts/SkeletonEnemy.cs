@@ -20,7 +20,7 @@ public class SkeletonEnemy : Enemy
 
     void Start()
     {
-        this.viewDistance = 10;
+        this.viewDistance = 15;
         maxHealth = 50;
         this.health = maxHealth;
         this.attackSpeed = 3.0f;
@@ -73,6 +73,16 @@ public class SkeletonEnemy : Enemy
             if (currentRotationDistance >= 350)
             {
                 currentRotationDistance -= 350;
+            }
+
+            if (Physics.Raycast(enemySight, out hitInfo, viewDistance))
+            {
+                if (hitInfo.collider.tag == "Player")
+                {
+                    //Debug.Log("triggered!!!!");
+
+                    SwitchState(State.Chasing);
+                }
             }
         }
     }
@@ -152,13 +162,16 @@ public class SkeletonEnemy : Enemy
         //Debug.Log("WALL HIT");
 
         if (collision.transform.tag == "Player") Physics.IgnoreCollision(this.transform.GetComponent<BoxCollider>(), collision.collider);
-        if (collision.transform.tag == "Player") return;
+        if (collision.transform.tag != "Player")
+        {
+            enemyNavMeshAgent.Warp(transform.position - transform.forward * 1.5f);
 
-        enemyNavMeshAgent.Warp(transform.position - transform.forward * 1.5f);
+            currentRotationDistance = previousRotationDistance += Random.Range(135, 180);
+            rotationSpeed = 200.0f;
+            walkToLocation = transform.position;
+        }
 
-        currentRotationDistance = previousRotationDistance += Random.Range(135, 180);
-        rotationSpeed = 200.0f;
-        walkToLocation = transform.position;
+        
 
     }
 

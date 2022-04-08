@@ -13,7 +13,8 @@ public class Enemy : CharacterStats
         Attacking,
         Stunned,
         Hit,
-        Dying
+        Dying,
+        Swining
     }
 
     protected State enemyState;
@@ -27,10 +28,6 @@ public class Enemy : CharacterStats
 
     protected Material[] enemyModel;
 
-    protected float attackAnimTime;
-    protected float stunnedAnimTime;
-    protected float dyingAnimTime;
-
     protected float viewDistance;
     protected float hearingDistance;
     protected float attackDistance;
@@ -43,6 +40,7 @@ public class Enemy : CharacterStats
     protected float hitTimer;
     protected float stunnedHitDuration;
     protected float dyingTimer;
+    protected float swingingTimer;
 
     protected Vector3 playerLocation;
     protected Vector3 enemyLocation;
@@ -65,7 +63,7 @@ public class Enemy : CharacterStats
         UpdateHealth();
         transform.GetChild(0).transform.LookAt(transform.GetChild(0).transform.position + cam.forward);
 
-        enemySight = new Ray(transform.position, transform.TransformDirection(Vector3.forward));
+        enemySight = new Ray(new Vector3(transform.position.x, transform.position.y + 3, transform.position.z), transform.TransformDirection(Vector3.forward));
         enemyLocation = this.enemyNavMeshAgent.transform.position;
         playerLocation = GameManager.manager.playerStats.gameObject.transform.position;
         distanceFromPlayer = Vector3.Distance(playerLocation, enemyLocation);
@@ -88,6 +86,10 @@ public class Enemy : CharacterStats
 
             case State.Attacking:
                 Attacking();
+                break;
+
+            case State.Swining:
+                Swinging();
                 break;
 
             case State.Stunned:
@@ -139,34 +141,56 @@ public class Enemy : CharacterStats
 
     void Attacking()
     {
-        if (currentAnimationState != "Attacking Idle" && currentAnimationState != "Swinging") { SwitchAnimation("Attacking Idle"); Debug.LogWarning("STATE CHANGED TO ATTACKIDLE"); }
-        attackTimer -= Time.deltaTime;
-
-        if (attackTimer <= 0.0f)
-        {
-            SwitchAnimation("Swinging");
-            animator.Play("Swinging");
-
-            if (GameManager.manager.playerController.IsBlocking())
-            {
-                this.stunnedTimer = 1.5f;
-                GameManager.manager.playerStats.TakeDamage((int)(damage / 4), GameManager.manager.playerStats.GetComponent<Transform>());
-                SoundManager.PlaySound(SoundManager.Sound.MetalClang, playerLocation);
-                SwitchState(State.Stunned);
-            }
-            else // attack hits
-            {
-                GameManager.manager.playerStats.TakeDamage(damage, GameManager.manager.playerStats.GetComponent<Transform>());
-                this.attackTimer = this.attackSpeed;
-                PlayAudio(this);
-            }
-
-            SwitchAnimation("Attacking Idle");
-        }
+        //if (this.audioGroup == "Zombie") Debug.LogError("Zombie attack time: " + attackTimer);
 
         if (distanceFromPlayer > attackDistance)
         {
             SwitchState(State.Chasing);
+        }
+
+        this.transform.LookAt(new Vector3(GameManager.manager.playerStats.gameObject.transform.position.x,
+            this.transform.position.y,
+            GameManager.manager.playerStats.gameObject.transform.position.z));
+
+        SwitchAnimation("Attacking Idle");
+
+        attackTimer -= Time.deltaTime;
+
+        if (attackTimer <= 0.0f)
+        {
+            //SwitchAnimation("Swinging");
+            //animator.Play("Swinging");
+
+            if (GameManager.manager.playerController.IsBlocking())
+            {
+                SwitchAnimation("Swinging");
+                this.stunnedTimer = 1.5f;
+                SwitchState(State.Stunned);
+            }
+            else // attack hits
+            {
+                //this.swingingTimer = 1.5f;
+                this.attackTimer = this.attackSpeed;
+                PlayAudio(this);
+                SwitchState(State.Swining);
+
+            }
+
+        }
+
+        
+    }
+
+    void Swinging()
+    {
+        SwitchAnimation("Swinging");
+        swingingTimer -= Time.deltaTime;
+
+        if (this.swingingTimer <= 0.0f)
+        {
+            if (distanceFromPlayer < attackDistance) GameManager.manager.playerStats.TakeDamage(damage, GameManager.manager.playerStats.GetComponent<Transform>());
+            attackTimer = attackSpeed;
+            SwitchState(State.Attacking);
         }
     }
 
@@ -177,7 +201,11 @@ public class Enemy : CharacterStats
 
         if (this.stunnedTimer <= 0.0f)
         {
-            //SwitchAnimation("Attacking Idle");
+            if (distanceFromPlayer < attackDistance) {
+                GameManager.manager.playerStats.TakeDamage((int)(damage / 4), GameManager.manager.playerStats.GetComponent<Transform>());
+                    SoundManager.PlaySound(SoundManager.Sound.MetalClang, playerLocation);
+            }
+
             attackTimer = attackSpeed;
             SwitchState(State.Attacking);
         }
@@ -187,17 +215,18 @@ public class Enemy : CharacterStats
     {
         if (animator.GetBool("Swinging") != true) SwitchAnimation("Hit");
         hitTimer -= Time.deltaTime;
-        Debug.LogError(this.hitTimer);
+        attackTimer -= Time.deltaTime;
 
         if (this.hitTimer <= 0.0f)
         {
+            //attackTimer = 0;
             SwitchState(State.Attacking);
         }
     }
 
     void Dying()
     {
-        Debug.LogWarning(this.dyingTimer);
+        //Debug.LogWarning(this.dyingTimer);
         this.dyingTimer -= Time.deltaTime;
 
         if (this.dyingTimer <= 0.0f)
@@ -209,6 +238,8 @@ public class Enemy : CharacterStats
     void FadeOut()
     {
         this.gameObject.SetActive(false);
+        DropItemOnDeath();
+
 
     }
 
@@ -217,7 +248,7 @@ public class Enemy : CharacterStats
         if (currentAnimationState == "Dying") { return; }
 
         enemyState = newState;
-        if (this.audioGroup == "Skeleton") Debug.LogWarning("SKELETON STATE: " + newState);
+        if (this.audioGroup == "Zombie") Debug.LogError("Zombie STATE: " + newState);
     }
 
     public void UpdateHealth()
@@ -255,16 +286,6 @@ public class Enemy : CharacterStats
         stunnedHitDuration = attackSpeed * 1.5f;
 
         if (this.audioGroup != "Ghost") animator = transform.GetChild(1).GetComponent<Animator>();
-
-        //int numOfMaterials = this.transform.GetChild(1).GetChild(1).GetComponent<SkinnedMeshRenderer>().materials.Length;
-        /*enemyModel = new Material[numOfMaterials];
-
-        for (int i = 0; i > numOfMaterials; i++)
-        {
-            enemyModel[i] = this.transform.GetChild(1).GetChild(1).GetComponent<SkinnedMeshRenderer>().materials[i];
-        }*/
-
-        //SetAnimations();
     }
 
     public override void TakeDamage(int damage, Transform character)
@@ -276,8 +297,8 @@ public class Enemy : CharacterStats
             Death();
         }
 
-        this.hitTimer = 0.5f;
-        SwitchState(State.Hit);
+        if (hitTimer < 0.0f) this.hitTimer = 1.5f;
+        if (currentAnimationState != "Swinging") SwitchState(State.Hit);
     }
 
     protected override void Death()
@@ -288,12 +309,11 @@ public class Enemy : CharacterStats
         // ENTER CODE FOR DEATH ANIMATIONS, ETC
         //this.gameObject.SetActive(false);
 
-        this.dyingTimer = this.dyingAnimTime;
+        this.dyingTimer = 4.0f;
         SwitchState(State.Dying);
         Debug.LogWarning("animation dying");
         SwitchAnimation("Dying");
 
-        DropItemOnDeath();
     }
 
     protected void DropItemOnDeath()
@@ -330,53 +350,11 @@ public class Enemy : CharacterStats
             SoundManager.PlaySound(enemy.attackSound, enemy.transform.position);
     }
 
-    public void SetAnimations()
-    {
-        animationStates = new string[9];
-
-        animationStates[0] = "Idle";
-        animationStates[1] = "Chasing";
-        animationStates[2] = "Attacking Idle";
-        animationStates[3] = "Stunned";
-        animationStates[4] = "Hit";
-        animationStates[5] = "Dying";
-        animationStates[6] = "Swinging";
-        animationStates[7] = "Dead";
-        animationStates[8] = "Spotted";
-
-        /*if (this.animator != null)
-        {
-            AnimationClip[] clips = animator.runtimeAnimatorController.animationClips;
-
-            foreach (AnimationClip clip in clips)
-            {
-                switch (clip.name)
-                {
-                    case "attackAnim":
-                        attackAnimTime = clip.length;
-                        break;
-                    case "stunnedAnim":
-                        stunnedAnimTime = clip.length;
-                        break;
-                    case "deathAnim":
-                        this.dyingAnimTime = clip.length;
-                        this.dyingTimer = dyingAnimTime;
-                        break;
-                }
-            }
-        }*/
-    }
-
     public void SwitchAnimation(string nextState)
     {
         if (this.audioGroup == "Ghost") return;
         
         if (animator.GetBool(nextState) == true) return;
-
-        /*foreach (string state in animationStates)
-        {
-            animator.SetBool(state, false);
-        }*/
 
         foreach (AnimatorControllerParameter parameter in this.animator.parameters)
         {
@@ -385,7 +363,7 @@ public class Enemy : CharacterStats
 
         animator.SetBool(nextState, true);
         currentAnimationState = nextState;
-        //Debug.LogWarning("NEW ANIMATION STATE: " + nextState);
+        if (this.audioGroup == "Zombie") Debug.LogError("Zombie ANIMATION STATE: " + nextState);
     }
 
     private int ChooseNumbByChance(int output1, int output2, int chanceNum)

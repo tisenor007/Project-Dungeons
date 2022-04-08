@@ -12,10 +12,10 @@ public class ZombieEnemy : Enemy
         this.viewDistance = 10;
         maxHealth = 75;
         this.health = maxHealth;
-        this.attackSpeed = 5.0f;
+        this.attackSpeed = 3.0f;
         this.damage = 25;
         this.speed = 3.5f;
-        this.attackDistance = 2.5f;
+        this.attackDistance = 4.0f;
         this.audioGroup = "Zombie";
 
         this.attackSound = SoundManager.Sound.ZombieAttack;

@@ -18,7 +18,7 @@ public class BossTrap : Trap
                 break;
             case false:
                 thisStructure.trapPlayer = false;
-                bossObj.SetActive(false);
+                //bossObj.SetActive(false);
                 break;
         }
         if (bossObj.GetComponent<Boss>().IsAlive == false) { trapTriggered = false; }

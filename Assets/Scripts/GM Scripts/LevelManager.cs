@@ -74,6 +74,9 @@ public class LevelManager : MonoBehaviour
 
     public void ChangeGameStateToTitleMenu()
     {
+        GameManager.manager.gameStarting = false;
+        GameManager.manager.uiManager.startButton.interactable = true;
+        //GameManager.manager.loadButton.interactable = true;
         GameManager.manager.ChangeState(GameState.TITLEMENU);
     }
     
@@ -124,6 +127,9 @@ public class LevelManager : MonoBehaviour
 
     public void ChangeGameStateToCharacterSelection()
     {
+        GameManager.manager.gameStarting = true;
+        GameManager.manager.uiManager.startButton.interactable = false;
+        //GameManager.manager.loadButton.interactable = false;
         StartCoroutine(LoadCharacterSelectionScreen());
     }
 
@@ -226,7 +232,7 @@ public class LevelManager : MonoBehaviour
     //misc commands
     public void LoadButtonFade(bool fileExists)
     {
-        if (!fileExists)
+        if (!fileExists || GameManager.manager.gameStarting)
         {
             foreach (Button button in GameManager.manager.uiManager.allLoadButtons)
                 button.interactable = false;
@@ -248,7 +254,7 @@ public class LevelManager : MonoBehaviour
         else
         {
             foreach(Button button in GameManager.manager.uiManager.allNextLevelButtons)
-            { button.interactable = true; }
+            { button.interactable = false; }
         }
     }
 
