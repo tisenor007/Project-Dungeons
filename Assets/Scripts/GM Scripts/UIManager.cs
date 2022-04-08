@@ -34,6 +34,7 @@ public class UIManager : MonoBehaviour
     public Slider brightnessSlider;
 
     [SerializeField] public Button startButton;
+    [SerializeField] public Button playButton;
 
     private void Awake()
     {

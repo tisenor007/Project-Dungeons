@@ -34,7 +34,7 @@ public class GhostEnemy : Enemy
         bobUp = transform.position.y + 4;
         bobDown = transform.position.y + 2;
         enemyNavMeshAgent.speed = speed;
-        this.audioGroup = "Ghost";
+        this.enemyType = "Ghost";
 
         this.attackSound = SoundManager.Sound.GhostAttack;
         this.chasingSound = SoundManager.Sound.GhostChasing;

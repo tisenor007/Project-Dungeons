@@ -27,7 +27,7 @@ public class SkeletonEnemy : Enemy
         this.damage = 15;
         this.speed = 5.0f;
         this.attackDistance = 3;
-        this.audioGroup = "Skeleton";
+        this.enemyType = "Skeleton";
         this.hitTimer = 1.5f;
 
         this.attackSound = SoundManager.Sound.SkeletonAttack;
@@ -117,6 +117,8 @@ public class SkeletonEnemy : Enemy
             }
         }
 
+        if (distanceFromPlayer <= attackDistance) { SwitchState(State.Attacking); }
+
         if (walkTimer <= 0.0f) walkToLocation = transform.position;
     }
 
@@ -164,17 +166,12 @@ public class SkeletonEnemy : Enemy
         if (collision.transform.tag == "Player") Physics.IgnoreCollision(this.transform.GetComponent<BoxCollider>(), collision.collider);
         if (collision.transform.tag != "Player")
         {
-            enemyNavMeshAgent.Warp(transform.position - transform.forward * 1.5f);
+            //"1" counts as how far skeleton will bounce back when colliding with wall
+            enemyNavMeshAgent.Warp(transform.position - transform.forward * 1f);
 
             currentRotationDistance = previousRotationDistance += Random.Range(135, 180);
             rotationSpeed = 200.0f;
             walkToLocation = transform.position;
         }
-
-        
-
     }
-
-
-
 }
