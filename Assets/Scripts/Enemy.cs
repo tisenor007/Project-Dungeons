@@ -32,7 +32,7 @@ public class Enemy : CharacterStats
     protected float hearingDistance;
     protected float attackDistance;
     protected float speed;
-    protected string audioGroup;
+    protected string enemyType;
 
     protected float distanceFromPlayer;
     protected float attackTimer;
@@ -248,7 +248,7 @@ public class Enemy : CharacterStats
         if (currentAnimationState == "Dying") { return; }
 
         enemyState = newState;
-        if (this.audioGroup == "Zombie") Debug.LogError("Zombie STATE: " + newState);
+        //if (this.enemyType == "Zombie") Debug.LogError("Zombie STATE: " + newState);
     }
 
     public void UpdateHealth()
