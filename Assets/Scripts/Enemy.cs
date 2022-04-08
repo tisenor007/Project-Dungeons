@@ -314,7 +314,8 @@ public class Enemy : CharacterStats
         SoundManager.PlaySound(this.deathSound, enemyLocation); 
         base.Death();
 
-        if (enemyType == EnemyType.Ghost) { transform.gameObject.SetActive(false); }
+        //this is done because ghost has no death animation
+        if (enemyType == EnemyType.Ghost) { DropItemOnDeath(); transform.gameObject.SetActive(false); }
 
         // ENTER CODE FOR DEATH ANIMATIONS, ETC
         //this.gameObject.SetActive(false);
