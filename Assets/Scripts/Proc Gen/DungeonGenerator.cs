@@ -67,6 +67,7 @@ public class DungeonGenerator : MonoBehaviour
     //master method
     public void GenerateNewDungeon(int maxStructureAmount)
     {
+        //starts with start structure
         if (structures.Count <=0) 
         {GenerateNewStructure(StructureType.StartStructure, mainStructureBase);}
         //adds rooms to dungeon until max number is met
@@ -77,11 +78,14 @@ public class DungeonGenerator : MonoBehaviour
             {
                 case false:
                     GenerateNewStructure(chosenStructureType, mainStructureBase);
+                    //relocates main branch build off if it is "stuck"
                     if (IsBranchStuck(mainStructureBase))
                     {mainStructureBase = mainStructures[Random.Range(0, mainStructures.Count)];}
-                    //sets up branch
+                    //sets up seperate branch stats for when code decides to make one
                     ResetBranchStats();
                     RandomizeCurrBranchStats();
+                    //chooses number and decideds between mainting to build off main branch or
+                    //building a seperate branch
                     branchDecision = ChooseNumbByChance(1, 2, branchChance);
                     if (branchDecision == 1 && mainStructures.Count > 1) { branchIsGenerating = true; }
                     break;
@@ -89,11 +93,12 @@ public class DungeonGenerator : MonoBehaviour
                     if (currentBranchStructCount >= currentBranchLength){ branchIsComplete = true; }
                     if (IsBranchStuck(currBranchStructureBase)) { branchIsComplete = true; }
                     if (branchIsComplete) { CompleteBranch(ref branchIsGenerating, mainStructureBase); break; }
+                    //will keep generating if checks are passed
                     GenerateNewStructure(chosenStructureType, currBranchStructureBase);
                     break;
             }
         }
-        //makes them all children after generation
+        //ends gen with end structure
         else if (structures.Count >= maxStructureAmount) 
         {GenerateNewStructure(StructureType.EndStructure, mainStructureBase);}
     }
@@ -249,7 +254,7 @@ public class DungeonGenerator : MonoBehaviour
         if (currentStructureType == StructureType.Hallway && baseStruct.transform.eulerAngles.y == 0) { nextStructureDirection = ChooseNumbByChance(0, 1, 50); }// Random.Range(0, 1); }
         else if (currentStructureType == StructureType.Hallway && baseStruct.transform.eulerAngles.y == 90) { nextStructureDirection = ChooseNumbByChance(2, 3, 50); }// Random.Range(2, 3); }
         else if (currentStructureType != StructureType.Hallway) { nextStructureDirection = Random.Range(0, 4); }
-
+       //would have been a switch state but they do not support < > >= <=
         if (nextStructureDirection <= 0)
         {
             nextStructureRot = new Vector3(0, 0, 0);
