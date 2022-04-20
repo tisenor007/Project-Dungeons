@@ -9,21 +9,21 @@ public class BossTrap : Trap
     // Update is called once per frame
     void Update()
     {
-        switch (trapTriggered)
+        if (trapTriggered)
         {
-            case true:
-                thisStructure.trapPlayer = true;
-                bossObj.SetActive(true);
-                if (!soundPlaying)
-                { GameManager.manager.ChangeGamePlayState(GamePlayState.BossRoom); soundPlaying = true; }
-                break;
-            case false:
-                thisStructure.trapPlayer = false;
-                //bossObj.SetActive(false);
-                if (soundPlaying) 
-                { GameManager.manager.ChangeGamePlayState(GamePlayState.Default); soundPlaying = false; }
-                break;
+            thisStructure.trapPlayer = true;
+            bossObj.SetActive(true);
+            if (!soundPlaying)
+            { GameManager.manager.ChangeGamePlayState(GamePlayState.BossRoom); soundPlaying = true; }
         }
+        else if (!trapTriggered)
+        {
+            thisStructure.trapPlayer = false;
+            //bossObj.SetActive(false);
+            if (soundPlaying)
+            { GameManager.manager.ChangeGamePlayState(GamePlayState.Default); soundPlaying = false; }
+        }
+        
         if (bossObj.GetComponent<Boss>().IsAlive == false) { trapTriggered = false; }
     }
 

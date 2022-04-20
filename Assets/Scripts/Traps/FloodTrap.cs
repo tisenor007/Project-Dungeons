@@ -17,27 +17,28 @@ public class FloodTrap : Trap
     // Update is called once per frame
     void Update()
     {
-        switch (trapTriggered)
+        if (trapTriggered)
         {
-            case true:
-                water.SetActive(true);
-                waterLevel = waterLevel += Time.deltaTime * waterRiseRate;
-                water.transform.position = new Vector3(water.transform.position.x, waterLevel, water.transform.position.z);
-                ReplaceOpenDoors();
-                if (water.transform.position.y >= 5)
-                { GameManager.manager.playerStats.TakeDamage(GameManager.manager.playerStats.MaxHealth, GameManager.manager.playerStats.transform); }
-                GameManager.manager.playerStats.inWater = true;
-                if (!soundPlaying)
-                { GameManager.manager.ChangeGamePlayState(GamePlayState.FloodRoom); SoundManager.PlaySound(SoundManager.Sound.RockCollapsing); soundPlaying = true; }
-                break;
-            case false:
-                water.SetActive(false);
-                OpenAllBreakableDoors();
-                GameManager.manager.playerStats.inWater = false;
-                if (soundPlaying)
-                { GameManager.manager.ChangeGamePlayState(GamePlayState.Default); soundPlaying = false; }
-                break;
+
+            water.SetActive(true);
+            waterLevel = waterLevel += Time.deltaTime * waterRiseRate;
+            water.transform.position = new Vector3(water.transform.position.x, waterLevel, water.transform.position.z);
+            ReplaceOpenDoors();
+            if (water.transform.position.y >= 5)
+            { GameManager.manager.playerStats.TakeDamage(GameManager.manager.playerStats.MaxHealth, GameManager.manager.playerStats.transform); }
+            GameManager.manager.playerStats.inWater = true;
+            if (!soundPlaying)
+            { GameManager.manager.ChangeGamePlayState(GamePlayState.FloodRoom); SoundManager.PlaySound(SoundManager.Sound.RockCollapsing); soundPlaying = true; }
         }
+        else if (!trapTriggered)
+        {
+            water.SetActive(false);
+            OpenAllBreakableDoors();
+            GameManager.manager.playerStats.inWater = false;
+            if (soundPlaying)
+            { GameManager.manager.ChangeGamePlayState(GamePlayState.Default); soundPlaying = false; }
+        }
+        
 
         if (anyDoorBroken()){ trapTriggered = false; }
         

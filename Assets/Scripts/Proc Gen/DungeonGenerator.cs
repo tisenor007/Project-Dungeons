@@ -74,28 +74,26 @@ public class DungeonGenerator : MonoBehaviour
         else if (structures.Count < maxStructureAmount && structures.Count > 0)
         {
             StructureType chosenStructureType = (StructureType)ChooseNumbByChance((int)StructureType.Room, (int)StructureType.Hallway, roomChance);
-            switch (branchIsGenerating)
+            if (!branchIsGenerating)
             {
-                case false:
-                    GenerateNewStructure(chosenStructureType, mainStructureBase);
-                    //relocates main branch build off if it is "stuck"
-                    if (IsBranchStuck(mainStructureBase))
-                    {mainStructureBase = mainStructures[Random.Range(0, mainStructures.Count)];}
-                    //sets up seperate branch stats for when code decides to make one
-                    ResetBranchStats();
-                    RandomizeCurrBranchStats();
-                    //chooses number and decideds between mainting to build off main branch or
-                    //building a seperate branch
-                    branchDecision = ChooseNumbByChance(1, 2, branchChance);
-                    if (branchDecision == 1 && mainStructures.Count > 1) { branchIsGenerating = true; }
-                    break;
-                case true:
-                    if (currentBranchStructCount >= currentBranchLength){ branchIsComplete = true; }
-                    if (IsBranchStuck(currBranchStructureBase)) { branchIsComplete = true; }
-                    if (branchIsComplete) { CompleteBranch(ref branchIsGenerating, mainStructureBase); break; }
-                    //will keep generating if checks are passed
-                    GenerateNewStructure(chosenStructureType, currBranchStructureBase);
-                    break;
+                GenerateNewStructure(chosenStructureType, mainStructureBase);
+                //relocates main branch build off if it is "stuck"
+                if (IsBranchStuck(mainStructureBase))
+                { mainStructureBase = mainStructures[Random.Range(0, mainStructures.Count)]; }
+                //sets up seperate branch stats for when code decides to make one
+                ResetBranchStats();
+                RandomizeCurrBranchStats();
+                //chooses number and decideds between mainting to build off main branch or building a seperate branch
+                branchDecision = ChooseNumbByChance(1, 2, branchChance);
+                if (branchDecision == 1 && mainStructures.Count > 1) { branchIsGenerating = true; }
+            }
+            else if (branchIsGenerating)
+            {
+                if (currentBranchStructCount >= currentBranchLength) { branchIsComplete = true; }
+                if (IsBranchStuck(currBranchStructureBase)) { branchIsComplete = true; }
+                if (branchIsComplete) { CompleteBranch(ref branchIsGenerating, mainStructureBase); return; }
+                //will keep generating if checks are passed
+                GenerateNewStructure(chosenStructureType, currBranchStructureBase);
             }
         }
         //ends gen with end structure

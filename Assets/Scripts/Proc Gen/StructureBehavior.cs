@@ -20,26 +20,24 @@ public class StructureBehavior : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        switch (trapPlayer)
+        if (trapPlayer)
         {
-            case true:
-                ShutAllDoors();
-                break;
-            case false:
-                OpenAvailableDoors();
-                break;
+            ShutAllDoors();
         }
-
-        switch (playerInStructure)
+        else if (!trapPlayer)
         {
-            case true:
-                ShowStructure(true);
-                ShowLights(true);
-                break;
-            case false:
-                ShowStructure(false);
-                ShowLights(false);
-                break;
+            OpenAvailableDoors();
+        }
+        
+        if (playerInStructure)
+        {
+            ShowStructure(true);
+            ShowLights(true);
+        }
+        else if (!playerInStructure)
+        {
+            ShowStructure(false);
+            ShowLights(false);
         }
     }
 

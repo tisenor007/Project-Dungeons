@@ -16,19 +16,19 @@ public class SpikeTrap : Trap
     // Update is called once per frame
     void Update()
     {
-        switch (trapTriggered)
+        if (trapTriggered)
         {
-            case true:
-                floor.SetActive(false);
-                planks.SetActive(true);
-                if (soundPlayed == false)
-                { SoundManager.PlaySound(SoundManager.Sound.SpikeWoodBreak); soundPlayed = true; }
-                break;
-            case false:
-                floor.SetActive(true);
-                planks.SetActive(false);
-                break;
+            floor.SetActive(false);
+            planks.SetActive(true);
+            if (soundPlayed == false)
+            { SoundManager.PlaySound(SoundManager.Sound.SpikeWoodBreak); soundPlayed = true; }
         }
+        else if (!trapTriggered)
+        {
+            floor.SetActive(true);
+            planks.SetActive(false);
+        }
+        
     }
 
     private void OnTriggerEnter(Collider other)
