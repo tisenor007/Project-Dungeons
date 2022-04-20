@@ -2953,7 +2953,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a620268b5285788409918005f90a26a6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5b9a1ac5dcd72b741b908f12d8d6f23d, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -13534,6 +13534,7 @@ MonoBehaviour:
   currentLevel: 0
   currentPlayerModel: {fileID: 0}
   playerController: {fileID: 4395637265828225256}
+  gameStarting: 0
   saveText: {fileID: 5517084552951902533}
   loadText: {fileID: 2902856519019606038}
   malePlayer: {fileID: 6097127088938103896}
@@ -13612,6 +13613,8 @@ MonoBehaviour:
   notePlain: {fileID: 7727303814917417001}
   brightnessImage: {fileID: 672174135704190534}
   brightnessSlider: {fileID: 156179075620180780}
+  startButton: {fileID: 0}
+  playButton: {fileID: 0}
 --- !u!1 &7676479150830606939
 GameObject:
   m_ObjectHideFlags: 0
