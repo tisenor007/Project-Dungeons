@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     public LayerMask interactable;
     public int runSpeed = 5;
     public int sprintSpeed = 10;
+
+    public Joystick joystick;
     public enum MovementDirection
     {
         Forward,
@@ -179,10 +181,10 @@ public class PlayerController : MonoBehaviour
 
     private void UpdatePlayerInput()
     {
-        if (Input.GetKey(forwardInput) == true) { Move(MovementDirection.Forward); }
-        if (Input.GetKey(backwardInput) == true) { Move(MovementDirection.Backward); }
-        if (Input.GetKey(rightInput) == true) { Move(MovementDirection.Right); }
-        if (Input.GetKey(leftInput) == true) { Move(MovementDirection.Left); }
+        if (joystick.Vertical > 0) { Move(MovementDirection.Forward); }
+        if (joystick.Vertical < 0) { Move(MovementDirection.Backward); }
+        if (joystick.Horizontal > 0) { Move(MovementDirection.Right); }
+        if (joystick.Horizontal < 0) { Move(MovementDirection.Left); }
         moveDirection.Normalize();
         transform.Translate(moveDirection * moveIntensity * Time.deltaTime, Space.World);
 
@@ -329,10 +331,10 @@ public class PlayerController : MonoBehaviour
 
     private bool IsMoving()
     {
-        if (Input.GetKey(forwardInput) == true) { return true; }
-        if (Input.GetKey(backwardInput) == true) { return true; }
-        if (Input.GetKey(rightInput) == true) { return true; }
-        if (Input.GetKey(leftInput) == true) { return true; }
+        if (joystick.Vertical > 0) { return true; }
+        if (joystick.Vertical < 0) { return true; }
+        if (joystick.Horizontal > 0) { return true; }
+        if (joystick.Horizontal < 0) { return true; }
         if (movementMode == MovementMode.Jumping) { return true; }
         if (isGrounded() == false) { return true; }
 
