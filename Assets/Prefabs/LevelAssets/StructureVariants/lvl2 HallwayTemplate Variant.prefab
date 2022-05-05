@@ -47,33 +47,6 @@ Transform:
   m_Father: {fileID: 4896267734044562691}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &6680380393951676211
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2559849012435682985}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 2516820105448210417, guid: 04a77957086f501488f5ab0fb444559f, type: 3}
---- !u!65 &6771485425921564339
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4768874330515481732}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.08000002, y: 0.08, z: 2.2737367e-15}
-  m_Center: {x: 0.000000005995389, y: 0.0000000053842086, z: 1.546141e-10}
 --- !u!64 &1209279475730255736
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -88,6 +61,33 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!65 &6771485425921564339
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4768874330515481732}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.08000002, y: 0.08, z: 2.2737367e-15}
+  m_Center: {x: 0.000000005995389, y: 0.0000000053842086, z: 1.546141e-10}
+--- !u!64 &6680380393951676211
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2559849012435682985}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2516820105448210417, guid: 04a77957086f501488f5ab0fb444559f, type: 3}
 --- !u!65 &8721109109154180631
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -254,6 +254,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d73dbc90274b59747a0a3503ccb107ee, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d6985041282dae0418982c4532b531a0, type: 2}
+    - target: {fileID: -7511558181221131132, guid: d73dbc90274b59747a0a3503ccb107ee, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: d6985041282dae0418982c4532b531a0, type: 2}
+    - target: {fileID: -7511558181221131132, guid: d73dbc90274b59747a0a3503ccb107ee, type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: d6985041282dae0418982c4532b531a0, type: 2}
     - target: {fileID: 919132149155446097, guid: d73dbc90274b59747a0a3503ccb107ee, type: 3}
       propertyPath: m_Name
       value: Door (2)
@@ -329,6 +341,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Door
       objectReference: {fileID: 0}
+    - target: {fileID: 1238846494721761377, guid: b4da79fb635d1184e8f6a6ace28c3ab6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d6985041282dae0418982c4532b531a0, type: 2}
+    - target: {fileID: 1238846494721761377, guid: b4da79fb635d1184e8f6a6ace28c3ab6, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: d6985041282dae0418982c4532b531a0, type: 2}
+    - target: {fileID: 1238846494721761377, guid: b4da79fb635d1184e8f6a6ace28c3ab6, type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: d6985041282dae0418982c4532b531a0, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b4da79fb635d1184e8f6a6ace28c3ab6, type: 3}
 --- !u!4 &5719700011092272590 stripped
@@ -623,6 +647,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d73dbc90274b59747a0a3503ccb107ee, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d6985041282dae0418982c4532b531a0, type: 2}
+    - target: {fileID: -7511558181221131132, guid: d73dbc90274b59747a0a3503ccb107ee, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: d6985041282dae0418982c4532b531a0, type: 2}
+    - target: {fileID: -7511558181221131132, guid: d73dbc90274b59747a0a3503ccb107ee, type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: d6985041282dae0418982c4532b531a0, type: 2}
     - target: {fileID: 919132149155446097, guid: d73dbc90274b59747a0a3503ccb107ee, type: 3}
       propertyPath: m_Name
       value: Door (3)
@@ -702,6 +738,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: d73dbc90274b59747a0a3503ccb107ee, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: d6985041282dae0418982c4532b531a0, type: 2}
+    - target: {fileID: -7511558181221131132, guid: d73dbc90274b59747a0a3503ccb107ee, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: d6985041282dae0418982c4532b531a0, type: 2}
+    - target: {fileID: -7511558181221131132, guid: d73dbc90274b59747a0a3503ccb107ee, type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: d6985041282dae0418982c4532b531a0, type: 2}
     - target: {fileID: 919132149155446097, guid: d73dbc90274b59747a0a3503ccb107ee, type: 3}
       propertyPath: m_Name
       value: Door (1)

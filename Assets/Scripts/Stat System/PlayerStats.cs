@@ -150,7 +150,7 @@ public class PlayerStats : CharacterStats
         GameObject newInteractable = GameManager.manager.levelManager.CreateInteractable(weaponObject,
             transform.position, true, Color.red, CurrentWeaponType);
 
-        Physics.IgnoreCollision(this.transform.GetComponent<BoxCollider>(), newInteractable.GetComponent<BoxCollider>(), true);
+        Physics.IgnoreCollision(this.transform.GetComponent<CapsuleCollider>(), newInteractable.GetComponent<BoxCollider>(), true);
     }
     #endregion
 
