@@ -144,13 +144,11 @@ public class PlayerController : MonoBehaviour
                 case MovementMode.Running:
                     animator.SetFloat("AnimState", (int)BlendState.Idle_Running_Sprinting);
                     maxInensity = runSpeed;
-                    moveForce = 55;
                     UpdateMoveIntensity(movementMode);
                     break;
                 case MovementMode.Sprinting:
                     animator.SetFloat("AnimState", (int)BlendState.Idle_Running_Sprinting);
                     maxInensity = sprintSpeed;
-                    moveForce = 55;
                     UpdateMoveIntensity(movementMode);
                     break;
                 case MovementMode.Jumping:
@@ -365,6 +363,11 @@ public class PlayerController : MonoBehaviour
 
         Debug.Log("Sprinting");
         movementMode = MovementMode.Sprinting;
+    }
+
+    public void StopSprint()
+    {
+        movementMode = MovementMode.Running;
     }
 
     private void Jump()
