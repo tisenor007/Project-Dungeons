@@ -114,7 +114,7 @@ GameObject:
   - component: {fileID: 4775209107842619112}
   - component: {fileID: 4775209107842619115}
   - component: {fileID: 4775209107842619114}
-  - component: {fileID: 4331089722898570111}
+  - component: {fileID: 6449934744826590599}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -176,6 +176,7 @@ MonoBehaviour:
     m_Bits: 64
   runSpeed: 5
   sprintSpeed: 10
+  cam: {fileID: 4775209107463414707}
   interactionRadius: 7
   attackTimer: 0
 --- !u!114 &4775209107842619114
@@ -205,8 +206,8 @@ MonoBehaviour:
   healthText: {fileID: 0}
   respawnPos: {x: -55.1, y: 5.8, z: -59.7}
   hA: {fileID: 0}
---- !u!65 &4331089722898570111
-BoxCollider:
+--- !u!136 &6449934744826590599
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -215,9 +216,10 @@ BoxCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 3.94, z: 1}
-  m_Center: {x: 0, y: 1.19, z: 0}
+  m_Radius: 0.5
+  m_Height: 3.9342089
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.1573298, z: 0}
 --- !u!1 &4775209108903603522
 GameObject:
   m_ObjectHideFlags: 0
