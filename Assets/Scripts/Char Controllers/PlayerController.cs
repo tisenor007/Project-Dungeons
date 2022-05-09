@@ -47,7 +47,6 @@ public class PlayerController : MonoBehaviour
     [Header("Interaction")]
     [SerializeField] private float interactionRadius = 7f;
 
-    private bool interacted = false;
     private Joystick joystick;
     private float maxInensity;
     private Vector3 input;
@@ -56,12 +55,10 @@ public class PlayerController : MonoBehaviour
     private float moveIntensity = 0.0f;
     private float moveForce = 55.0f;
     private float velocityAcceleration = 80.0f;
-    private float velocityDeceleration = 40.0f;
+    private float velocityDeceleration = 80.0f;
     private float playerRotationSpeed = 4000;
     private float jumpHeight = 4f;
     private KeyCode jumpInput = KeyCode.Space;
-    private KeyCode sprintInput = KeyCode.LeftShift;
-    private KeyCode interactInput = KeyCode.E;
     private float actionBlend;
     private float actionBlendAcceleration = 10.0f;
     private float actionBlendDeceleration = 3.5f;
@@ -330,7 +327,11 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = Quaternion.Euler(0, cam.transform.eulerAngles.y, 0) * 
         new Vector3(input.x, input.y, input.z) * moveIntensity * moveForce * Time.deltaTime;
 
-        rb.velocity = movement;
+        //Lock Vertual Joystick
+        if (joystick.Horizontal > 0.5) rb.velocity = movement;
+        if (joystick.Horizontal < -0.5) rb.velocity = movement;
+        if (joystick.Vertical > 0.5) rb.velocity = movement;
+        if (joystick.Vertical < -0.5) rb.velocity = movement;
 
         rb.AddForce(0, -velocityAcceleration, 0);
         //----------------------------------------------------------------------------
@@ -344,8 +345,10 @@ public class PlayerController : MonoBehaviour
 
     private bool IsMoving()
     {
-        if (joystick.Vertical != 0) { return true; }
-        if (joystick.Horizontal != 0) { return true; }
+        if (joystick.Vertical > 0.5) { return true; }
+        if (joystick.Vertical < -0.5) { return true; }
+        if (joystick.Horizontal > 0.5) { return true; }
+        if (joystick.Horizontal < -0.5) { return true; }
         if (movementMode == MovementMode.Jumping) { return true; }
         if (isGrounded() == false) { return true; }
 
