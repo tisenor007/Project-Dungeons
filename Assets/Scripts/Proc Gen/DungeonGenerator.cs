@@ -97,7 +97,7 @@ public class DungeonGenerator : MonoBehaviour
             }
         }
         //ends gen with end structure
-        else if (structures.Count >= maxStructureAmount) 
+        else if (structures.Count < maxStructureAmount) 
         {GenerateNewStructure(StructureType.EndStructure, mainStructureBase);}
     }
 
